@@ -735,3 +735,5 @@
 
 \usepackage{tikz} % Required for drawing custom shapes and positioning elements absolutely on the page
 \usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{subfig}
