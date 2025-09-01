@@ -143,3 +143,202 @@ The equilibrium point $x_e$ is said to be \textbf{exponentially stable} if there
     and evolve differently depending on the stability type.}
 \end{figure}
 
+%------------------------------------------------
+\section{Positive Definite Functions}\index{Positive Definite Functions}
+
+Positive definite functions are the basis of Lyapunov stability theory.  
+They provide a way to measure the ``energy'' of a system and are crucial for analyzing stability.
+
+\begin{definition}[Positive Semidefinite Function]
+A continuous function $V:\mathcal{D}\subset\mathbb{R}^n \to \mathbb{R}$ is said to be
+\begin{itemize}
+    \item \textbf{Positive semidefinite} if 
+    \[
+        V(x) \geq 0, \quad \forall x \in \mathcal{D}, \quad V(0) = 0
+    \]
+    \item \textbf{Positive definite} if 
+    \[
+        V(x) > 0 \ \forall x \in \mathcal{D}\setminus\{0\}, \quad V(0)=0
+    \]
+    \item \textbf{Negative semidefinite} if $V(x) \leq 0$ with equality at the origin.
+    \item \textbf{Negative definite} if $V(x) < 0$ for all $x \neq 0$ and $V(0)=0$.
+\end{itemize}
+\end{definition}
+
+\begin{example}[Quadratic Form]
+An important class of functions is given by quadratic forms:
+\[
+    V(x) = x^T Q x, \quad Q = Q^T \in \mathbb{R}^{n\times n}.
+\]
+Here,
+\begin{itemize}
+    \item If $Q$ is positive definite, then $V(x)$ is positive definite.
+    \item If $Q$ is positive semidefinite, then $V(x)$ is positive semidefinite.
+\end{itemize}
+\end{example}
+
+\begin{definition}[Lie Derivative]
+Consider a dynamical system 
+\[
+    \dot{x} = f(x), \quad f:\mathcal{D}\subset\mathbb{R}^n \to \mathbb{R}^n.
+\]
+For a differentiable function $V:\mathcal{D}\to \mathbb{R}$, the \textbf{Lie derivative} of $V$ along $f$ is defined as
+\[
+    \dot{V}(x) = L_f V(x) = \nabla V(x)\cdot f(x) =\frac{\partial V}{\partial x}f(x)
+\]
+\end{definition}
+
+\begin{example}[Computation of $\dot V(x)$]
+Consider the nonlinear system
+\[
+    \dot{x}_1 = 2x_1, 
+    \qquad 
+    \dot{x}_2 = x_1x_2,
+\]
+with state vector $x = \begin{bmatrix}x_1 \\ x_2\end{bmatrix}$.
+
+Let the candidate Lyapunov function be
+\[
+    V(x) = x_1^2 + x_2^2.
+\]
+
+Then the gradient of $V$ is
+\[
+    \nabla V(x) = \begin{bmatrix} 2x_1 & 2x_2 \end{bmatrix}.
+\]
+
+Hence the Lie derivative of $V$ along $f(x)$ is
+\[
+    \dot{V}(x) = \nabla V(x)\cdot f(x) 
+    = \begin{bmatrix} 2x_1 & 2x_2 \end{bmatrix}
+      \begin{bmatrix} 2x_1 \\ x_1x_2 \end{bmatrix}.
+\]
+
+Carrying out the multiplication,
+\[
+    \dot{V}(x) = 4x_1^2 + 2x_1x_2^2.
+\]
+
+\end{example}
+
+\begin{remark}
+The sign of $\dot{V}(x)$ (negative definite, semidefinite, or indefinite) determines whether the function $V$ can be used as a Lyapunov function to prove stability of the equilibrium at the origin.
+\end{remark}
+
+%------------------------------------------------
+\section{Stability Theorems}\index{Stability Theorems}
+
+\begin{theorem}[Lyapunov Stability Theorem]
+Consider the autonomous system
+\[
+    \dot{x} = f(x), \qquad f(0)=0,
+\]
+with equilibrium at the origin.  
+Let $V:\mathcal{D}\to \mathbb{R}$ be a continuously differentiable function such that:
+\begin{enumerate}
+    \item $V(0) = 0$,
+    \item $V(x) > 0, \quad \forall x \in \mathcal{D}\setminus\{0\}$ (positive definite),
+    \item $\dot V(x) = \nabla V(x)\cdot f(x) \leq 0, \quad \forall x \in \mathcal{D}\setminus\{0\}$.
+\end{enumerate}
+Then the equilibrium at the origin is \textbf{stable}.
+\end{theorem}
+
+\begin{theorem}[Asymptotic Stability Theorem]
+Under the same setup, suppose:
+\begin{enumerate}
+    \item $V(0) = 0$,
+    \item $V(x) > 0, \quad \forall x \in \mathcal{D}\setminus\{0\}$,
+    \item $\dot V(x) < 0, \quad \forall x \in \mathcal{D}\setminus\{0\}$ (negative definite).
+\end{enumerate}
+Then the equilibrium at the origin is \textbf{asymptotically stable}.
+\end{theorem}
+
+\begin{example}[Pendulum without Friction]
+Consider the undamped pendulum (schematic shown below):
+
+\begin{center}
+\begin{tikzpicture}[thick,scale=1.0]
+    % Pivot point
+    \fill (0,0) circle (2pt);
+
+    % String
+    \draw (0,0) -- (30:-3);
+
+    % Bob
+    \filldraw[fill=gray!30] (30:-3) circle (8pt);
+
+    % Vertical reference line
+    \draw[dashed] (0,0) -- (0,-3);
+
+    % Angle theta
+    \draw[->] (0,-1) arc (-90:-150:1);
+    \node at (-0.6,-1.3) {$\theta$};
+\end{tikzpicture}
+\end{center}
+
+The dynamics are:
+\[
+    \ddot{\theta} + \frac{g}{l}\sin\theta = 0.
+\]
+Define the state variables $x_1 = \theta$, $x_2 = \dot\theta$.  
+The system can be written as:
+\[
+    \dot{x}_1 = x_2, 
+    \qquad 
+    \dot{x}_2 = -\tfrac{g}{l}\sin(x_1).
+\]
+
+Choose the candidate Lyapunov function (total mechanical energy):
+\[
+    V(x) = \tfrac{1}{2}x_2^2 + \tfrac{g}{l}(1-\cos x_1).
+\]
+
+Then
+\[
+    \dot V(x) = \nabla V(x)\cdot f(x) = x_2\dot{x}_2 + \tfrac{g}{l}\sin(x_1)\dot{x}_1 = 0.
+\]
+
+Hence $\dot V(x)=0$, so $V$ is conserved (energy conservation).  
+The equilibrium is \textbf{stable}, but not asymptotically stable.
+\end{example}
+
+
+\begin{example}[Pendulum with Friction]
+Now consider the damped pendulum:
+\[
+    \ddot{\theta} + k\dot{\theta} + \tfrac{g}{l}\sin\theta = 0, \quad k>0.
+\]
+In state-space form:
+\[
+    \dot{x}_1 = x_2, 
+    \qquad 
+    \dot{x}_2 = -k x_2 - \tfrac{g}{l}\sin(x_1).
+\]
+
+Using the same Lyapunov function:
+\[
+    V(x) = \tfrac{1}{2}x_2^2 + \tfrac{g}{l}(1-\cos x_1),
+\]
+we compute
+\[
+    \dot V(x) = x_2\dot{x}_2 + \tfrac{g}{l}\sin(x_1)\dot{x}_1
+    = x_2(-k x_2 - \tfrac{g}{l}\sin(x_1)) + \tfrac{g}{l}\sin(x_1)x_2.
+\]
+
+Simplifying,
+\[
+    \dot V(x) = -k x_2^2 \leq 0,
+\]
+with equality only when $x_2=0$.  
+
+Thus, $\dot V(x)<0$ for all $x_2 \neq 0$, and the equilibrium is \textbf{asymptotically stable}.
+\end{example}
+
+\section{Asymptotic Stability in the Large}\index{Asymptotic Stability in the Large}
+\section{Positive Definite Functions Revisited}\index{Positive Definite Functions Revisited} 
+\subsection{Exponential Stability}\index{Positive Definite Functions Revisited!Exponential Stability}
+\section{Construction of Lyapunov Functions}\index{Construction of Lyapunov Functions}
+\section{The Invariance Principle}\index{The Invariance Principle}
+\section{Region of Attraction}\index{Region of Attraction}
+\section{Analysis of LTI systems}\index{Analysis of LTI systems}
+\section{Instability}\index{Instability}
