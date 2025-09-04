@@ -334,9 +334,150 @@ with equality only when $x_2=0$.
 Thus, $\dot V(x)<0$ for all $x_2 \neq 0$, and the equilibrium is \textbf{asymptotically stable}.
 \end{example}
 
+\newpage
+%------------------------------------------------
 \section{Asymptotic Stability in the Large}\index{Asymptotic Stability in the Large}
-\section{Positive Definite Functions Revisited}\index{Positive Definite Functions Revisited} 
+
+\begin{definition}[Global Asymptotic Stability]
+	An equilibrium point $x_e$ of $\dot{x}=f(x)$ is said to be \emph{globally asymptotically stable} if it is:
+	\begin{enumerate}
+		\item Stable in the sense of Lyapunov;
+		\item For every initial condition $x(0)\in \mathbb{R}^n$, $\lim_{t\to\infty}x(t)=x_e$.
+	\end{enumerate}
+\end{definition}
+
+\begin{definition}[Radially Unbounded Function]
+	A continuously differentiable function $V:\mathbb{R}^n \to \mathbb{R}$ is said to be \emph{radially unbounded} if
+	\begin{equation}
+		\|x\| \to \infty \quad \Rightarrow \quad V(x)\to \infty.
+	\end{equation}
+	In other words, the value of $V(x)$ increases without bound as the norm of $x$ goes to infinity.
+\end{definition}
+
+\begin{theorem}[Lyapunov’s Global Stability Theorem]
+	Consider the system $\dot{x}=f(x)$ with equilibrium at $x=0$.  
+	If there exists a continuously differentiable function $V:\mathbb{R}^n \to \mathbb{R}$ such that:
+	\begin{enumerate}
+		\item $V(0)=0$,
+		\item $V(x)>0$ for all $x\neq 0$,
+		\item $V(x)\to \infty$ as $\|x\|\to \infty$ (radially unbounded),
+		\item $\dot{V}(x)<0$ for all $x\neq 0$,
+	\end{enumerate}
+	then the equilibrium $x=0$ is globally asymptotically stable.
+\end{theorem}
+
+\begin{example}[Mass–Spring–Damper]
+	Consider a mass--spring--damper system:
+	\begin{equation}
+		m\ddot{x} + c\dot{x} + kx = 0, \quad m,c,k>0.
+	\end{equation}
+	Choose the Lyapunov function representing the total energy:
+	\begin{equation}
+		V(x,\dot{x}) = \tfrac{1}{2}m\dot{x}^2 + \tfrac{1}{2}kx^2.
+	\end{equation}
+	Then:
+	\begin{itemize}
+		\item $V(x,\dot{x}) \ge 0$, and $V(x,\dot{x}) \to \infty$ as $\|(x,\dot{x})\|\to \infty$ (radially unbounded),
+		\item $\dot{V}(x,\dot{x}) = -c\dot{x}^2 < 0$ for $\dot{x}\neq 0$.
+	\end{itemize}
+	Thus, the equilibrium point $(x,\dot{x})=(0,0)$ is globally asymptotically stable:  
+	the mass always comes to rest at the origin, regardless of its initial displacement and velocity.
+\end{example}
+
+
+%------------------------------------------------
+\section{Positive Definite Functions Revisited}\index{Positive Definite Functions Revisited}
+
+\begin{definition}[Class $\mathcal{K}$ Functions]
+	A continuous function $\alpha:[0,a)\to [0,\infty)$ is said to belong to \emph{class $\mathcal{K}$} if it is:
+	\begin{enumerate}
+		\item strictly increasing,
+		\item $\alpha(0)=0$.
+	\end{enumerate}
+	If $a=\infty$ and $\alpha(r)\to \infty$ as $r\to \infty$, then $\alpha$ is said to be of \emph{class $\mathcal{K}_\infty$}.
+\end{definition}
+
+\begin{corollary}
+	A function $V:\mathbb{R}^n \to \mathbb{R}$ is positive definite if and only if there exist class $\mathcal{K}$ functions $\alpha_1, \alpha_2$ such that
+	\begin{equation}
+		\alpha_1(\|x\|) \leq V(x) \leq \alpha_2(\|x\|), \quad \forall x \in \mathbb{R}^n.
+	\end{equation}
+\end{corollary}
+
+\begin{corollary}
+	Let $x_e$ be an equilibrium of $\dot{x}=f(x)$.  
+	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) \leq 0$, then $x_e$ is stable.
+\end{corollary}
+
+\begin{corollary}
+	Let $x_e$ be an equilibrium of $\dot{x}=f(x)$.  
+	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) < 0$ for all $x\neq x_e$, then $x_e$ is asymptotically stable.
+\end{corollary}
+
+%------------------------------------------------
 \subsection{Exponential Stability}\index{Positive Definite Functions Revisited!Exponential Stability}
+
+\begin{theorem}[Exponential Stability]
+	Consider the system $\dot{x}=f(x)$ with equilibrium at $x=0$.  
+	If there exists a continuously differentiable, radially unbounded, positive definite function $V(x)$ such that
+	\begin{equation}
+		c_1 \|x\|^2 \leq V(x) \leq c_2 \|x\|^2,
+	\end{equation}
+	and
+	\begin{equation}
+		\dot{V}(x) \leq -c_3 \|x\|^2,
+	\end{equation}
+	for positive constants $c_1, c_2, c_3 > 0$, then the equilibrium $x=0$ is \emph{globally exponentially stable}.  
+	In particular, there exist constants $k,\lambda > 0$ such that
+	\begin{equation}
+		\|x(t)\| \leq k e^{-\lambda t}\|x(0)\|, \quad \forall t \geq 0.
+	\end{equation}
+\end{theorem}
+
+\begin{example}[Linear system: global exponential stability]
+Consider the system
+\begin{equation}
+    \dot{x} = Ax,\qquad A=\begin{bmatrix}-1 & 0\\ 0 & -2\end{bmatrix}.
+\end{equation}
+Choose the Lyapunov function $V(x)=\tfrac{1}{2}\|x\|^2=\tfrac{1}{2}(x_1^2+x_2^2)$. Then
+\begin{equation}
+    \dot{V}(x) = x^\top \dot{x} = x_1(-x_1)+x_2(-2x_2) = -x_1^2-2x_2^2
+    \le -\min\{1,2\}\,(x_1^2+x_2^2) = -\|x\|^2.
+\end{equation}
+Moreover,
+\begin{equation}
+    \tfrac{1}{2}\|x\|^2 \le V(x) \le \tfrac{1}{2}\|x\|^2, 
+    \qquad \dot{V}(x) \le -\|x\|^2 = -2\,V(x).
+\end{equation}
+By the exponential stability theorem, $x=0$ is \emph{globally exponentially stable} and
+\begin{equation}
+    \|x(t)\| \le e^{-t}\|x(0)\|.
+\end{equation}
+\end{example}
+
+\begin{example}[Nonlinear system: global exponential stability]
+Consider the scalar system
+\begin{equation}
+    \dot{x} = -x - x^3.
+\end{equation}
+Let $V(x)=\tfrac{1}{2}x^2$. Then
+\begin{equation}
+    \dot{V}(x) = x\dot{x} = x(-x-x^3) = -x^2 - x^4 \le -x^2 = -2V(x).
+\end{equation}
+Hence $V$ is positive definite and satisfies $\dot{V}\le -2V$ globally, so the origin is
+\emph{globally exponentially stable}. In particular,
+\begin{equation}
+    |x(t)| \le e^{-t}\,|x(0)|.
+\end{equation}
+\end{example}
+
+\begin{remark}[Contrast: asymptotic but not exponential]
+For the system $\dot{x}=-x^3$ with $V(x)=\tfrac{1}{2}x^2$, we get $\dot{V}=-x^4$.
+Although $\dot{V}<0$ for $x\neq 0$ (implying global asymptotic stability), there is no bound of the form
+$\dot{V}\le -c\,V$ with a constant $c>0$ valid for all $x$. Thus the origin is \emph{not} exponentially
+stable—only (global) asymptotically stable.
+\end{remark}
+
 \section{Construction of Lyapunov Functions}\index{Construction of Lyapunov Functions}
 \section{The Invariance Principle}\index{The Invariance Principle}
 \section{Region of Attraction}\index{Region of Attraction}
