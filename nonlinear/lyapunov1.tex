@@ -479,7 +479,356 @@ stable—only (global) asymptotically stable.
 \end{remark}
 
 \section{Construction of Lyapunov Functions}\index{Construction of Lyapunov Functions}
+
+We present the \emph{variable-gradient} (also called ``line-integral'') method for constructing a scalar Lyapunov function \(V(x)\) from a candidate gradient field \(g(x)\). The main theorem gives a simple necessary and sufficient condition when a vector field is a gradient.
+
+\begin{theorem}
+Let \(G\subset\mathbb{R}^n\) be open and simply connected. A continuously differentiable vector field \(g:G\to\mathbb{R}^n\) is the gradient of a scalar function \(V:G\to\mathbb{R}\) (that is, \(g=\nabla V\)) if and only if the Jacobian matrix \(Dg(x)\) is symmetric for all \(x\in G\):
+\[
+\frac{\partial g_i}{\partial x_j}(x)=\frac{\partial g_j}{\partial x_i}(x)
+\quad\text{for all }i,j,\ x\in G.
+\]
+\end{theorem}
+
+\subsection{Variable-gradient method}\index{Construction of Lyapunov Functions!Variable-gradient method}
+Given a candidate vector field \(g(x)\) (continuous and \(C^1\)) on a simply connected domain:
+
+\begin{enumerate}
+  \item \textbf{Check symmetry:} compute the Jacobian \(Dg(x)\). Verify \(\partial g_i/\partial x_j=\partial g_j/\partial x_i\) for all \(i,j\). If not symmetric, \(g\) is not a gradient and the method fails.
+  \item \textbf{Construct \(V\):} if symmetric, define
+  \[
+  V(x)=\int_{0}^{1} x^\top g(tx)\,dt
+  \]
+  or pick a base point \(x_0\) and set
+  \[
+  V(x)=\int_{\gamma} g(\xi)\cdot d\xi,
+  \]
+  where \(\gamma\) is any path from \(x_0\) to \(x\). Path independence holds because \(Dg\) is symmetric.
+  \item \textbf{Verify gradient:} differentiate the built \(V\) to confirm \(\nabla V(x)=g(x)\).
+  \item \textbf{Lyapunov test (for dynamics):} for a system \(\dot x=f(x)\), if you choose \(f(x)=-g(x)\) then
+  \[
+  \dot V(x)=\nabla V(x)\cdot\dot x = g(x)\cdot(-g(x))=-\|g(x)\|^2\le 0,
+  \]
+  so \(V\) is a (nonincreasing) Lyapunov function; it is positive definite if \(V(0)=0\) and \(V(x)>0\) for \(x\neq0\).
+\end{enumerate}
+
+\begin{example}
+Consider the nonlinear system
+\[
+\dot{x}_1=-a x_1,\qquad \dot{x}_2= b x_2 + x_1x_2^2,\qquad a>0.
+\]
+
+\begin{enumerate}
+\item \textbf{Choose candidate gradient field.}  
+\\Take
+$
+g(x)=\begin{bmatrix}2x_1\\ x_2\end{bmatrix}.
+$
+Its Jacobian is
+$
+Dg(x)=\begin{bmatrix}2 & 0\\0 & 1\end{bmatrix},
+$
+which is symmetric.
+
+\item \textbf{Construct \(V(x)\).}  
+Integrating gives
+\[
+V(x)=x_1^2+\tfrac{1}{2}x_2^2,
+\]
+since \(\nabla V(x)=g(x)\).
+
+\item \textbf{Verify Lyapunov conditions.}  
+\\Clearly, \(V(x)>0\) for all \(x\neq 0\) and \(V(0)=0\). Along trajectories,
+\[
+\dot{V}(x)=\nabla V(x)\cdot \dot{x}
+=\begin{bmatrix}2x_1 & x_2\end{bmatrix}
+\begin{bmatrix}-a x_1\\ b x_2+x_1x_2^2\end{bmatrix}.
+\]
+
+Carrying out the multiplication,
+\[
+\dot{V}(x)=-2a x_1^2+b x_2^2+x_1x_2^3.
+\]
+
+\item \textbf{Interpretation.}  
+\\- If \(b<0\) and the cross-term \(x_1x_2^3\) is small (e.g., in a local region around the origin), then \(\dot{V}(x)\leq 0\).  
+\\- Thus, \(V(x)\) serves as a Lyapunov function showing local stability of the origin when \(a>0,\ b<0\).
+\end{enumerate}
+\end{example}
+
+\begin{remark}
+\textbf{How do we choose $g(x)$ in the variable-gradient method?}
+
+\begin{itemize}
+  \item Start with a quadratic candidate $V(x)=p_1x_1^2+p_2x_2^2+\cdots$, with $p_i>0$.  
+        Its gradient is $g(x)=[2p_1x_1,\ 2p_2x_2,\ \ldots]^T$.  
+
+  \item Check $\dot V(x)=g(x)^\top f(x)$.  
+        Adjust the constants $p_i$ so that the negative terms dominate.  
+
+  \item For the system 
+  \[
+  \dot{x}_1=-a x_1,\qquad \dot{x}_2=b x_2+x_1x_2^2,
+  \]
+  the simple choice $g(x)=[2x_1,\ x_2]^T$ works well, leading to
+  $V(x)=x_1^2+\tfrac12 x_2^2$.
+
+  \item In general, if cross-terms appear in $\dot V(x)$, try adding cross-terms
+  like $x_1x_2$ inside $V(x)$ so that $g(x)$ cancels unwanted terms.
+\end{itemize}
+\end{remark}
+
 \section{The Invariance Principle}\index{The Invariance Principle}
+
+\begin{definition}[Invariant set]
+A set $M \subset \mathbb{R}^n$ is said to be \emph{invariant} with respect to a dynamical system 
+\[
+\dot{x}=f(x), \quad x(0)=x_0,
+\]
+if every trajectory starting in $M$ remains in $M$ for all future time, i.e.
+\[
+x(0)\in M \;\;\Rightarrow\;\; x(t)\in M \quad \forall t\geq 0.
+\]
+\end{definition}
+
+%--------------------------------------
+
+\begin{theorem}[Asymptotic stability of the origin]
+Consider the system $\dot{x}=f(x)$ with equilibrium $x=0$.  
+If there exists a continuously differentiable function $V:\mathbb{R}^n\to \mathbb{R}$ such that
+\[
+V(x)>0 \;\; \forall x\neq 0, \quad V(0)=0, \quad \dot V(x) = \nabla V(x)\cdot f(x) <0 \;\; \forall x\neq 0,
+\]
+then the equilibrium $x=0$ is \emph{asymptotically stable}.
+\end{theorem}
+
+\begin{example}
+For $\dot{x}=-x$ in $\mathbb{R}$, choose $V(x)=\tfrac12 x^2$. Then $V(x)>0$ for $x\neq 0$, and
+\[
+\dot V(x) = x(-x) = -x^2 <0.
+\]
+Hence $x=0$ is asymptotically stable.
+\end{example}
+
+%--------------------------------------
+
+\begin{theorem}[Null solution stability for autonomous systems]
+Let $\dot{x}=f(x)$ be an autonomous system with equilibrium $x=0$.  
+If there exists $V(x)$ positive definite such that $\dot V(x)$ is negative definite, then the \emph{null solution} $x(t)\equiv 0$ is asymptotically stable.
+\end{theorem}
+
+\begin{example}
+Consider $\dot{x}_1=-x_1+x_2^2,\ \dot{x}_2=-2x_2$.  
+Take $V(x)=x_1^2+x_2^2$. Then
+\[
+\dot V=2x_1(-x_1+x_2^2)+2x_2(-2x_2)=-2x_1^2+2x_1x_2^2-4x_2^2.
+\]
+For small $x$, negative terms dominate, showing asymptotic stability of the null solution.
+\end{example}
+
+%--------------------------------------
+
+\begin{theorem}[LaSalle's Invariance Principle]
+Let $\dot{x}=f(x)$ be an autonomous system with equilibrium $x=0$.  
+Suppose there exists $V(x)\geq 0$, continuously differentiable, such that $\dot V(x)\leq 0$ in a domain $D$ containing the origin.  
+Let 
+\[
+E=\{x\in D:\dot V(x)=0\}.
+\]
+If the largest invariant set $M\subset E$ contains only the point $x=0$, then the origin is asymptotically stable.
+\end{theorem}
+
+\begin{example}
+Consider
+\[
+\dot{x}_1=-x_1,\qquad \dot{x}_2=-x_1^2.
+\]
+Take $V(x)=\tfrac12 x_1^2+\tfrac12 x_2^2$. Then
+\[
+\dot V= x_1(-x_1)+x_2(-x_1^2)=-x_1^2 -x_1^2x_2 \leq 0.
+\]
+The set where $\dot V=0$ is $\{(0,x_2):x_2\in\mathbb{R}\}$.  
+On this set, the dynamics reduce to $\dot{x}_1=0,\ \dot{x}_2=0$, so the only invariant point is $(0,0)$.  
+By LaSalle’s theorem, $(0,0)$ is asymptotically stable.
+\end{example}
+
 \section{Region of Attraction}\index{Region of Attraction}
+
+\begin{definition}[Trajectory and Region of Attraction]
+Let $\psi(x,t)$ denote the trajectory of the system
+\[
+\dot{x}=f(x), \qquad x(0)=x,
+\]
+at time $t\geq 0$.  
+The \emph{region of attraction} ($R_A$) of an equilibrium point $x_e$ with domain $D\subset \mathbb{R}^n$ is defined as
+\[
+R_A(x_e)=\{x\in D:\lim_{t\to\infty}\psi(x,t)=x_e\}.
+\]
+\end{definition}
+
+%--------------------------------------
+
+\begin{theorem}[Lyapunov characterization of region of attraction]
+Let $x_e$ be an equilibrium of $\dot{x}=f(x)$ with domain $D$.  
+Assume:
+\begin{enumerate}
+    \item $M\subset D$ is a compact set containing $x_e$ in its interior.
+    \item There exists a continuously differentiable function $V:M\to\mathbb{R}$ such that
+    \[
+    V(x)>0 \ \ \forall x\in M,\ x\neq x_e,\quad V(x_e)=0,
+    \]
+    and
+    \[
+    \dot V(x)=\nabla V(x)\cdot f(x) < 0 \quad \forall x\in M,\ x\neq x_e, \qquad \dot V(x_e)=0.
+    \]
+\end{enumerate}
+Then $M\subset R_A(x_e)$, i.e. $M$ is contained in the region of attraction of $x_e$.
+\end{theorem}
+
+%--------------------------------------
+
+\begin{example}
+Consider the nonlinear system
+\[
+\dot{x}_1=-x_1+x_1x_2, 
+\qquad 
+\dot{x}_2=-x_2.
+\]
+The equilibrium is $x_e=(0,0)$.
+
+Choose the Lyapunov function
+\[
+V(x)=x_1^2+x_2^2.
+\]
+Then
+\[
+\dot V=2x_1(-x_1+x_1x_2)+2x_2(-x_2)=-2x_1^2+2x_1^2x_2-2x_2^2.
+\]
+\\
+\textbf{Analysis:}  \\
+- Inside the compact set $M=\{x\in\mathbb{R}^2: V(x)\leq 1\}$, $V$ is positive definite.  
+\\- For small $x_2$, the term $2x_1^2x_2$ is dominated by $-2x_1^2-2x_2^2$, hence $\dot V<0$ for all $x\in M$, $x\neq 0$.  
+\\- Thus, by the theorem, $M\subset R_A(0)$.
+\\So the unit ball $M$ lies inside the region of attraction of the origin.
+\end{example}
+
 \section{Analysis of LTI systems}\index{Analysis of LTI systems}
+
+Consider the linear time-invariant (LTI) system
+\[
+\dot x = A x,\qquad x\in\mathbb{R}^n.
+\]
+
+We propose a quadratic Lyapunov candidate
+\[
+V(x)=x^\top P x, \quad P=P^\top>0.
+\]
+
+Differentiating along trajectories gives
+\[
+\dot V(x) = \dot x^\top P x + x^\top P \dot x 
+          = (A x)^\top P x + x^\top P (A x).
+\]
+
+This simplifies to
+\[
+\dot V(x) = x^\top \big(A^\top P + P A\big) x.
+\]
+
+To ensure stability, we require \(\dot V(x)<0\) for all \(x\neq 0\).  
+A standard way is to enforce
+\[
+A^\top P + P A = -Q,
+\]
+where \(Q=Q^\top>0\).  
+Thus, \(\dot V(x) = -x^\top Q x < 0\), proving that \(V(x)\) is strictly decreasing along trajectories.
+
+\begin{theorem}[Stability of LTI systems]
+Let \(A\in\mathbb{R}^{n\times n}\).
+\begin{enumerate}
+  \item If all eigenvalues of \(A\) satisfy \(\Re(\lambda)<0\) (i.e. \(A\) is Hurwitz), then the equilibrium \(x=0\) is \textbf{asymptotically stable}.
+  \item Equivalently, for any symmetric \(Q=Q^\top>0\), there exists a unique \(P=P^\top>0\) that solves the Lyapunov equation
+  \[
+  A^\top P + P A = -Q.
+  \]
+  In this case, the Lyapunov function \(V(x)=x^\top P x\) satisfies
+  \[
+  \dot V(x) = -x^\top Q x < 0 \quad (x\neq 0).
+  \]
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}
+The matrix \(Q\) appears from the requirement that \(\dot V(x)\) must be negative definite.  
+It is chosen arbitrarily as any symmetric positive definite matrix, and then \(P\) is solved from the Lyapunov equation.  
+Different choices of \(Q\) yield different \(P\), but all provide valid Lyapunov functions proving stability.
+\end{remark}
+
+\begin{example}
+Take
+\[
+A=\begin{bmatrix}-1 & 0\\[4pt] 0 & -2\end{bmatrix}, \qquad 
+Q=\begin{bmatrix}1 & 0\\[4pt] 0 & 1\end{bmatrix}.
+\]
+The Lyapunov equation
+\[
+A^\top P + P A = -Q
+\]
+becomes
+\[
+\begin{bmatrix}-1 & 0\\[4pt] 0 & -2\end{bmatrix}
+P + P
+\begin{bmatrix}-1 & 0\\[4pt] 0 & -2\end{bmatrix}
+= -I.
+\]
+
+Solving gives
+\[
+P=\begin{bmatrix}\tfrac12 & 0\\[4pt] 0 & \tfrac14\end{bmatrix}>0.
+\]
+
+Thus,
+\[
+V(x)=\tfrac12 x_1^2+\tfrac14 x_2^2, \qquad 
+\dot V(x) = -x_1^2 - x_2^2 < 0 \quad (x\neq 0).
+\]
+
+Therefore, the equilibrium \(x=0\) is exponentially asymptotically stable.
+\end{example}
+
 \section{Instability}\index{Instability}
+
+\begin{theorem}[Chetaev's Theorem]
+Consider the system $\dot x = f(x)$ with equilibrium at $x=0$.  
+If there exists a continuously differentiable function $V(x)$ such that:
+\begin{enumerate}
+  \item $V(0)=0$,
+  \item $V(x)>0$ in some neighborhood of the origin (except at $x=0$),
+  \item $\dot V(x)>0$ in that neighborhood,
+\end{enumerate}
+then the equilibrium $x=0$ is \textbf{unstable}.
+\end{theorem}
+
+\begin{remark}
+This result is the dual of Lyapunov’s stability theorem:  
+instead of $\dot V(x)<0$ implying stability, here $\dot V(x)>0$ implies instability.
+\end{remark}
+
+\begin{example}
+Consider the scalar system
+\[
+\dot x = x.
+\]
+Choose
+\[
+V(x) = \tfrac{1}{2} x^2.
+\]
+We check Chetaev’s conditions:
+\begin{align*}
+V(0) &= 0, \\
+V(x) &= \tfrac{1}{2}x^2 > 0 \quad \text{for } x\neq 0, \\
+\dot V(x) &= x \dot x = x(x) = x^2 > 0 \quad \text{for } x\neq 0.
+\end{align*}
+Thus, all conditions are satisfied, and by Chetaev’s theorem,  
+the equilibrium $x=0$ is unstable.
+\end{example}
