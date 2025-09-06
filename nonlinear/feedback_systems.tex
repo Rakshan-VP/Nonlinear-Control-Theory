@@ -1,0 +1,143 @@
+\chapterimage{orange2.jpg} % Chapter heading image
+\chapterspaceabove{6.75cm} % Whitespace from the top of the page to the chapter title on chapter pages
+\chapterspacebelow{7.25cm} % Amount of vertical whitespace from the top margin to the start of the text on chapter pages
+
+\chapter{Feedback Systems}\index{Feedback Systems}
+
+\section{Overview}\index{Overview}
+
+Until now, we have focused on open-loop systems. In this chapter, our attention shifts to \textbf{closed-loop systems}, where feedback is used to stabilize and control the system.  
+
+We will introduce basic \textbf{feedback stabilization} and the \textbf{backstepping method}. Consider a general nonlinear system:
+\[
+\dot{x} = f(x,u), \quad x \in \mathbb{R}^n, \; u \in \mathbb{R}^m,
+\]
+where \(u\) is the control input.  
+
+In a \textbf{state feedback} approach, the control is chosen as a function of the state:
+\[
+u = \phi(x),
+\]
+so that the closed-loop system becomes
+\[
+\dot{x} = f(x, \phi(x)).
+\]
+
+The goal of feedback design is to choose \(\phi(x)\) such that the equilibrium \(x=0\) (or any desired state) is \textbf{stable}, preferably \textbf{asymptotically} or \textbf{exponentially stable}.
+
+\section{Basic Feedback Stabilization}\index{Basic Feedback Stabilization}
+
+We illustrate feedback stabilization using simple examples and explain the impact of nonlinear terms.  
+
+\begin{example}[Exact Cancellation – Globally Asymptotically Stable]
+Consider the system:
+\[
+\dot{x} = a x^2 + u.
+\]
+
+\begin{itemize}
+    \item \textbf{Step 1: Choose Control Input:}  
+    Suppose we can exactly cancel the nonlinear term by choosing
+    \[
+    u = - a x^2 - x.
+    \]
+
+    \item \textbf{Step 2: Closed-Loop Dynamics:}  
+    Substituting the control gives
+    \[
+    \dot{x} = -x.
+    \]
+
+    \item \textbf{Step 3: Stability Analysis:}  
+    \begin{itemize}
+        \item Take a Lyapunov function \(V(x) = \frac{1}{2} x^2\).  
+        \item Then \(\dot{V}(x) = x \dot{x} = - x^2 \le 0\).  
+        \item Therefore, \(x=0\) is \textbf{globally asymptotically stable (GAS)}.
+    \end{itemize}
+\end{itemize}
+\end{example}
+
+\begin{remark}[\textbf{Practical Limitation}]
+In practice, exact cancellation of the nonlinear term \(a x^2\) may not be possible. For instance, suppose the implemented control is
+\[
+u = - \bar{a} x^2 - x,
+\]
+with \(\bar{a} \neq a\). Then the closed-loop system becomes
+\[
+\dot{x} = (a - \bar{a}) x^2 - x.
+\]
+
+\begin{itemize}
+    \item The term \((a-\bar{a}) x^2\) may cause the system to be only \textbf{locally asymptotically stable (LAS)}.  
+    \item This illustrates that exact cancellation is not always required or achievable in real systems.
+\end{itemize}
+\end{remark}
+
+\begin{example}[Nonlinear Terms Can Be Beneficial – Detailed Analysis]
+Consider the system:
+\[
+\dot{x} = a x^2 - x^3 + u,
+\]
+where \(x \in \mathbb{R}\) and \(u\) is the control input.  
+
+\begin{itemize}
+    \item \textbf{Step 1: Choose a simple control input:}  
+    Let us select
+    \[
+    u = - a x^2 - x.
+    \]
+    This eliminates the \(a x^2\) term and introduces linear damping. The closed-loop system becomes:
+    \[
+    \dot{x} = - x - x^3.
+    \]
+
+    \item \textbf{Step 2: Observe the remaining nonlinear term:}  
+    The cubic term \(-x^3\) remains. Unlike the \(a x^2\) term, it \textbf{assists in stabilization} because it is negative for positive \(x\) and positive for negative \(x\), i.e.,
+    \[
+    -x^3 \cdot x = -x^4 \le 0.
+    \]
+
+    \item \textbf{Step 3: Construct a Lyapunov function:}  
+    A natural choice is the quadratic function
+    \[
+    V(x) = \frac{1}{2} x^2, \quad V(x) \ge 0, \quad V(0)=0.
+    \]
+
+    \item \textbf{Step 4: Compute the derivative along the trajectories:}  
+    \[
+    \dot{V}(x) = \frac{dV}{dx} \dot{x} = x \cdot (-x - x^3) = -x^2 - x^4.
+    \]
+
+    \item \textbf{Step 5: Analyze the derivative:}  
+    \begin{itemize}
+        \item For all \(x \neq 0\), \(\dot{V}(x) = -x^2 - x^4 < 0\).  
+        \item This shows that the energy \(V(x)\) decreases along system trajectories.  
+        \item Therefore, the equilibrium \(x=0\) is \textbf{globally asymptotically stable (GAS)}.
+    \end{itemize}
+
+    \item \textbf{Step 6: Insights from the nonlinear term:}  
+    \begin{itemize}
+        \item The term \(-x^3\) naturally adds damping for large \(x\), making the system return faster to the origin.  
+        \item This demonstrates that nonlinear terms are not always detrimental—they can enhance global stability.  
+    \end{itemize}
+\end{itemize}
+\end{example}
+
+\begin{remark}[\textbf{Alternative Lyapunov-Based Design}]
+When exact cancellation of nonlinear terms is not possible, an alternative approach is to:
+
+\begin{itemize}
+    \item Construct a Lyapunov function \(V_1(x)\), e.g., \(V_1(x) = \frac{1}{2} x^2\).  
+    \item Design the control \(u(x)\) such that
+    \[
+    \dot{V}_1(x) = \frac{d V_1}{dx} \dot{x} \le - W(x), \quad W(x) > 0 \;\; \forall x \neq 0.
+    \]  
+    \item This ensures asymptotic stability without needing exact cancellation of all nonlinear terms.  
+    \item Nonlinear terms that naturally help damping can be retained, simplifying the controller.
+\end{itemize}
+\end{remark}
+
+\section{Integrator Backstepping}\index{Integrator Backstepping}
+\section{Backstepping: More General Cases}\index{Backstepping: More General Cases}
+\subsection{Chain of integrators}\index{Backstepping: More General Cases!Chain of integrators}
+\subsection{Strict Feedback Systems}\index{Backstepping: More General Cases!Strict Feedback Systems}
