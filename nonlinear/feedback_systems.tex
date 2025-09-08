@@ -138,7 +138,7 @@ When exact cancellation of nonlinear terms is not possible, an alternative appro
 \end{remark}
 
 \section{Integrator Backstepping}\index{Integrator Backstepping}
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     
     % ====== (a) ======
@@ -332,7 +332,15 @@ When exact cancellation of nonlinear terms is not possible, an alternative appro
 
 \section{Backstepping: More General Cases}\index{Backstepping: More General Cases}
 
-Backstepping is a recursive design methodology used to stabilize systems in \textit{strict-feedback form} or chains of integrators. It constructs control laws step by step while designing Lyapunov functions to guarantee stability.
+Backstepping is a recursive control design method for a special class of nonlinear systems called \textit{strict-feedback systems}. It is particularly useful when:
+
+\begin{itemize}
+\item The system has cascaded dynamics (like a chain of integrators).
+
+\item You want to stabilize each subsystem step by step, starting from the “first” state and moving to the last input.
+\end{itemize}
+
+It systematically constructs a control law and a Lyapunov function to guarantee asymptotic stability.
 
 \subsection{Chain of Integrators}\index{Backstepping: More General Cases!Chain of integrators}
 

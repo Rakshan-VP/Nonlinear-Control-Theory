@@ -1,0 +1,21 @@
+\chapterimage{orange2.jpg} % Chapter heading image
+\chapterspaceabove{6.75cm} % Whitespace from the top of the page to the chapter title on chapter pages
+\chapterspacebelow{7.25cm} % Amount of vertical whitespace from the top margin to the start of the text on chapter pages
+
+\chapter{Input-Output Stability}\index{Input-Output Stability}
+
+\section{Overview}\index{Overview}
+
+So far, stability was studied using Lyapunov functions focusing on internal states. Input-Output (I/O) Stability, in contrast, studies how bounded inputs produce bounded outputs using the mapping $y = H(u)$. It treats the system as a black box without considering internal states.  
+
+\begin{center}
+\begin{tikzpicture}[auto, node distance=1.5cm, thick]
+  \node (u) {$u(t)$};
+  \node[draw, rectangle, minimum height=1.5cm, minimum width=2.5cm, right=of u] (H) {$H$};
+  \node (y) [right=of H] {$y(t)$};
+  \draw[->] (u) -- (H);
+  \draw[->] (H) -- (y);
+\end{tikzpicture}
+\end{center}
+
+\section{Function Spaces}\index{Function Spaces}

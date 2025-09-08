@@ -36,7 +36,7 @@
 
 \usepackage{float} % Allows more precisely positioning floats e.g. \begin{figure}[H]
 
-\usepackage[usenames, svgnames, table]{xcolor} % Required for defining and using custom colors
+\usepackage[svgnames, table]{xcolor} % Required for defining and using custom colors
 
 \usepackage{calc} % For simpler calculations - used for spacing the index letter headings correctly
 

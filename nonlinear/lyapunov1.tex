@@ -194,8 +194,9 @@ Consider the nonlinear system
     \dot{x}_1 = 2x_1, 
     \qquad 
     \dot{x}_2 = x_1x_2,
+    \qquad
+    x = \begin{bmatrix}x_1 \\ x_2\end{bmatrix}
 \]
-with state vector $x = \begin{bmatrix}x_1 \\ x_2\end{bmatrix}$.
 
 Let the candidate Lyapunov function be
 \[
@@ -222,7 +223,7 @@ Carrying out the multiplication,
 \end{example}
 
 \begin{remark}
-The sign of $\dot{V}(x)$ (negative definite, semidefinite, or indefinite) determines whether the function $V$ can be used as a Lyapunov function to prove stability of the equilibrium at the origin.
+The sign of $\dot{V}(x)$ (negative definite, semidefinite) determines whether the function $V$ can be used as a Lyapunov function to prove stability of the equilibrium at the origin.
 \end{remark}
 
 %------------------------------------------------
@@ -253,6 +254,7 @@ Under the same setup, suppose:
 Then the equilibrium at the origin is \textbf{asymptotically stable}.
 \end{theorem}
 
+\newpage
 \begin{example}[Pendulum without Friction]
 Consider the undamped pendulum (schematic shown below):
 
