@@ -138,6 +138,384 @@ When exact cancellation of nonlinear terms is not possible, an alternative appro
 \end{remark}
 
 \section{Integrator Backstepping}\index{Integrator Backstepping}
+\begin{figure}[h!]
+    \centering
+    
+    % ====== (a) ======
+    \begin{tikzpicture}[auto, node distance=1.5cm]
+    \tikzset{
+      block/.style={draw, rectangle, minimum height=1cm, minimum width=1cm},
+      sum/.style={draw, circle, inner sep=1pt, minimum size=6mm},
+      line/.style={->, thick}
+    }
+
+    \node (u) {$u$};
+    \node[block, right=of u] (int1) {$\int$};
+    \node[block, right=of int1] (g) {$g(x)$};
+    \node[sum, right=of g] (sum1) {$+$};
+    \node[block, right=of sum1] (int2) {$\int$};
+    \node[right=of int2] (x) {$x$};
+    \node[block, below=1.5cm of int2] (f) {$f(\cdot)$};
+
+    \draw[line] (u) -- (int1);
+    \draw[line] (int1) -- node[above] {$\xi$} (g);
+    \draw[line] (g) -- (sum1);
+    \draw[line] (sum1) -- (int2);
+    \draw[line] (int2) -- (x);
+    \draw[line] (x) |- (f);
+    \draw[line] (f) -| (sum1);
+
+    \node at ($(u)!0.5!(x)+(0,1)$) {(a)};
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    
+    % ====== (b) ======
+    \begin{tikzpicture}[auto, node distance=1.5cm]
+    \tikzset{
+      block/.style={draw, rectangle, minimum height=1cm, minimum width=1cm},
+      sum/.style={draw, circle, inner sep=1pt, minimum size=6mm},
+      line/.style={->, thick}
+    }
+
+    \node (u) {$u$};
+    \node[block, right=of u] (int1) {$\int$};
+    \node[sum, right=of int1] (sum0) {$+$};
+    \node[block, right=of sum0] (g) {$g(x)$};
+    \node[sum, right=of g] (sum1) {$+$};
+    \node[block, right=of sum1] (int2) {$\int$};
+    \node[right=of int2] (x) {$x$};
+    \node[block, below=1.5cm of int2] (f) {$f(\cdot)+g(\cdot)\phi(\cdot)$};
+
+    \draw[line] (u) -- (int1);
+    \draw[line] (int1) -- node[above] {$\xi$} (sum0);
+    \draw[line] (sum0) -- (g);
+    \draw[line] (g) -- (sum1);
+    \draw[line] (sum1) -- (int2);
+    \draw[line] (int2) -- (x);
+    \draw[line] (x) |- (f);
+    \draw[line] (f) -| (sum1);
+
+    \draw[line] ($(sum0.south)+(0,-0.3)$) node[below] {$-\phi(x)$} -- (sum0.south);
+
+    \node at ($(u)!0.5!(x)+(0,1)$) {(b)};
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    
+    % ====== (c) ======
+    \begin{tikzpicture}[auto, node distance=1.5cm]
+    \tikzset{
+      block/.style={draw, rectangle, minimum height=1cm, minimum width=1cm},
+      sum/.style={draw, circle, inner sep=1pt, minimum size=6mm},
+      line/.style={->, thick}
+    }
+
+    \node (u) {$u$};
+    \node[sum, right=of u] (sum0) {$+$};
+    \node[block, right=of sum0] (int1) {$\int$};
+    \node[block, right=of int1] (g) {$g(x)$};
+    \node[sum, right=of g] (sum1) {$+$};
+    \node[block, right=of sum1] (int2) {$\int$};
+    \node[right=of int2] (x) {$x$};
+    \node[block, below=1.5cm of int2] (f) {$f(\cdot)+g(\cdot)\phi(\cdot)$};
+
+    \draw[line] (u) -- (sum0);
+    \draw[line] (sum0) -- (int1);
+    \draw[line] (int1) -- node[above] {$z$} (g);
+    \draw[line] (g) -- (sum1);
+    \draw[line] (sum1) -- (int2);
+    \draw[line] (int2) -- (x);
+    \draw[line] (x) |- (f);
+    \draw[line] (f) -| (sum1);
+
+    \draw[line] ($(sum0.south)+(0,-0.3)$) node[below] {$-\phi(x)$} -- (sum0.south);
+
+    \node at ($(u)!0.5!(x)+(0,1)$) {(c)};
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    
+    % ====== (d) ======
+    \begin{tikzpicture}[auto, node distance=1.5cm]
+    \tikzset{
+      block/.style={draw, rectangle, minimum height=1cm, minimum width=1cm},
+      sum/.style={draw, circle, inner sep=1pt, minimum size=6mm},
+      line/.style={->, thick}
+    }
+
+    \node (v) {$v=\dot{z}$};
+    \node[block, right=of v] (int1) {$\int$};
+    \node[block, right=of int1] (g) {$g(x)$};
+    \node[sum, right=of g] (sum1) {$+$};
+    \node[block, right=of sum1] (int2) {$\int$};
+    \node[right=of int2] (x) {$x$};
+    \node[block, below=1.5cm of int2] (f) {$f(\cdot)+g(\cdot)\phi(\cdot)$};
+
+    \draw[line] (v) -- (int1);
+    \draw[line] (int1) -- node[above] {$z$} (g);
+    \draw[line] (g) -- (sum1);
+    \draw[line] (sum1) -- (int2);
+    \draw[line] (int2) -- (x);
+    \draw[line] (x) |- (f);
+    \draw[line] (f) -| (sum1);
+
+    \node at ($(v)!0.5!(x)+(0,1)$) {(d)};
+    \end{tikzpicture}
+    
+    \caption{Block diagram representations: (a) Basic structure, (b) With $\phi(x)$ cancellation, (c) Alternate structure, (d) Reformulated with $v=\dot{z}$.}
+    \label{fig:block_diagrams}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{System in cascade form:}
+    \[
+        \dot{x} = f(x) + g(x)\, \xi  
+    \]
+    \[
+        \dot{\xi} = u
+    \]
+
+    \item \textbf{Virtual control:} Assume $\xi = \phi(x)$ stabilizes the $x$-subsystem with Lyapunov function $V_1(x)$:
+    \[
+        \dot{V}_1(x) \le -V_a(x) \le 0
+    \]
+
+    \item \textbf{Expose the error:} Add and subtract $g(x)\phi(x)$:
+    \[
+        \dot{x} = f(x) + g(x)\phi(x) + g(x)(\xi - \phi(x))
+    \]
+
+    \item \textbf{Define tracking error:}
+    \[
+        z := \xi - \phi(x), \quad \dot{z} = u - \dot{\phi}(x), \quad 
+        \dot{\phi}(x) = \frac{\partial \phi}{\partial x}[f(x) + g(x)\xi]
+    \]
+
+    \item \textbf{Introduce new control:} Set $v := \dot{z}$. Then
+    \[
+        \dot{x} = f(x) + g(x)\phi(x) + g(x) z, \quad \dot{z} = v
+    \]
+
+    \item \textbf{Composite Lyapunov candidate:}
+    \[
+        V(x,z) = V_1(x) + \frac{1}{2} z^2
+    \]
+
+    \item \textbf{Design $v$ to stabilize:}
+    \[
+        v = - \left( \frac{\partial V_1}{\partial x} g(x) + k z \right), \quad k>0
+    \]
+    \[
+        \dot{V} \le - V_a(x) - k z^2 \le 0
+    \]
+
+    \item \textbf{Recover actual control:}
+    \[
+        u = v + \dot{\phi}(x)
+          = - \left( \frac{\partial V_1}{\partial x} g(x) + k z \right) + \frac{\partial \phi}{\partial x}[f(x) + g(x)\xi]
+    \]
+
+    \[
+    \boxed{
+    u = - \frac{\partial V_1}{\partial x} g(x) - k (\xi - \phi(x)) + \frac{\partial \phi}{\partial x} \big[ f(x) + g(x) \xi \big]
+    }
+    \]
+    
+
+    \item \textbf{Conclusion:} With $z \to 0$ and the $x$-subsystem stabilized, $(x,\xi)$ is asymptotically stable. If $V_1$ is radially unbounded, stability can be global.
+\end{itemize}
+
+
+
+
+
 \section{Backstepping: More General Cases}\index{Backstepping: More General Cases}
-\subsection{Chain of integrators}\index{Backstepping: More General Cases!Chain of integrators}
-\subsection{Strict Feedback Systems}\index{Backstepping: More General Cases!Strict Feedback Systems}
+
+Backstepping is a recursive design methodology used to stabilize systems in \textit{strict-feedback form} or chains of integrators. It constructs control laws step by step while designing Lyapunov functions to guarantee stability.
+
+\subsection{Chain of Integrators}\index{Backstepping: More General Cases!Chain of integrators}
+
+Consider a system in the form of a chain of integrators:
+\begin{align}
+    \dot{x} &= f(x) + g(x)\xi_1, \\
+    \dot{\xi}_1 &= \xi_2, \\
+    \dot{\xi}_2 &= \xi_3, \\
+    &\;\;\vdots \notag\\
+    \dot{\xi}_{r-1} &= \xi_r, \\
+    \dot{\xi}_r &= u,
+\end{align}
+where $x \in \mathbb{R}^n$, $\xi_i \in \mathbb{R}$, and $u \in \mathbb{R}$.  
+
+Assume the \textit{reduced system}:
+\[
+\dot{x} = f(x) + g(x)\phi(x)
+\]
+is stabilized by the virtual control $\xi_1 = \phi(x)$, with a Lyapunov function $V_1(x)$ such that
+\[
+\dot{V}_1(x) = L_f V_1(x) + L_g V_1(x) \phi(x) \leq -W_1(x), \quad W_1(x) > 0.
+\]
+
+\begin{itemize}
+    
+\item\textbf{Step 1: Define first error variable}
+
+\begin{itemize}
+    \item Introduce the error:
+    \[
+        z_1 = \xi_1 - \phi(x).
+    \]
+    \item Extend the Lyapunov function:
+    \[
+        V_2(x, z_1) = V_1(x) + \frac{1}{2} z_1^2.
+    \]
+    \item Its time derivative is:
+    \begin{align*}
+        \dot{V}_2 &= \dot{V}_1(x) + z_1 \dot{z}_1 \\
+        &= L_f V_1(x) + L_g V_1(x)\xi_1 + z_1(\xi_2 - \dot{\phi}(x)) \\
+        &= L_f V_1(x) + L_g V_1(x)\phi(x) + L_g V_1(x) z_1 + z_1(\xi_2 - \dot{\phi}(x)) \\
+        &\leq -W_1(x) + z_1\big(L_g V_1(x) + \xi_2 - \dot{\phi}(x)\big).
+    \end{align*}
+\end{itemize}
+
+\item\textbf{Step 2: Introduce next error variable}
+
+\begin{itemize}
+    \item Define:
+    \[
+        z_2 = \xi_2 - \alpha_1(x, \xi_1),
+    \]
+    where $\alpha_1(x,\xi_1)$ is designed to cancel the troublesome term:
+    \[
+        \alpha_1(x, \xi_1) = -L_g V_1(x) + \dot{\phi}(x) - k_1 z_1, \quad k_1 > 0.
+    \]
+    \item Extend the Lyapunov function:
+    \[
+        V_3 = V_2 + \frac{1}{2} z_2^2.
+    \]
+    \item Its derivative:
+    \[
+        \dot{V}_3 = -W_1(x) - k_1 z_1^2 + z_2(\xi_3 - \dot{\alpha}_1).
+    \]
+\end{itemize}
+
+\item\textbf{Step 3: Recursive design}
+
+Proceed recursively for $k=3,4,\dots,r$:
+\begin{align}
+    z_k &= \xi_k - \alpha_{k-1}(x,\xi_1,\dots,\xi_{k-1}), \\
+    V_{k+1} &= V_k + \frac{1}{2} z_k^2, \\
+    \dot{V}_{k+1} &\leq - W_k(x, z_1, \dots, z_{k-1}) - k_{k-1} z_{k-1}^2 + z_k(\xi_{k+1} - \dot{\alpha}_{k-1}).
+\end{align}
+
+\item\textbf{Final Step: Control input}
+
+\begin{itemize}
+    \item At $k=r$, define the actual control input:
+    \[
+        u = \alpha_r(x, \xi_1, \dots, \xi_r),
+    \]
+    with
+    \[
+        \alpha_r = \dot{\alpha}_{r-1} - k_r z_r.
+    \]
+    \item The resulting derivative satisfies
+    \[
+        \dot{V}_{r+1} \leq - W(x, z_1, \dots, z_r),
+    \]
+    which guarantees asymptotic stability of the full system.
+\end{itemize}
+\end{itemize}
+
+\subsection{Strict-Feedback Systems}\index{Backstepping: More General Cases!Strict Feedback Systems}
+
+For systems in strict-feedback form:
+\begin{align}
+    \dot{\xi}_1 &= f_1(\xi_1) + g_1(\xi_1) \xi_2, \\
+    \dot{\xi}_2 &= f_2(\xi_1, \xi_2) + g_2(\xi_1, \xi_2) \xi_3, \\
+    &\;\vdots \notag\\
+    \dot{\xi}_r &= f_r(\xi_1, \dots, \xi_r) + g_r(\xi_1, \dots, \xi_r) u,
+\end{align}
+the backstepping procedure is applied recursively:
+\begin{itemize}
+    \item Define virtual control laws $\alpha_i$ and errors $z_i$ step by step.
+    \item Construct Lyapunov functions $V_{i+1} = V_i + \frac{1}{2} z_i^2$ at each step.
+    \item At the last step, define $u = \alpha_r$ to stabilize the full system.
+\end{itemize}
+
+\begin{example}[Magnetic Suspension System with Constant Current]
+
+
+
+Consider a simplified magnetic levitation system:
+\begin{align}
+    \dot{x}_1 &= x_2, \\
+    \dot{x}_2 &= g - \frac{k}{m}\frac{I^2}{(x_1 + c)^2},
+\end{align}
+where $x_1$ is the position of the levitated object, $x_2$ its velocity, $I$ the constant coil current, and $g, k, m, c$ are constants.  
+
+\begin{center}
+\begin{tikzpicture}[auto, node distance=3cm, thick]
+
+    % Blocks
+    \node[draw, rectangle, minimum width=8.5cm, minimum height=1cm] (C) {Backstepping Controller: $\alpha_1(x_1)=-k_1 z_1$};
+    \node[draw, rectangle, minimum width=8cm, minimum height=1cm, below=of C] (P) {Magnetic Suspension: $\dot{x}_1=x_2$, $\dot{x}_2=g-\frac{k}{m}\frac{I^2}{(x_1+c)^2}$};
+
+    % Input and output
+    \node[left=of C] (ref) {Error $z_{1}$};
+    \node[left=of P] (out) {Position $x_1$};
+
+    % Arrows
+    \draw[->] (ref) -- (C) node[midway, above] {$z_1 = x_1 - x_{1d}$};
+    \draw[->] (C) -- (P) node[midway, right] {Control $\alpha_1$};
+    \draw[->] (P) -- (out);
+    \draw[->, dashed] (out.north) --  (ref.south) node[pos=0.5, right] {Feedback};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Step 1: Define position error.} Let
+    \[
+        z_1 = x_1 - x_{1d},
+    \]
+    where $x_{1d}$ is the desired position. Lyapunov function:
+    \[
+        V_1 = \frac{1}{2} z_1^2.
+    \]
+
+    \item \textbf{Step 2: Define velocity error.} Let
+    \[
+        z_2 = x_2 - \alpha_1(x_1),
+    \]
+    where $\alpha_1(x_1)$ is a virtual control law chosen to stabilize $z_1$, for example:
+    \[
+        \alpha_1(x_1) = -k_1 z_1, \quad k_1>0.
+    \]
+    
+    Extend the Lyapunov function:
+    \[
+        V_2 = V_1 + \frac{1}{2} z_2^2.
+    \]
+
+    \item \textbf{Step 3: Compute derivative and verify stability.}  
+    \begin{align*}
+        \dot{z}_1 &= z_2 + \alpha_1(x_1), \\
+        \dot{z}_2 &= g - \frac{k}{m}\frac{I^2}{(x_1+c)^2} - \dot{\alpha}_1(x_1).
+    \end{align*}
+    
+    Choosing $\alpha_1(x_1)$ properly ensures
+    \[
+        \dot{V}_2 = z_1 \dot{z}_1 + z_2 \dot{z}_2 \leq - k_1 z_1^2 - k_2 z_2^2 \leq 0.
+    \]
+
+\end{itemize}
+
+Thus, the simplified 2-state system is asymptotically stabilized using backstepping.
+
+\end{example}
+
+
+
+
+
