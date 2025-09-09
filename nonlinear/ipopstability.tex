@@ -276,4 +276,73 @@ Thus, the system has \textbf{finite gain} with
 \end{example}
 
 \section{LTI Systems}\index{LTI Systems}
-def
+
+We study Linear Time-Invariant (LTI) systems in terms of input-output behavior instead of state-space models, focusing on SISO systems for simplicity.  
+
+%------------------------------------------------
+\begin{definition}[Set $A$]  
+A function $f$ belongs to the set $\mathcal{A}$ if
+\[
+f(t) = f_0\delta(t) + f_a(t), \quad t \geq 0,
+\]
+and $f(t) = 0$ for $t < 0$, where
+\[
+f_a \in L_1, \quad \int_0^\infty |f_a(\tau)| \, d\tau < \infty.
+\]
+The norm is defined as
+\[
+\|f_a\| = f_0 + \int_0^\infty f_a(t)\, dt.
+\]
+\end{definition}
+
+\begin{definition}[Laplace Transform Set]  
+Let $\hat{\mathcal{A}}$ be the set of Laplace transforms of $A$. That is,
+\[
+\hat{\mathcal{A}} = \{ F(s) = \mathcal{L}\{f(t)\} \mid f \in A \}.
+\]
+\end{definition}
+
+\begin{definition}[Proper and Strictly Proper Rational Functions]  
+Let $\mathbb{R}[s]$ denote the set of polynomials in $s$, and $\mathbb{R}(s)$ the field of fractions of $\mathbb{R}[s]$.  
+
+A rational function $\hat{M}(s) \in \mathbb{R}(s)$ is called:  
+\begin{itemize}
+    \item \textbf{Proper} if $\displaystyle \lim_{s \to \infty} \hat{M}(s) < \infty$; equivalently, the degree of the numerator is less than or equal to the degree of the denominator in the Laplace domain.
+    \item \textbf{Strictly Proper} if $\displaystyle \lim_{s \to \infty} \hat{M}(s) = 0$; equivalently, the degree of the numerator is strictly less than that of the denominator in the Laplace domain.
+\end{itemize}
+According to this, $H^\cap(s)$ (Laplace transform of the impulse response) is strictly proper.
+\end{definition}
+
+\begin{theorem}  
+If $\hat{F}(s) \in \mathbb{R}(s)$, then $F(s) \in \hat{\mathcal{A}}$ if and only if:
+\begin{enumerate}
+    \item $F^\cap(s)$ is proper, and  
+    \item All poles of $F^\cap(s)$ lie in the left-half plane.  
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}[Convolution]  
+For functions $f$ and $g$, their convolution is defined as
+\[
+(f * g)(t) = \int_0^t f(\tau) g(t-\tau)\, d\tau.
+\]
+\end{definition}
+
+\begin{definition}[Convolution Operator]  
+An LTI system $H$ is a convolution operator if
+\[
+H(u(t)) = (h * u)(t),
+\]
+where $h(\cdot)$ is called the \textbf{kernel} (impulse response) of $H$.  
+\end{definition}
+
+\begin{theorem}[Lp Stability]  
+Consider an LTI system $H$ with impulse response
+\[
+h(t) = h_0 \delta(t) + h_a(t).
+\]  
+Then $H$ is $L_p$ stable if and only if $h \in A$, and moreover
+\[
+\|Hu\|_{L_p} \;\leq\; \|h\|_{L_p}\, \|u\|_{L_p}.
+\]
+\end{theorem}
