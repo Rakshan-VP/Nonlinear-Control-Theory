@@ -633,40 +633,40 @@
 %	COLORED THEOREM BOXES
 %----------------------------------------------------------------------------------------
 
-\RequirePackage[framemethod=default]{mdframed} % Required for creating colored boxes used for theorems, definitions, exercises and corollaries
+ \RequirePackage[framemethod=default]{mdframed} % Required for creating colored boxes used for theorems, definitions, exercises and corollaries
 
-% Theorem box
-\newmdenv[
-	skipabove=7pt, % Whitespace above box
-	skipbelow=7pt, % Whitespace below box
-	backgroundcolor=black!5, % Background color
-	linecolor=ocre, % Border color
-	innerleftmargin=5pt, % Inside left margin width
-	innerrightmargin=5pt, % Inside right margin width
-	innertopmargin=5pt, % Inside top margin height
-	innerbottommargin=5pt, % Inside bottom margin height
-	leftmargin=0cm, % Outside left margin width
-	rightmargin=0cm % Outside right margin width
-]{tBox}
+% % Theorem box
+% \newmdenv[
+% 	skipabove=7pt, % Whitespace above box
+% 	skipbelow=7pt, % Whitespace below box
+% 	backgroundcolor=black!5, % Background color
+% 	linecolor=ocre, % Border color
+% 	innerleftmargin=5pt, % Inside left margin width
+% 	innerrightmargin=5pt, % Inside right margin width
+% 	innertopmargin=5pt, % Inside top margin height
+% 	innerbottommargin=5pt, % Inside bottom margin height
+% 	leftmargin=0cm, % Outside left margin width
+% 	rightmargin=0cm % Outside right margin width
+% ]{tBox}
 
-% Exercise box
-\newmdenv[
-	skipabove=7pt, % Whitespace above box
-	skipbelow=7pt, % Whitespace below box
-	rightline=false, % Right line visible
-	leftline=true, % Left line visible
-	topline=false, % Top line visible
-	bottomline=false, % Bottom line visible
-	linecolor=ocre, % Line color
-	linewidth=4pt, % Line width
-	backgroundcolor=ocre!10, % Background color
-	innerleftmargin=5pt, % Inside left margin width
-	innerrightmargin=5pt, % Inside right margin width
-	innertopmargin=5pt, % Inside top margin height
-	innerbottommargin=5pt, % Inside bottom margin height
-	leftmargin=0cm, % Outside left margin width
-	rightmargin=0cm % Outside right margin width
-]{eBox}
+% % Exercise box
+% \newmdenv[
+% 	skipabove=7pt, % Whitespace above box
+% 	skipbelow=7pt, % Whitespace below box
+% 	rightline=false, % Right line visible
+% 	leftline=true, % Left line visible
+% 	topline=false, % Top line visible
+% 	bottomline=false, % Bottom line visible
+% 	linecolor=ocre, % Line color
+% 	linewidth=4pt, % Line width
+% 	backgroundcolor=ocre!10, % Background color
+% 	innerleftmargin=5pt, % Inside left margin width
+% 	innerrightmargin=5pt, % Inside right margin width
+% 	innertopmargin=5pt, % Inside top margin height
+% 	innerbottommargin=5pt, % Inside bottom margin height
+% 	leftmargin=0cm, % Outside left margin width
+% 	rightmargin=0cm % Outside right margin width
+% ]{eBox}
 
 % Definition box
 \newmdenv[
@@ -686,39 +686,64 @@
 	rightmargin=0cm % Outside right margin width
 ]{dBox}
 
-% Corollary box
-\newmdenv[
-	skipabove=7pt, % Whitespace above box
-	skipbelow=7pt, % Whitespace below box
-	rightline=false, % Right line visible
-	leftline=true, % Left line visible
-	topline=false, % Top line visible
-	bottomline=false, % Bottom line visible
-	linecolor=gray, % Line color
-	linewidth=4pt, % Line width
-	backgroundcolor=black!5, % Background color
-	innerleftmargin=5pt, % Inside left margin width
-	innerrightmargin=5pt, % Inside right margin width
-	innertopmargin=5pt, % Inside top margin height
-	innerbottommargin=5pt, % Inside bottom margin height
-	leftmargin=0cm, % Outside left margin width
-	rightmargin=0cm % Outside right margin width
-]{cBox}
-% Example box
-\newmdenv[
-    skipabove=7pt,
-    skipbelow=7pt,
-    backgroundcolor=black!5, % Background color
-    linecolor=gray,          % Border color
-    linewidth=1pt,           % Border width
-    roundcorner=5pt,         % Rounded corners
-    innerleftmargin=8pt,
-    innerrightmargin=8pt,
-    innertopmargin=6pt,
-    innerbottommargin=6pt,
-    leftmargin=0cm,
-    rightmargin=0cm
-]{xBox}
+% % Corollary box
+% \newmdenv[
+% 	skipabove=7pt, % Whitespace above box
+% 	skipbelow=7pt, % Whitespace below box
+% 	rightline=false, % Right line visible
+% 	leftline=true, % Left line visible
+% 	topline=false, % Top line visible
+% 	bottomline=false, % Bottom line visible
+% 	linecolor=gray, % Line color
+% 	linewidth=4pt, % Line width
+% 	backgroundcolor=black!5, % Background color
+% 	innerleftmargin=5pt, % Inside left margin width
+% 	innerrightmargin=5pt, % Inside right margin width
+% 	innertopmargin=5pt, % Inside top margin height
+% 	innerbottommargin=5pt, % Inside bottom margin height
+% 	leftmargin=0cm, % Outside left margin width
+% 	rightmargin=0cm % Outside right margin width
+% ]{cBox}
+
+% \newmdenv[
+%   skipabove=7pt,
+%   skipbelow=7pt,
+%   backgroundcolor=black!5,
+%   linecolor=gray,
+%   linewidth=1pt,
+%   roundcorner=5pt,
+%   innerleftmargin=8pt,
+%   innerrightmargin=8pt,
+%   innertopmargin=6pt,
+%   innerbottommargin=6pt,
+%   leftmargin=0cm,
+%   rightmargin=0cm,
+%   splitbottomskip=2ex,
+%   splittopskip=2ex,
+%   split=true        % ✅ allow page breaks
+% ]{xBox}
+\usepackage[most]{tcolorbox}
+
+\tcbset{
+  colback=black!5,     % default background
+  colframe=gray,       % default border color
+  boxrule=0.8pt,       % border thickness
+  arc=5pt,             % rounded corners
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+}
+
+% --- Theorem-like boxes ---
+\newtcolorbox{tBox}{colframe=ocre, colback=black!5, breakable}
+
+\newtcolorbox{eBox}{colframe=ocre, colback=ocre!10, left=6pt, right=6pt, breakable}
+
+% \newtcolorbox{dBox}{colframe=ocre, colback=ocre!2, left=6pt, right=6pt, breakable}
+
+\newtcolorbox{cBox}{colframe=gray, colback=black!5, breakable}
+
+\newtcolorbox{xBox}{colframe=gray, colback=black!5, breakable}
+
+
 % Creates an environment for each type of theorem and assigns it a theorem text style from the THEOREM STYLES block above and a colored box from above
 \newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
 \newenvironment{exercise}{\begin{eBox}\begin{exerciseT}}{\hfill{\color{ocre}\tiny\ensuremath{\blacksquare}}\end{exerciseT}\end{eBox}}
