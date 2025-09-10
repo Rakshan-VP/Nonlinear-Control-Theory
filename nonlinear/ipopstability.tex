@@ -346,3 +346,315 @@ Then $H$ is $L_p$ stable if and only if $h \in A$, and moreover
 \|Hu\|_{L_p} \;\leq\; \|h\|_{L_p}\, \|u\|_{L_p}.
 \]
 \end{theorem}
+
+\section{$L_p$ Gains for LTI Systems}\index{Lp Gains}
+
+We now focus on the study of input-output gains for Linear Time-Invariant (LTI) systems.  
+For simplicity, we restrict attention to single-input single-output (SISO) systems.  
+The notion of gain depends essentially on the choice of input function space.
+
+%------------------------------------------------
+\subsection{$L_\infty$ Gain}\index{Lp Gains!$L_\infty$ Gain}
+
+\begin{definition}[$L_\infty$ Gain]
+For an LTI system $H$ with impulse response $h(t) = h_0 \delta(t) + h_a(t)$, the $L_\infty$ gain is defined as
+\[
+\gamma_\infty(H) \;=\; \sup_{u \neq 0} \frac{\|Hu\|_\infty}{\|u\|_\infty}.
+\]
+\end{definition}
+
+\begin{theorem}
+The $L_\infty$ gain of $H$ is given by the $L_1$ norm of the impulse response:
+\[
+\gamma_\infty(H) = \|h\|_1 = |h_0| + \int_0^\infty |h_a(\tau)| \, d\tau.
+\]
+\end{theorem}
+
+%------------------------------------------------
+\subsection{$L_2$ Gain}\index{Lp Gains!$L_2$ Gain}
+
+\begin{definition}[$L_2$ Gain]
+For an LTI system $H$ with impulse response $h \in L_2$, the $L_2$ gain is defined as
+\[
+\gamma_2(H) \;=\; \sup_{u \neq 0} \frac{\|Hu\|_2}{\|u\|_2}.
+\]
+\end{definition}
+
+\begin{theorem}
+The $L_2$ gain of $H$ equals the $H_\infty$ norm of its transfer function:
+\[
+\gamma_2(H) \;=\; \|H(j\omega)\|_\infty 
+= \sup_{\omega \in \mathbb{R}} |H(j\omega)|.
+\]
+\end{theorem}
+
+\section{Closed-Loop Input-Output Stability}\index{Closed-Loop Stability}
+
+We now study stability of feedback interconnections using the input-output framework.  
+Consider two subsystems $H_1, H_2 : X_e \to X_e$ interconnected as in Figure~\ref{fig:feedback}.
+
+\begin{definition}[Feedback System]
+The feedback system satisfies for inputs $u_1,u_2 \in X_e$:
+\begin{align}
+e_1 &= u_1 - H_2 e_2, \label{eq:fb1}\\
+e_2 &= u_2 + H_1 e_1, \label{eq:fb2}
+\end{align}
+with outputs $y_1 = H_1 e_1$, $y_2 = H_2 e_2$.  
+The signals $e_1,e_2,y_1,y_2$ are called the \emph{internal errors and outputs}.
+\end{definition}
+
+\begin{definition}[Closed-Loop Relations]
+Define
+\[
+E = \{ (u,e) \in X_e \times X_e \;\mid\; e \text{ satisfies } \eqref{eq:fb1}, \eqref{eq:fb2}\},
+\]
+\[
+F = \{ (u,y) \in X_e \times X_e \;\mid\; y \text{ satisfies } \eqref{eq:fb1}, \eqref{eq:fb2}\}.
+\]
+\end{definition}
+
+\begin{definition}[Boundedness]
+A relation $P$ on $X_e$ is \emph{bounded} if the image of every bounded subset of $\mathrm{dom}(P)$ is bounded in $X_e$.
+\end{definition}
+
+\begin{definition}[Closed-Loop Stability]
+The feedback interconnection is said to be \emph{input-output stable} (or simply stable) if the relations $E$ and $F$ are bounded.  
+Equivalently, for all bounded inputs $u_1,u_2 \in X_e$, the signals $e_1,e_2,y_1,y_2$ also belong to $X_e$.
+\end{definition}
+
+\begin{remark}
+Stability depends on the choice of function space $X_e$; we may write ``$X_e$-stable'' when emphasis is needed.
+\end{remark}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=2cm, thick]
+
+  % Nodes
+  \node (u1) {$u_1(t)$};
+  \node[circle, draw, minimum size=8mm, right=of u1] (sum1) {};
+  \node[draw, rectangle, minimum height=1.2cm, minimum width=2cm, right=of sum1] (H1) {$H_1$};
+  \node[right=of H1] (y1) {$y_1(t)$};
+  
+  \node[circle, draw, minimum size=8mm, below=2.5cm of y1] (sum2) {};
+  \node[draw, rectangle, minimum height=1.2cm, minimum width=2cm, left=of sum2] (H2) {$H_2$};
+  \node[right=of sum2] (u2) {$u_2(t)$};
+  
+  % Connections
+  \draw[->] (u1) -- (sum1);
+  \draw[->] (sum1) -- node {$e_1(t)$} (H1);
+  \draw[->] (H1) -- (y1);
+  \draw[->] (y1) -- (sum2);
+  \draw[->] (sum2) -- node {$e_2(t)$} (H2);
+  \draw[->] (H2) -| node[pos=0.9, left] {$y_2(t)$} (sum1);
+  \draw[->] (u2) -- (sum2);
+
+  % Signs inside sum circles
+  \node at (sum1.center) {$+$};
+  \node at ([xshift=-4pt,yshift=-6pt]sum1.center) {$-$};
+  
+  \node at (sum2.center) {$+$};
+  \node at ([xshift=6pt,yshift=-4pt]sum2.center) {$+$};
+
+\end{tikzpicture}
+\caption{The feedback system $S$.}
+\label{fig:feedback}
+\end{figure}
+
+\section{The Small Gain Theorem}
+
+In this section we study the so-called \textbf{small gain theorem}, one of the most important results in the theory of input-output systems. The main goal of the theorem is to provide open-loop conditions for closed-loop stability. 
+
+\begin{theorem}[Small Gain Theorem]
+Consider the feedback interconnection of two systems 
+\[
+H_1, H_2 : X_e \to X_e.
+\]
+If 
+\[
+\gamma(H_1)\,\gamma(H_2) < 1,
+\]
+then the feedback system is input-output stable.
+\end{theorem}
+
+
+\begin{remark}
+\begin{itemize}
+    \item The theorem gives a \textbf{sufficient condition} for stability, not necessary. Some systems with $\gamma(H_1)\gamma(H_2)\geq 1$ may still be stable.
+    \item Existence of solutions is not guaranteed by the theorem; it only ensures boundedness if solutions exist.
+\end{itemize}
+\end{remark}
+
+\begin{example}[Nonlinear Feedback]
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.2, thick]
+  % Axes
+  \draw[->] (-2.5,0) -- (2.5,0) node[right] {$x$};
+  \draw[->] (0,-1.5) -- (0,1.5) node[above] {$N(x)$};
+
+  % Saturation characteristic
+  \draw (-2,-1) -- (-1,-1) -- (1,1) -- (2,1);
+
+  % Slope indicator
+  \draw (0.5,0.5) -- (0.7,0.5) -- (0.7,0.7);
+  \node at (0.8,0.4) {$K$};
+\end{tikzpicture}
+\caption{The nonlinearity $N(\cdot)$.}
+\label{fig:nonlinear}
+\end{figure}
+
+Let $H_1$ be an LTI system with transfer function
+\[
+G(s) = \frac{-2}{s^2+2s+4},
+\]
+and $H_2$ a memoryless nonlinearity $N(\cdot)$ as in Fig.\ref{fig:nonlinear}.
+
+The gain of $H_1$ is
+\[
+\gamma(H_1) = \sup_{\omega} |G(j\omega)|.
+\]
+After computation, $\gamma(H_1) = \tfrac{1}{12}$.
+
+If $N(\cdot)$ has slope $k$, then $\gamma(H_2) = |k|$.  
+The small gain condition requires
+\[
+|k| < 12.
+\]
+\end{example}
+
+\begin{example}[Constant Gain Feedback]
+Let $H_2 = k$ (a constant gain). Then $\gamma(H_2)=|k|$.
+
+Small gain theorem yields stability if
+\[
+|k| < 12.
+\]
+
+Pole analysis of
+\[
+H(s) = \frac{G(s)}{1+kG(s)} = \frac{-2}{s^2+2s+4+k}
+\]
+gives stability iff $k>-4$.
+
+\textbf{Conclusion:} small gain theorem gives $-12<k<12$, while exact pole test gives $k>-4$. Thus, the small gain theorem provides only a conservative (sufficient) stability condition.
+\end{example}
+
+\section{Loop Transformations}
+
+As we have seen, the small gain theorem provides sufficient conditions for the stability of a feedback loop, and very often results in conservative estimates of the system stability.  
+The same occurs with any other sufficient but not necessary stability condition, such as the passivity theorem (to be discussed in Chapter~8).  
+
+One way to obtain improved stability conditions (i.e., less conservative) is to apply the theorems to a modified feedback loop that satisfies the following two properties:  
+
+\begin{enumerate}
+\item  it guarantees stability of the original feedback loop, and  
+\item  it lessens the overall requirements over $H_1$ and $H_2$. 
+\end{enumerate}
+
+In other words, it is possible that a modified system satisfies the stability conditions imposed by the theorem in use whereas the original system does not.  
+There are two basic transformations of feedback loops that will be used throughout the book, and will be referred to as \textbf{transformations of Type I and Type II}.  
+
+
+\begin{definition}[Type I Loop Transformation]
+Consider the feedback system $S$ of Figure~\ref{fig:feedback-S}.  
+Let $H_1, H_2, K$ and $(I+KH_1)^{-1}$ be causal maps from $X_e$ into $X$, and assume that $K$ is linear.  
+
+A loop transformation of Type I is defined to be the modified system, denoted $S_K$, formed by the feedback interconnection of the subsystems
+\[
+H_1' = H_1 (I+KH_1)^{-1}, \qquad H_2' = H_2 - K,
+\]
+with inputs
+\[
+u_1' = u_1 - Ku_2, \qquad u_2' = u_2,
+\]
+as shown in Figure~\ref{fig:feedback-SK}.  
+
+The closed-loop relations of $S_K$ will be denoted $E_K$ and $F_K$.
+\end{definition}
+
+\begin{theorem}
+Consider the system $S$ of Figure~\ref{fig:feedback-S} and let $S_K$ be the modified system obtained after a Type I loop transformation. Assume $K$ and $(I+KH_1)^{-1}: X \to X$. Then:
+\begin{enumerate}
+    \item The system $S$ is stable if and only if the system $S_K$ is stable.
+\end{enumerate}
+\end{theorem}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[auto, node distance=1.5cm, thick, >=latex]
+  % Nodes
+  \node (u1) {$u_1$};
+  \node[draw, rectangle, minimum width=1.5cm, minimum height=1cm, right=of u1] (Minv) {$M^{-1}$};
+  \node[circle, draw, minimum size=8mm, right=1.8cm of Minv] (sum1) {};
+  \node[draw, rectangle, minimum width=1.5cm, minimum height=1cm, right=2.1cm of sum1] (M) {$M$};
+  \node[draw, rectangle, minimum width=1.5cm, minimum height=1cm, right=of M] (H1) {$H_1$};
+
+  \node[draw, rectangle, minimum width=1.5cm, minimum height=1cm, below=2.2cm of sum1] (Minv2) {$M^{-1}$};
+  \node[draw, rectangle, minimum width=1.5cm, minimum height=1cm, right=of Minv2] (H2) {$H_2$};
+  \node[circle, draw, minimum size=8mm, right=2.1cm of H2] (sum2) {};
+  \node[right=2.1cm of sum2] (u2) {$u_2$};
+
+  % Connections - Top path
+  \draw[->] (u1) -- (Minv);
+  \draw[->] (Minv) -- node[above] {$u_1'$} (sum1); 
+  \draw[->] (sum1) -- node[above] {$x_1$} (M);
+  \draw[->] (M) -- node[above] {$e_1$} (H1);
+
+  % Feedback from H1 output to sum2 (no separate y1 node)
+  \draw[->] (H1) |- ++(0,-2) -| (sum2);
+
+  % Bottom path
+  \draw[->] (Minv2) -- ++(0,2.2cm) -| node[pos=0.25,left] {$z_2$} (sum1);  
+  \draw[->] (H2) -- node[below] {$y_2$} (Minv2);
+  \draw[->] (sum2) -- node[below] {$e_2$} (H2);
+  \draw[->] (u2) -- (sum2);
+
+  % Labels on connections
+  \node at ([xshift=1.3cm]sum1) [above] {};
+  \node at ([xshift=1.15cm]M) [above] {};
+  \node at ([xshift=0cm,yshift=-1.2cm]sum1) [left] {};
+  \node at ([xshift=1.3cm]Minv2) [below] {};
+  \node at ([xshift=1.3cm]H2) [below] {};
+
+  % Signs
+  \node at (sum1.center) {$+$};
+  \node at ([xshift=-5pt, yshift=-7.5pt]sum1.center) {$-$};
+  \node at (sum2.center) {$+$};
+  \node at ([xshift=7.5pt, yshift=-5pt]sum2.center) {$+$};
+
+\end{tikzpicture}
+\caption{The Feedback System $S_M$}
+\label{fig:feedback_sm}
+\end{figure}
+
+
+\begin{definition}[Type II Loop Transformation]
+Consider the feedback system $S$ of Figure~\ref{fig:feedback-S}.  
+Let $H_1, H_2$ be causal maps of $X_e$ into $X$, and let $M$ be a causal linear operator satisfying:  
+
+\begin{enumerate}
+    \item $M: X \to X$,  
+    \item $M^{-1}: X \to X$ with $MM^{-1}=I$, and $M^{-1}$ is causal,  
+    \item both $M$ and $M^{-1}$ have finite gain.  
+\end{enumerate}
+
+A Type II loop transformation is defined to be the modified system $S_M$, formed by the feedback interconnection of the subsystems
+\[
+H_1' = H_1 M, \qquad H_2' = M^{-1} H_2,
+\]
+with inputs
+\[
+u_1' = M^{-1}u_1, \qquad u_2' = u_2,
+\]
+as shown in Figure~\ref{fig:feedback_sm}.  
+
+The closed-loop relations of this modified system will be denoted $E_M$ and $F_M$.
+\end{definition}
+
+\begin{theorem}
+Consider the system $S$ of Figure~\ref{fig:feedback-S} and let $S_M$ be the modified system obtained after a Type II loop transformation. Then:
+\[
+S \text{ is stable } \iff S_M \text{ is stable.}
+\]
+\end{theorem}
