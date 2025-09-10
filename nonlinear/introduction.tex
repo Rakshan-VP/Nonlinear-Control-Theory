@@ -18,18 +18,12 @@ where $x(t)$ is the state vector, $u(t)$ the input, and $y(t)$ the output.
 \end{definition}
 
 \begin{example}[Spring–Mass–Damper System]
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.35\textwidth]{Images/nonlinear/introduction/mass_spring_damper.jpg}
-    \caption{Spring–mass–damper system with external force $F(t)$.}
-    \label{fig:spring}
-\end{figure}
-
-Consider a mass $m$ attached to a spring (constant $k$) and damper (coefficient $b$), subject to an external force $F(t)$ as shown in the figure \ref{fig:spring}.  
+    Consider a mass $m$ attached to a spring (constant $k$) and damper (coefficient $b$), 
+    subject to an external force $F(t)$ as shown in Figure~\ref{fig:spring}.
+    
 The equation of motion is:
 \begin{equation}
-    m\ddot{x}(t) + b\dot{x}(t) + kx(t) = F(t).
+        m\ddot{x}(t) + b\dot{x}(t) + kx(t) = F(t).
 \end{equation}
 
 Defining the state vector as $x_1 = x(t)$ and $x_2 = \dot{x}(t)$, the system becomes:
@@ -40,6 +34,7 @@ Defining the state vector as $x_1 = x(t)$ and $x_2 = \dot{x}(t)$, the system bec
 
 In matrix form:
 \begin{equation}
+\boxed{
 \dot{x}(t) =
 \begin{bmatrix}
 0 & 1 \\
@@ -52,8 +47,13 @@ In matrix form:
 y(t) =
 \begin{bmatrix}
 1 & 0
-\end{bmatrix} x(t).
+\end{bmatrix} x(t)
+}
 \end{equation}
+    \centering
+    \includegraphics[width=0.35\textwidth]{Images/nonlinear/introduction/mass_spring_damper.jpg}
+    \captionof{figure}{Spring–mass–damper system with external force $F(t)$.}
+    \label{fig:spring}
 \end{example}
 
 \section{Nonlinear Systems}\index{Nonlinear Systems}
@@ -67,7 +67,8 @@ where $f(\cdot)$ and $g(\cdot)$ may depend explicitly on time $t$ in addition to
 \end{definition}
 
 \begin{example}[Spring–Mass–Damper with Nonlinear Spring]
-Consider again the spring mass damper system as shown in figure \ref{fig:spring}, but now the spring has a nonlinear restoring force:
+Consider again the \textbf{spring mass damper} system as shown in Figure~\ref{fig:spring}, 
+but now the spring has a nonlinear restoring force:
 \begin{equation}
     F_{\text{spring}}(x) = k_1 x + k_3 x^3,
 \end{equation}
@@ -76,21 +77,28 @@ so that the equation of motion becomes:
     m\ddot{x}(t) + b\dot{x}(t) + k_1 x(t) + k_3 x^3(t) = F(t).
 \end{equation}
 
-Defining $x_1 = x(t)$ and $x_2 = \dot{x}(t)$, the state equations are:
-\begin{align}
-    \dot{x}_1(t) &= x_2(t), \\
-    \dot{x}_2(t) &= -\tfrac{b}{m}x_2(t) - \tfrac{k_1}{m}x_1(t) - \tfrac{k_3}{m}x_1^3(t) + \tfrac{1}{m}F(t).
-\end{align}
+\medskip
 
-Compactly,
+Defining $x_1 = x(t)$ and $x_2 = \dot{x}(t)$, the state equations are:
 \begin{equation}
+    \dot{x}_1(t) = x_2(t), 
+    \qquad
+    \dot{x}_2(t) = -\tfrac{b}{m}x_2(t) - \tfrac{k_1}{m}x_1(t) - \tfrac{k_3}{m}x_1^3(t) + \tfrac{1}{m}F(t).
+\end{equation}
+
+\medskip
+
+Finally, the system in compact form is:
+\begin{equation}
+\boxed{
 \dot{x}(t) =
 \begin{bmatrix}
-x_2(t) \\
+x_2(t) \\[6pt]
 -\tfrac{b}{m}x_2(t) - \tfrac{k_1}{m}x_1(t) - \tfrac{k_3}{m}x_1^3(t) + \tfrac{1}{m}F(t)
 \end{bmatrix},
 \qquad
-y(t) = x_1(t).
+y(t) = x_1(t)
+}
 \end{equation}
 \end{example}
 
@@ -104,11 +112,8 @@ y(t) = x_1(t).
     \end{equation}
 
     \item \textbf{Autonomous System ($\dot{x}=f(x)$):}  
-    If the system has no input and no explicit time dependence,
-    \begin{equation}
-        \dot{x}(t) = f\big(x(t)\big).
-    \end{equation}
-    For this example,
+    If the system has no input and no explicit time dependence
+    
     \begin{equation}
         \dot{x} =
         \begin{bmatrix}
@@ -133,7 +138,7 @@ In other words, if the system starts at $(x_e,u_e)$, it remains there for all ti
 \end{definition}
 
 \begin{example}[Spring–Mass–Damper with Nonlinear Spring]
-For the nonlinear spring–mass–damper system
+For the \textbf{nonlinear spring mass damper} system
 \begin{equation}
     \dot{x}_1 = x_2, \qquad 
     \dot{x}_2 = -\tfrac{b}{m}x_2 - \tfrac{k_1}{m}x_1 - \tfrac{k_3}{m}x_1^3 + \tfrac{1}{m}F(t),
@@ -146,10 +151,10 @@ the equilibrium points are obtained by solving
 
 Thus, the equilibria satisfy
 \begin{equation}
-    -k_1 x_1 - k_3 x_1^3 + F = 0, \qquad x_2 = 0.
+\boxed{\, -k_1 x_1 - k_3 x_1^3 + F = 0, \qquad x_2 = 0 \,}
 \end{equation}
-
 \end{example}
+
 
 \section{First-order Autonomous Nonlinear Systems}\index{First-order Autonomous Nonlinear Systems}
 
@@ -186,8 +191,6 @@ Equilibrium points are given by $\cos x = 0$, i.e.
 \[
 x = \tfrac{\pi}{2} + n\pi, \quad n \in \mathbb{Z}.
 \]
-\end{example}
-
 \begin{center}
 \begin{tikzpicture}[scale=1.0]
 \begin{axis}[
@@ -210,6 +213,9 @@ x = \tfrac{\pi}{2} + n\pi, \quad n \in \mathbb{Z}.
 \end{axis}
 \end{tikzpicture}
 \end{center}
+\end{example}
+
+
 
 From the plot we observe:
 \begin{itemize}
@@ -240,36 +246,42 @@ To perform phase-plane analysis:
 \end{enumerate}
 
 \begin{example}[Nonlinear System]
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\linewidth]{Images/nonlinear/introduction/phase.png}
-    \caption{Phase portrait}
-    \label{fig:phase}
-\end{figure}
 Consider the system
-\begin{align}
-    \dot{x}_1 &= x_2, \\
-    \dot{x}_2 &= -x_1^2 - x_2.
-\end{align}
-\\
-\textbf{Step 1: Equilibrium Points.}  
-\\Solve
-\[
-x_2 = 0, \qquad -x_1^2 - x_2 = 0.
-\]
-This gives the only equilibrium at $(x_1, x_2) = (0,0)$.
-\\\\
-\textbf{Step 2: Vector Field.}  
-\\The vector field in the $(x_1,x_2)$ plane is obtained (as shown in figure \ref{fig:phase}) by evaluating
-\[
-\dot{x}_1 = x_2, \qquad \dot{x}_2 = -x_1^2 - x_2.
-\]
+\begin{equation}
+    \dot{x}_1 = x_2, \qquad 
+    \dot{x}_2 = -x_1^2 - x_2.
+\end{equation}
 
+\begin{itemize}
+\item \textbf{Step 1: Equilibrium Points.}  
+\\Solve
+$
+x_2 = 0, \qquad -x_1^2 - x_2 = 0.
+$
+\\Thus, the only equilibrium point is
+$
+\boxed{(x_1, x_2) = (0,0)}.
+$
+\medskip
+\item \textbf{Step 2: Vector Field.}  
+\\The vector field in the $(x_1,x_2)$ plane (shown in Figure~\ref{fig:phase}) is given by
+\begin{equation}
+\boxed{\dot{x}_1 = x_2, \qquad 
+\dot{x}_2 = -x_1^2 - x_2}
+\end{equation}
+\end{itemize}
 
 \textbf{Observation.}  
-- The equilibrium at $(0,0)$ is asymptotically stable, since $x_2$ introduces damping and $-x_1^2$ is always nonpositive.  
-- Trajectories spiral or curve toward the origin but with nonlinear effects due to the $-x_1^2$ term.
+\begin{itemize}
+    \item The equilibrium at $(0,0)$ is asymptotically stable, since $x_2$ introduces damping and $-x_1^2$ is always nonpositive.  
+    \item Trajectories curve toward the origin, with nonlinear effects due to the $-x_1^2$ term.
+\end{itemize}
+\centering
+\includegraphics[width=\linewidth]{Images/nonlinear/introduction/phase.png}
+\captionof{figure}{Phase portrait}
+\label{fig:phase}
 \end{example}
+
 
 \section{Phase-Plane Analysis of LTI Systems}\index{Phase-Plane Analysis of LTI Systems}
 
@@ -279,7 +291,7 @@ We now specialize phase-plane analysis to \emph{linear time-invariant (LTI)} sys
 \end{equation}
 The solution is
 \begin{equation}
-    x(t) = e^{At} x(0).
+    \boxed{x(t) = e^{At} x(0)}
 \end{equation}
 The qualitative behavior depends only on the eigenvalues of $A$.  
 
@@ -287,22 +299,22 @@ The qualitative behavior depends only on the eigenvalues of $A$.
 
 Suppose $A$ has two distinct real eigenvalues $\lambda_1, \lambda_2$ with corresponding linearly independent eigenvectors $v_1, v_2$.  
 Then, $A$ is diagonalizable:
-\[
-A = T D T^{-1}, \qquad D = \text{diag}(\lambda_1,\lambda_2),
-\]
+\begin{equation}
+\boxed{A = T D T^{-1}, \qquad D = \text{diag}(\lambda_1,\lambda_2),}
+\end{equation}
 so that in the transformed coordinates $z = T^{-1}x$,
-\[
+\begin{equation}
 \dot{z} = Dz =
 \begin{bmatrix}
 \lambda_1 & 0 \\
 0 & \lambda_2
 \end{bmatrix} z.
-\]
+\end{equation}
 
 The solutions are
-\[
+\begin{equation}
 z_1(t) = z_1(0)e^{\lambda_1 t}, \qquad z_2(t) = z_2(0)e^{\lambda_2 t}.
-\]
+\end{equation}
 
 \paragraph{Qualitative Behavior.}
 \begin{itemize}
@@ -317,22 +329,23 @@ The eigenvectors define the principal axes of trajectories in the phase plane.
 
 If $A$ has a repeated eigenvalue $\lambda$ but only one independent eigenvector, then it is not diagonalizable.  
 Instead, we form the Jordan form:
-\[
+\begin{equation}
+\boxed{
 A = P J P^{-1}, \qquad J =
 \begin{bmatrix}
 \lambda & 1 \\
 0 & \lambda
-\end{bmatrix}.
-\]
+\end{bmatrix}}
+\end{equation}
 
 The solution in Jordan coordinates is
-\[
+\begin{equation}
 z(t) =
 \begin{bmatrix}
 e^{\lambda t} & t e^{\lambda t} \\
 0 & e^{\lambda t}
 \end{bmatrix} z(0).
-\]
+\end{equation}
 
 \paragraph{Qualitative Behavior.}
 \begin{itemize}
@@ -346,22 +359,23 @@ In the phase plane, trajectories are tangent to the single eigenvector direction
 \subsection{Case 3: Systems with Complex Eigenvalues}\index{Phase-Plane Analysis of LTI Systems!Case 3}
 
 If $A$ has complex-conjugate eigenvalues $\lambda_{1,2} = \alpha \pm j\beta$ with $\beta \neq 0$, then $A$ can be transformed into
-\[
+\begin{equation}
+\boxed{
 M^{-1} A M =
 \begin{bmatrix}
 \alpha & -\beta \\
 \beta & \alpha
-\end{bmatrix}.
-\]
+\end{bmatrix}}
+\end{equation}
 
 The solution is
-\[
+\begin{equation}
 z(t) = e^{\alpha t}
 \begin{bmatrix}
 \cos(\beta t) & -\sin(\beta t) \\
 \sin(\beta t) & \cos(\beta t)
 \end{bmatrix} z(0).
-\]
+\end{equation}
 
 \paragraph{Qualitative Behavior.}
 \begin{itemize}
@@ -373,15 +387,6 @@ z(t) = e^{\alpha t}
 The frequency of oscillation is $\beta$, and $\alpha$ determines whether the spiral converges or diverges.
 
 \begin{example}[Comparison of LTI Systems]
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=\linewidth]{Images/nonlinear/introduction/phase_dense.png}
-    \caption{Phase portraits of three different LTI systems: 
-    (a) saddle point, 
-    (b) stable defective node, 
-    (c) center.}
-    \label{fig:lti_phase}
-\end{figure}
 
 We compare the qualitative behavior of three linear time-invariant systems of the form
 \[
@@ -408,6 +413,14 @@ A_3 = \begin{bmatrix} 0 & -3 \\ 1 & 0 \end{bmatrix}.
 \]
 Eigenvalues are purely imaginary $\lambda = \pm j\sqrt{3}$.  
 Trajectories form closed orbits, indicating a neutrally stable center (Fig.~\ref{fig:lti_phase}c).
+
+    \centering
+    \includegraphics[width=\linewidth]{Images/nonlinear/introduction/phase_dense.png}
+    \captionof{figure}{Phase portraits of three different LTI systems: 
+    (a) saddle point, 
+    (b) stable defective node, 
+    (c) center.}
+    \label{fig:lti_phase}
 \end{example}
 
 \subsection{Conclusion}\index{Phase-Plane Analysis of LTI Systems!Conclusion}
@@ -447,38 +460,39 @@ One of the most famous examples of a system with a limit cycle is the
     where $\mu$ is a scalar parameter controlling nonlinearity and damping.
 \end{definition}
 
-\subsubsection*{State-Space Form}
+\subsubsection{State-Space Form}
 Let $x_1 = x$ and $x_2 = \dot{x}$, then
 \begin{align}
     \dot{x}_1 &= x_2 \\
     \dot{x}_2 &= \mu(1 - x_1^2)x_2 - x_1
 \end{align}
 This defines the nonlinear vector field:
-\[
+\begin{equation}
+\boxed{
 \dot{\mathbf{x}} =
 \begin{bmatrix}
 x_2 \\
 \mu(1-x_1^2)x_2 - x_1
-\end{bmatrix}.
-\]
+\end{bmatrix}}
+\end{equation}
 
-\subsubsection*{Equilibrium and Dynamics}
-\begin{remark}
-    For $\mu = 0$, the system reduces to the linear oscillator
+\subsubsection{Equilibrium and Dynamics}
+\begin{itemize}
+    \item For $\mu = 0$, the system reduces to the \textbf{linear oscillator}
     \begin{equation}
-        \dot{x}_1 = x_2, \qquad \dot{x}_2 = -x_1,
+        \boxed{\dot{x}_1 = x_2, \qquad \dot{x}_2 = -x_1}
     \end{equation}
     which has the origin $(0,0)$ as a center with closed trajectories (neutrally stable).
-\end{remark}
 
-\begin{remark}
-    For $\mu > 0$, the nonlinear term $\mu(1-x_1^2)x_2$ introduces:
+
+
+    \item For $\mu > 0$, the nonlinear term $\mu(1-x_1^2)x_2$ introduces:
     \begin{itemize}
         \item Negative damping near the origin, pushing trajectories outward.
         \item Positive damping for large $|x_1|$, pulling trajectories inward.
     \end{itemize}
     This balance creates a \textbf{stable limit cycle}, i.e. all trajectories converge to a periodic orbit.
-\end{remark}
+\end{itemize}
 
 \begin{example}[Vector Field of Van der Pol Oscillator: Stable vs. Unstable]
     The Van der Pol oscillator in state-space form is

@@ -704,12 +704,26 @@
 	leftmargin=0cm, % Outside left margin width
 	rightmargin=0cm % Outside right margin width
 ]{cBox}
-
+% Example box
+\newmdenv[
+    skipabove=7pt,
+    skipbelow=7pt,
+    backgroundcolor=black!5, % Background color
+    linecolor=gray,          % Border color
+    linewidth=1pt,           % Border width
+    roundcorner=5pt,         % Rounded corners
+    innerleftmargin=8pt,
+    innerrightmargin=8pt,
+    innertopmargin=6pt,
+    innerbottommargin=6pt,
+    leftmargin=0cm,
+    rightmargin=0cm
+]{xBox}
 % Creates an environment for each type of theorem and assigns it a theorem text style from the THEOREM STYLES block above and a colored box from above
 \newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
 \newenvironment{exercise}{\begin{eBox}\begin{exerciseT}}{\hfill{\color{ocre}\tiny\ensuremath{\blacksquare}}\end{exerciseT}\end{eBox}}
 \newenvironment{definition}{\begin{dBox}\begin{definitionT}}{\end{definitionT}\end{dBox}}
-\newenvironment{example}{\begin{exampleT}}{\hfill{\tiny\ensuremath{\blacksquare}}\end{exampleT}}	
+\newenvironment{example}{\begin{xBox}\begin{exampleT}}{\end{exampleT}\end{xBox}}	
 \newenvironment{corollary}{\begin{cBox}\begin{corollaryT}}{\end{corollaryT}\end{cBox}}
 
 %----------------------------------------------------------------------------------------

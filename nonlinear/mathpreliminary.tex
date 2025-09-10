@@ -86,10 +86,10 @@ such that the usual axioms of associativity, commutativity, distributivity, and 
 \begin{example}
 The set $\mathbb{R}^n$ with componentwise addition and scalar multiplication is a vector space over $\mathbb{R}$.  
 For instance, in $\mathbb{R}^2$:  
-\[
+\begin{equation}
 (x_1,x_2) + (y_1,y_2) = (x_1+y_1,\; x_2+y_2), \quad 
 \lambda(x_1,x_2) = (\lambda x_1,\; \lambda x_2).
-\]
+\end{equation}
 \end{example}
 
 %------------------------------------------------
@@ -97,9 +97,9 @@ For instance, in $\mathbb{R}^2$:
 
 \begin{definition}[Linear Independence]
 A set of vectors $\{v_1,v_2,\dots,v_k\}$ in $V$ is said to be \emph{linearly independent} if 
-\[
+\begin{equation}
 \alpha_1 v_1 + \alpha_2 v_2 + \cdots + \alpha_k v_k = 0 \quad \Rightarrow \quad \alpha_1=\alpha_2=\cdots=\alpha_k=0.
-\]
+\end{equation}
 Otherwise, the set is \emph{linearly dependent}.
 \end{definition}
 
@@ -115,9 +115,9 @@ In $\mathbb{R}^n$, any set of $n+1$ or more vectors is linearly dependent.
 \begin{example}
 In $\mathbb{R}^3$, the vectors $e_1=(1,0,0)$, $e_2=(0,1,0)$, and $e_3=(0,0,1)$ form a basis.  
 They are linearly independent, and every vector $(x,y,z) \in \mathbb{R}^3$ can be written uniquely as 
-\[
+\begin{equation}
 (x,y,z) = x e_1 + y e_2 + z e_3.
-\]
+\end{equation}
 Hence, $\dim(\mathbb{R}^3)=3$.
 \end{example}
 
@@ -136,17 +136,17 @@ A subset $W \subseteq V$ is called a \emph{subspace} of $V$ if:
 \begin{definition}[Span]
 Given a set of vectors $S = \{v_1,\dots,v_k\}$ in $V$, the \emph{span} of $S$, denoted $\mathrm{span}(S)$, is the set of all linear combinations of the vectors in $S$.  
 That is, 
-\[
+\begin{equation}
 \mathrm{span}(S) = \Big\{ \sum_{i=1}^k \alpha_i v_i \; : \; \alpha_i \in \mathbb{K} \Big\}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}
 In $\mathbb{R}^3$, let $S=\{(1,0,0), (0,1,0)\}$.  
 The span of $S$ is 
-\[
+\begin{equation}
 \mathrm{span}(S) = \{(x,y,0) \in \mathbb{R}^3 \mid x,y \in \mathbb{R}\},
-\]
+\end{equation}
 which is a subspace of $\mathbb{R}^3$ corresponding to the $xy$-plane.
 \end{example}
 
@@ -164,19 +164,19 @@ A \emph{normed vector space} is a pair $(V,\|\cdot\|)$ where $V$ is a vector spa
 
 \begin{theorem}[Hölder's Inequality]
 For $x,y \in \mathbb{R}^n$ and $p,q > 1$ with $\tfrac{1}{p}+\tfrac{1}{q}=1$,  
-\[
+\begin{equation}
 \sum_{i=1}^n |x_i y_i| \;\leq\; \left( \sum_{i=1}^n |x_i|^p \right)^{1/p} 
 \left( \sum_{i=1}^n |y_i|^q \right)^{1/q}.
-\]
+\end{equation}
 \end{theorem}
 
 \begin{theorem}[Minkowski's Inequality]
 For $x,y \in \mathbb{R}^n$ and $p \geq 1$,  
-\[
+\begin{equation}
 \left( \sum_{i=1}^n |x_i+y_i|^p \right)^{1/p} \;\leq\; 
 \left( \sum_{i=1}^n |x_i|^p \right)^{1/p} + 
 \left( \sum_{i=1}^n |y_i|^p \right)^{1/p}.
-\]
+\end{equation}
 \end{theorem}
 
 \begin{example}

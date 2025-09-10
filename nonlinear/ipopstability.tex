@@ -555,9 +555,16 @@ One way to obtain improved stability conditions (i.e., less conservative) is to 
 In other words, it is possible that a modified system satisfies the stability conditions imposed by the theorem in use whereas the original system does not.  
 There are two basic transformations of feedback loops that will be used throughout the book, and will be referred to as \textbf{transformations of Type I and Type II}.  
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{Images/nonlinear/ipopstability/sk.png}
+    \caption{The feedback system $S_k$}
+    \label{fig:feedback_sk}
+\end{figure}
+
 
 \begin{definition}[Type I Loop Transformation]
-Consider the feedback system $S$ of Figure~\ref{fig:feedback-S}.  
+Consider the feedback system $S$ of Figure~\ref{fig:feedback}.  
 Let $H_1, H_2, K$ and $(I+KH_1)^{-1}$ be causal maps from $X_e$ into $X$, and assume that $K$ is linear.  
 
 A loop transformation of Type I is defined to be the modified system, denoted $S_K$, formed by the feedback interconnection of the subsystems
@@ -568,13 +575,13 @@ with inputs
 \[
 u_1' = u_1 - Ku_2, \qquad u_2' = u_2,
 \]
-as shown in Figure~\ref{fig:feedback-SK}.  
+as shown in Figure~\ref{fig:feedback_sk}.  
 
 The closed-loop relations of $S_K$ will be denoted $E_K$ and $F_K$.
 \end{definition}
 
 \begin{theorem}
-Consider the system $S$ of Figure~\ref{fig:feedback-S} and let $S_K$ be the modified system obtained after a Type I loop transformation. Assume $K$ and $(I+KH_1)^{-1}: X \to X$. Then:
+Consider the system $S$ of Figure~\ref{fig:feedback} and let $S_K$ be the modified system obtained after a Type I loop transformation. Assume $K$ and $(I+KH_1)^{-1}: X \to X$. Then:
 \begin{enumerate}
     \item The system $S$ is stable if and only if the system $S_K$ is stable.
 \end{enumerate}
@@ -630,7 +637,7 @@ Consider the system $S$ of Figure~\ref{fig:feedback-S} and let $S_K$ be the modi
 
 
 \begin{definition}[Type II Loop Transformation]
-Consider the feedback system $S$ of Figure~\ref{fig:feedback-S}.  
+Consider the feedback system $S$ of Figure~\ref{fig:feedback}.  
 Let $H_1, H_2$ be causal maps of $X_e$ into $X$, and let $M$ be a causal linear operator satisfying:  
 
 \begin{enumerate}
@@ -653,8 +660,70 @@ The closed-loop relations of this modified system will be denoted $E_M$ and $F_M
 \end{definition}
 
 \begin{theorem}
-Consider the system $S$ of Figure~\ref{fig:feedback-S} and let $S_M$ be the modified system obtained after a Type II loop transformation. Then:
+Consider the system $S$ of Figure~\ref{fig:feedback} and let $S_M$ be the modified system obtained after a Type II loop transformation. Then:
 \[
 S \text{ is stable } \iff S_M \text{ is stable.}
 \]
 \end{theorem}
+
+%------------------------------------------------
+\section{The Circle Criterion}\index{Circle Criterion}
+
+Historically, one of the first applications of the small gain theorem was the celebrated \emph{circle criterion}, which analyzes the $\mathcal{L}_2$ stability of nonlinear feedback systems.  
+
+\begin{definition}[Sector Condition]
+A function $\phi:\mathbb{R}^+\times\mathbb{R}\to\mathbb{R}$ belongs to the sector $[\alpha,\beta]$ with $\alpha<\beta$ if
+\begin{equation}
+    \alpha x^2 \leq x\phi(t,x) \leq \beta x^2, \quad \forall t\geq 0,\ \forall x\in\mathbb{R}.
+\end{equation}
+\end{definition}
+
+The Nyquist stability criterion provides necessary and sufficient conditions for the closed-loop stability of LTI systems with transfer function
+\[
+    G(s) = g(s) + \frac{n(s)}{d(s)},
+\]
+where $g(s)$ is stable, $n(s),d(s)$ are polynomials, and all zeros of $d(s)$ lie in the closed right-half plane. The number of open right-half plane zeros of $d(s)$ is denoted $v$.  
+
+\begin{proposition}[Nyquist Criterion]
+Consider the feedback of $H_1$ (with transfer function $d(s)$) and a constant gain $K$. The system is $\mathcal{L}_p$-stable ($1<p<\infty$) iff the Nyquist plot of $G(j\omega)$ avoids the point $(-1/K,0)$ and encircles it exactly $v$ times counterclockwise as $\omega$ goes from $-\infty$ to $\infty$.
+\end{proposition}
+
+\begin{theorem}[Circle Criterion]
+Consider the feedback interconnection of an LTI system $H_1$ with transfer function $G(s)$ (satisfying the above assumptions) and a nonlinearity $\phi$ in the sector $[\alpha,\beta]$. The closed-loop system is $\mathcal{L}_2$-stable if one of the following holds:
+\begin{enumerate}[(a)]
+    \item If $0 < \alpha < \beta$: the Nyquist plot of $\tfrac{n(s)}{d(s)}$ avoids the \emph{critical circle} $C'$ (centered on the real axis and passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$) and encircles it $v$ times counterclockwise.
+    \item If $0=\alpha<\beta$: $G(s)$ has no right-half plane poles and the Nyquist plot lies to the right of the vertical line $\Re(z) = -1/\beta$.
+    \item If $\alpha<0<\beta$: $G(s)$ has no poles in the closed right-half plane and the Nyquist plot lies entirely inside the circle $C'$.
+\end{enumerate}
+\end{theorem}
+
+%------------------------------------------------
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.2]
+    % Axes
+    \draw[->] (-3.5,0) -- (1,0) node[right] {$\Re$};
+    \draw[->] (0,-2) -- (0,2) node[above] {$\Im$};
+
+    % Points on real axis (-1/alpha, 0) and (-1/beta, 0)
+    \coordinate (A) at (-3,0); % Example: -1/alpha
+    \coordinate (B) at (-1,0); % Example: -1/beta
+
+    % Circle through A and B centered on real axis
+    \path (A) -- (B) coordinate[midway] (M);
+    \draw[dashed] (M) circle [x radius=1, y radius=1];
+
+    % Mark points
+    \fill (A) circle (1.5pt) node[below] {$-\tfrac{1}{\alpha}$};
+    \fill (B) circle (1.5pt) node[below] {$-\tfrac{1}{\beta}$};
+    \fill (M) circle (1.5pt) node[below,yshift=-2pt] {center};
+
+    % Nyquist path (schematic curve)
+    \draw[thick,blue,->,>=stealth] (-2.5,-1.2) .. controls (-2,0.8) and (-1.5,-0.8) .. (-0.5,1);
+
+    % Labels
+    \node at (-2,1.5) {$C'$: critical circle};
+    \node[blue] at (-0.8,1.2) {Nyquist plot};
+\end{tikzpicture}
+\caption{The critical circle $C'$ in the Nyquist plane, passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$.}
+\end{figure}
