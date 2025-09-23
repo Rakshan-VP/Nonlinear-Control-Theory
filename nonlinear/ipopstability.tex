@@ -486,7 +486,6 @@ then the feedback system is input-output stable.
 \end{remark}
 
 \begin{example}[Nonlinear Feedback]
-\begin{figure}[h!]
 \centering
 \begin{tikzpicture}[scale=1.2, thick]
   % Axes
@@ -500,9 +499,8 @@ then the feedback system is input-output stable.
   \draw (0.5,0.5) -- (0.7,0.5) -- (0.7,0.7);
   \node at (0.8,0.4) {$K$};
 \end{tikzpicture}
-\caption{The nonlinearity $N(\cdot)$.}
+\captionof{figure}{The nonlinearity $N(\cdot)$.}
 \label{fig:nonlinear}
-\end{figure}
 
 Let $H_1$ be an LTI system with transfer function
 \[
@@ -690,7 +688,7 @@ Consider the feedback of $H_1$ (with transfer function $d(s)$) and a constant ga
 
 \begin{theorem}[Circle Criterion]
 Consider the feedback interconnection of an LTI system $H_1$ with transfer function $G(s)$ (satisfying the above assumptions) and a nonlinearity $\phi$ in the sector $[\alpha,\beta]$. The closed-loop system is $\mathcal{L}_2$-stable if one of the following holds:
-\begin{enumerate}[(a)]
+\begin{enumerate}
     \item If $0 < \alpha < \beta$: the Nyquist plot of $\tfrac{n(s)}{d(s)}$ avoids the \emph{critical circle} $C'$ (centered on the real axis and passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$) and encircles it $v$ times counterclockwise.
     \item If $0=\alpha<\beta$: $G(s)$ has no right-half plane poles and the Nyquist plot lies to the right of the vertical line $\Re(z) = -1/\beta$.
     \item If $\alpha<0<\beta$: $G(s)$ has no poles in the closed right-half plane and the Nyquist plot lies entirely inside the circle $C'$.
@@ -698,7 +696,7 @@ Consider the feedback interconnection of an LTI system $H_1$ with transfer funct
 \end{theorem}
 
 %------------------------------------------------
-\begin{figure}[h]
+\begin{figure}[!h]
 \centering
 \begin{tikzpicture}[scale=1.2]
     % Axes
