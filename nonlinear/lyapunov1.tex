@@ -5,7 +5,7 @@
 \chapter{Lyapunov Stability I: Autonomous Systems}\index{Lyapunov Stability I: Autonomous Systems}
 
 \section{Overview}\index{Overview}
-In this chapter, we introduce the concept of Lyapunov stability for autonomous systems. The main objective is to analyze the qualitative behavior of dynamical systems without explicitly solving the differential equations. Lyapunov’s direct method provides a systematic way to assess the stability of equilibrium points by constructing an energy-like function, called a Lyapunov function. 
+In this chapter, we introduce the concept of Lyapunov stability for autonomous systems. The main objective is to analyze the qualitative behavior of dynamical systems without explicitly solving the differential equations. Lyapunov’s direct method provides a systematic way to assess the stability of equilibrium points by constructing an energy-like function, called a \textbf{Lyapunov function}. 
 This approach is particularly powerful because it applies to nonlinear systems where exact solutions are often difficult or impossible to obtain. We also discuss different notions of stability such as stability in the sense of Lyapunov, asymptotic stability, and global stability, laying the foundation for further analysis of nonlinear control systems.
 
 \section{Basic Definitions}\index{Basic Definitions}
@@ -275,6 +275,8 @@ Consider the undamped pendulum (schematic shown below):
     \draw[->] (0,-1) arc (-90:-150:1);
     \node at (-0.6,-1.3) {$\theta$};
 \end{tikzpicture}
+
+\captionof{figure}{A simple pendulum}
 \end{center}
 
 The dynamics are:
@@ -384,34 +386,42 @@ Thus, $\dot V(x)<0$ for all $x_2 \neq 0$, and the equilibrium is \textbf{asympto
 	the mass always comes to rest at the origin, regardless of its initial displacement and velocity.
 \end{example}
 
-
+\newpage
 %------------------------------------------------
 \section{Positive Definite Functions Revisited}\index{Positive Definite Functions Revisited}
 
 \begin{definition}[Class $\mathcal{K}$ Functions]
-	A continuous function $\alpha:[0,a)\to [0,\infty)$ is said to belong to \emph{class $\mathcal{K}$} if it is:
+	A continuous function $\alpha:[0,a)\to [0,\infty)$ is said to belong to \emph{class $\mathcal{K}$} if:
 	\begin{enumerate}
-		\item strictly increasing,
-		\item $\alpha(0)=0$.
+		\item it increases strictly (larger input $\Rightarrow$ larger output),
+		\item it starts at zero: $\alpha(0)=0$.
 	\end{enumerate}
-	If $a=\infty$ and $\alpha(r)\to \infty$ as $r\to \infty$, then $\alpha$ is said to be of \emph{class $\mathcal{K}_\infty$}.
+	If $a=\infty$ and $\alpha(r)\to \infty$ as $r\to \infty$, then $\alpha$ is called a \emph{class $\mathcal{K}_\infty$ function}.  
+	In simple terms: class $\mathcal{K}$ functions are just ``nice increasing functions'' starting from $0$, and $\mathcal{K}_\infty$ functions keep growing without bound.
 \end{definition}
 
 \begin{corollary}
-	A function $V:\mathbb{R}^n \to \mathbb{R}$ is positive definite if and only if there exist class $\mathcal{K}$ functions $\alpha_1, \alpha_2$ such that
+	A function $V:\mathbb{R}^n \to \mathbb{R}$ is positive definite if and only if we can find two class $\mathcal{K}$ functions $\alpha_1, \alpha_2$ such that
 	\begin{equation}
 		\alpha_1(\|x\|) \leq V(x) \leq \alpha_2(\|x\|), \quad \forall x \in \mathbb{R}^n.
 	\end{equation}
+	In other words, $V(x)$ is squeezed between two increasing functions of $\|x\|$, meaning $V(x)$ behaves like a measure of distance from the origin.
 \end{corollary}
 
 \begin{corollary}
 	Let $x_e$ be an equilibrium of $\dot{x}=f(x)$.  
-	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) \leq 0$, then $x_e$ is stable.
+	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) \leq 0$,  
+	then $x_e$ is \emph{stable}.  
+	\\[6pt]
+	Intuitively: if we can find an energy-like function $V(x)$ that never increases, then the system cannot ``blow up'' away from the equilibrium.
 \end{corollary}
 
 \begin{corollary}
 	Let $x_e$ be an equilibrium of $\dot{x}=f(x)$.  
-	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) < 0$ for all $x\neq x_e$, then $x_e$ is asymptotically stable.
+	If there exists a continuous positive definite function $V(x)$ such that $\dot{V}(x) < 0$ for all $x\neq x_e$,  
+	then $x_e$ is \emph{asymptotically stable}.  
+	\\[6pt]
+	Intuitively: if the energy-like function $V(x)$ always decreases (except at the equilibrium), then trajectories are not only stable but also forced to move closer and closer to $x_e$ over time.
 \end{corollary}
 
 %------------------------------------------------
@@ -471,7 +481,7 @@ Hence $V$ is positive definite and satisfies $\dot{V}\le -2V$ globally, so the o
 \end{equation}
 \end{example}
 
-\begin{remark}[Contrast: asymptotic but not exponential]
+\begin{remark}[\textbf{Contrast: asymptotic but not exponential}]
 For the system $\dot{x}=-x^3$ with $V(x)=\tfrac{1}{2}x^2$, we get $\dot{V}=-x^4$.
 Although $\dot{V}<0$ for $x\neq 0$ (implying global asymptotic stability), there is no bound of the form
 $\dot{V}\le -c\,V$ with a constant $c>0$ valid for all $x$. Thus the origin is \emph{not} exponentially

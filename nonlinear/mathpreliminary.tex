@@ -45,30 +45,31 @@ Sets may be finite or infinite. Infinite sets such as $\mathbb{N}$ and $\mathbb{
 A \emph{metric space} is a pair $(X,d)$ where $X$ is a non-empty set and 
 $d : X \times X \to \mathbb{R}$ is a function, called a \emph{metric}, such that for all $x,y,z \in X$:
 \begin{align}
-    & d(x,y) \geq 0 \quad \text{(non-negativity)} \\
-    & d(x,y) = 0 \iff x=y \quad \text{(identity of indiscernibles)} \\
-    & d(x,y) = d(y,x) \quad \text{(symmetry)} \\
-    & d(x,z) \leq d(x,y) + d(y,z) \quad \text{(triangle inequality)}
+    & d(x,y) \geq 0 \quad \text{(non-negativity: distances are never negative)} \\
+    & d(x,y) = 0 \iff x=y \quad \text{(identity: the distance is $0$ is iff the two points are the same)} \\
+    & d(x,y) = d(y,x) \quad \text{(symmetry: going from $x$ to $y$ is the same as going from $y$ to $x$)} \\
+    & d(x,z) \leq d(x,y) + d(y,z) \quad \text{(triangle inequality: the direct route is always shorter)}
 \end{align}
 \end{definition}
 
 \begin{notation}
 Commonly used metrics include:
 \begin{itemize}
-    \item Euclidean metric: $d(x,y) = \|x-y\|_2$ on $\mathbb{R}^n$  
-    \item Manhattan metric: $d(x,y) = \|x-y\|_1 = \sum |x_i - y_i|$  
-    \item Maximum metric: $d(x,y) = \|x-y\|_\infty = \max |x_i - y_i|$  
+    \item Euclidean metric: $d(x,y) = \|x-y\|_2$, the ordinary straight-line distance in $\mathbb{R}^n$.  
+    \item Manhattan metric: $d(x,y) = \|x-y\|_1 = \sum |x_i - y_i|$, the distance if you can only move along grid lines (like streets in Manhattan).  
+    \item Maximum metric: $d(x,y) = \|x-y\|_\infty = \max |x_i - y_i|$, the distance is the biggest coordinate difference.  
 \end{itemize}
 \end{notation}
 
 \begin{example}
 Let $X = \mathbb{R}^2$ and define $d(x,y) = \sqrt{(x_1-y_1)^2+(x_2-y_2)^2}$.  
-Then $(\mathbb{R}^2,d)$ is a metric space with the standard Euclidean distance.
+This is the usual Pythagoras distance between two points in the plane.  
+So $(\mathbb{R}^2,d)$ is a metric space with the standard Euclidean distance.
 \end{example}
 
 \begin{remark}
-Every normed vector space $(V,\|\cdot\|)$ induces a metric by defining $d(x,y) = \|x-y\|$.  
-Thus, metric spaces generalize the familiar notion of distance while allowing greater flexibility in analysis.
+Every normed vector space $(V,\|\cdot\|)$ gives rise to a metric by defining $d(x,y) = \|x-y\|$.  
+This shows that metric spaces generalize the ordinary idea of distance, but they are more flexible since we can use different ways of measuring distance depending on the problem.
 \end{remark}
 
 %------------------------------------------------
@@ -193,12 +194,12 @@ For example, $\|(3,4)\|_2=\sqrt{3^2+4^2}=5$.
 \begin{itemize}
     \item \textbf{Transpose:} For a matrix $A=(a_{ij}) \in \mathbb{R}^{m \times n}$, the transpose is $A^T=(a_{ji}) \in \mathbb{R}^{n \times m}$.  
     Properties:
-    \begin{align*}
+    \begin{align}
         (A^T)^T &= A, \\
         (A+B)^T &= A^T + B^T, \\
         (\alpha A)^T &= \alpha A^T, \quad \alpha \in \mathbb{R}, \\
         (AB)^T &= B^T A^T.
-    \end{align*}
+    \end{align}
     
     \item \textbf{Symmetric Matrix:} $A \in \mathbb{R}^{n \times n}$ is symmetric if $A^T = A$.
 
@@ -214,16 +215,16 @@ For example, $\|(3,4)\|_2=\sqrt{3^2+4^2}=5$.
 
 \begin{definition}[Null Space]
 The \emph{null space} (or kernel) of $A \in \mathbb{R}^{m \times n}$ is
-\[
+\begin{equation}
 \mathcal{N}(A) = \{x \in \mathbb{R}^n \mid Ax = 0\}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{theorem}[Rank-Nullity Theorem]
 For $A \in \mathbb{R}^{m \times n}$,  
-\[
+\begin{equation}
 \mathrm{rank}(A) + \dim(\mathcal{N}(A)) = n.
-\]
+\end{equation}
 \end{theorem}
 
 %------------------------------------------------
@@ -239,9 +240,9 @@ for some scalar $\lambda \in \mathbb{R}$, called an \emph{eigenvalue}.
 
 \begin{theorem}[Diagonalization]
 If $A \in \mathbb{R}^{n \times n}$ has $n$ linearly independent eigenvectors, then $A$ is diagonalizable, i.e.,
-\[
+\begin{equation}
 A = S D S^{-1},
-\]
+\end{equation}
 where $D$ is diagonal with the eigenvalues of $A$ on its diagonal, and $S$ is the matrix of eigenvectors.
 \end{theorem}
 
@@ -257,9 +258,9 @@ If $A \in \mathbb{R}^{n \times n}$ is real and symmetric, then:
 \subsection{Quadratic Forms}\index{Matrices!Quadratic Forms}
 
 A quadratic form on $\mathbb{R}^n$ associated with a matrix $A \in \mathbb{R}^{n \times n}$ is
-\[
+\begin{equation}
 q(x) = x^T A x, \quad x \in \mathbb{R}^n.
-\]
+\end{equation}
 Without loss of generality, $A$ can be assumed symmetric.
 
 \begin{definition}[Definiteness of Quadratic Forms]
@@ -276,13 +277,13 @@ Let $q(x) = x^T A x$, with $A$ symmetric.
 \begin{theorem}[Rayleigh’s Inequality]
 For a symmetric matrix $A \in \mathbb{R}^{n \times n}$ with eigenvalues $\lambda_{\min} \leq \cdots \leq \lambda_{\max}$,  
 the Rayleigh quotient
-\[
+\begin{equation}
 R(x) = \frac{x^T A x}{x^T x}, \quad x \neq 0,
-\]
+\end{equation}
 satisfies
-\[
+\begin{equation}
 \lambda_{\min} \leq R(x) \leq \lambda_{\max}.
-\]
+\end{equation}
 \end{theorem}
 
 %------------------------------------------------
@@ -335,9 +336,9 @@ A \emph{sequence} in a metric space $(X,d)$ is a function $\{x_n\}_{n=1}^\infty$
 
 \begin{definition}[Limit of a Sequence]
 A sequence $\{x_n\}$ in a metric space $(X,d)$ is said to \emph{converge} to $x \in X$ if for every $\epsilon > 0$, there exists $N \in \mathbb{N}$ such that
-\[
+\begin{equation}
 d(x_n, x) < \epsilon \quad \forall n \geq N.
-\]
+\end{equation}
 We then write $\lim_{n \to \infty} x_n = x$.
 \end{definition}
 
@@ -351,9 +352,9 @@ In $(\mathbb{R}^2, \|\cdot\|_2)$, the sequence $x_n = \left(\frac{1}{n}, \frac{1
 
 \begin{definition}[Cauchy Sequence]
 A sequence $\{x_n\}$ in a metric space $(X,d)$ is called a \emph{Cauchy sequence} if for every $\epsilon > 0$, there exists $N \in \mathbb{N}$ such that
-\[
+\begin{equation}
 d(x_m, x_n) < \epsilon \quad \forall m,n \geq N.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}[Cauchy Sequence in $\mathbb{Q}$]
@@ -386,9 +387,9 @@ For each $x \in \mathbb{R}$, the function assigns a unique value $x^2 \in \mathb
 \begin{definition}[Composition of Functions]
 Let $f:A \to B$ and $g:B \to C$ be two functions.  
 The \emph{composition} of $g$ with $f$ is the function $g \circ f : A \to C$ defined by
-\[
+\begin{equation}
 (g \circ f)(x) = g(f(x)), \qquad \forall x \in A.
-\]
+\end{equation}
 \index{Function!Composition}
 \end{definition}
 
@@ -400,9 +401,9 @@ Then $(g \circ f)(x) = \sin(x^2)$.
 \begin{definition}[Continuity in Metric Spaces]
 Let $(X,d_X)$ and $(Y,d_Y)$ be metric spaces, and let $f:X \to Y$.  
 The function $f$ is said to be \emph{continuous at} $x_0 \in X$ if for every $\epsilon > 0$, there exists $\delta > 0$ such that
-\[
+\begin{equation}
 d_X(x,x_0) < \delta \;\;\Rightarrow\;\; d_Y(f(x), f(x_0)) < \epsilon.
-\]
+\end{equation}
 If $f$ is continuous at every point in $X$, then $f$ is called \emph{continuous on $X$}.  
 \index{Continuity}
 \end{definition}
@@ -411,13 +412,12 @@ If $f$ is continuous at every point in $X$, then $f$ is called \emph{continuous 
 The function $f:\mathbb{R}\to \mathbb{R}$ defined by $f(x) = 3x+2$ is continuous everywhere since small changes in $x$ lead to proportionally small changes in $f(x)$.  
 \end{example}
 
-\begin{definition}[Uniform Continuity]
+\begin{definition}[Uniform Continuity]\index{Uniform Continuity}
 A function $f:X \to Y$ between metric spaces is called \emph{uniformly continuous} if for every $\epsilon > 0$, there exists $\delta > 0$ such that
-\[
+\begin{equation}
 d_X(x_1,x_2) < \delta \;\;\Rightarrow\;\; d_Y(f(x_1), f(x_2)) < \epsilon
-\]
+\end{equation}
 for \emph{all} $x_1, x_2 \in X$.  
-\index{Uniform Continuity}
 \end{definition}
 
 \begin{remark}
