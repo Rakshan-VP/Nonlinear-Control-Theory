@@ -6,9 +6,9 @@
 
 \section{Overview}\index{Overview}
 In the previous chapter, we studied autonomous systems, where the dynamics depend only on the state variables. We now extend the discussion to \textbf{nonautonomous systems}, where time explicitly appears as a second variable in the system dynamics. Such systems are represented as
-\[
+\begin{equation}
 \dot{x}(t) = f(x,t), \quad x \in \mathbb{R}^n, \; t \in \mathbb{R}.
-\]
+\end{equation}
 
 The presence of time makes the analysis more challenging, since the system’s behavior may vary depending on when an input or disturbance is applied. For example, equilibrium points can shift or even cease to exist in the classical sense, and stability must be understood relative to a time-varying reference.
 
@@ -23,9 +23,9 @@ This framework broadens the applicability of Lyapunov’s theory, enabling the a
 Consider the system $\dot{x}=f(x,t)$ with equilibrium $x=0$.  
 \begin{itemize}
     \item \textbf{Stable:} For every $\epsilon>0$ and $t_0$, there exists $\delta(\epsilon,t_0)>0$ such that
-    \[
+    \begin{equation}
     ||x(t_0)|| < \delta \;\; \Rightarrow \;\; ||x(t)|| < \epsilon, \quad \forall t \geq t_0.
-    \]
+    \end{equation}
     \item \textbf{Convergent:} $x(t) \to 0$ as $t \to \infty$.
     \item \textbf{Asymptotically Stable:} The equilibrium is stable and convergent.  
     \item \textbf{Unstable:} The equilibrium is not stable.  
@@ -37,9 +37,9 @@ The equilibrium $x=0$ is said to be uniformly stable if the $\delta$ in the stab
 \begin{itemize}
     \item \textbf{Uniformly Stable:} $\delta = \delta(\epsilon)$ independent of $t_0$.  
     \item \textbf{Uniformly Convergent:} For every $\epsilon>0$, there exists $T(\epsilon)>0$ independent of $t_0$ such that
-    \[
+    \begin{equation}
     t \geq t_0 + T(\epsilon) \;\; \Rightarrow \;\; ||x(t)|| < \epsilon.
-    \]
+    \end{equation}
     \item \textbf{Uniformly Asymptotically Stable (UAS):} Uniformly stable and uniformly convergent.  
     \item \textbf{Globally Uniformly Asymptotically Stable (GUAS):} Uniformly asymptotically stable with region of attraction $\mathbb{R}^n$.  
 \end{itemize}
@@ -47,9 +47,9 @@ The equilibrium $x=0$ is said to be uniformly stable if the $\delta$ in the stab
 
 \begin{definition}[Exponential Stability]
 The equilibrium $x=0$ is \textbf{exponentially stable} if there exist constants $\alpha>0$, $\lambda>0$, and $\delta>0$ such that
-\[
+\begin{equation}
 ||x(t)|| \leq \alpha \, ||x(t_0)|| e^{-\lambda (t-t_0)}, \quad \forall t \geq t_0, \; ||x(t_0)|| < \delta.
-\]
+\end{equation}
 If the inequality holds for all $x(t_0)\in\mathbb{R}^n$, the equilibrium is \textbf{globally exponentially stable}.
 \end{definition}
 
@@ -61,45 +61,45 @@ Assume that $W(x,t)$ is continuous in $(x,t)$ and has continuous partial derivat
 
 \begin{definition}[Positive Semi-Definite Function]
 A function $W(x,t)$ is said to be \textbf{positive semi-definite} in $D$ if
-\[
+\begin{equation}
 W(0,t) = 0 \forall t \in \mathbb{R}^+
-\]
-\[
+\end{equation}
+\begin{equation}
 W(x,t) \geq 0, \quad \forall (x,t) \in D \times \mathbb{R}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Positive Definite Function]
 A function $W(x,t)$ is said to be \textbf{positive definite} in $D$ if
-\[
+\begin{equation}
 W(0,t) = 0, \quad W(x,t) > 0 \;\; \forall x \neq 0,
-\]
+\end{equation}
 and there exists a continuous function $V_1(x)$ with $V_1(0)=0$ such that
-\[
+\begin{equation}
 V_1(x) \leq W(x,t), \quad \forall (x,t) \in D \times \mathbb{R}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Decrescent Function]
 A function $W(x,t)$ is said to be \textbf{decrescent} in $D$ if there exists a continuous function $V_2(x)$ with $V_2(0)=0$ such that
-\[
+\begin{equation}
 W(x,t) \leq V_2(x), \quad \forall (x,t) \in D \times \mathbb{R}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Radially Unbounded Function]
 A function $W(x,t)$ is said to be \textbf{radially unbounded} if
-\[
+\begin{equation}
 ||x|| \to \infty \;\; \Rightarrow \;\; W(x,t) \to \infty, \quad \forall t \geq 0.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}[A single example covering the definitions]
 Consider
-\[
+\begin{equation}
 W(x,t) = \big(1+|\sin t|\big)\,\|x\|^2, 
 \qquad x\in\mathbb{R}^n,\; t\ge 0.
-\]
+\end{equation}
 
 \begin{itemize}
     \item \textbf{Regularity:}  
@@ -110,9 +110,9 @@ W(x,t) = \big(1+|\sin t|\big)\,\|x\|^2,
 
     \item \textbf{Positive definite:}  
     Because $1+|\sin t|\in [1,2]$,  
-    \[
+    \begin{equation}
     \|x\|^2 \le W(x,t) \le 2\|x\|^2.
-    \]  
+    \end{equation}
     Thus, $W(0,t)=0$ and $W(x,t)>0$ for all $x\neq 0$. One may take $V_1(x)=\|x\|^2$ so that $V_1(x)\le W(x,t)$.
 
     \item \textbf{Decrescent:}  
@@ -147,13 +147,13 @@ then the equilibrium $x=0$ is \textbf{uniformly asymptotically stable}.
 
 \begin{theorem}[Restated Lyapunov Uniform Asymptotic Stability]
 If there exist class-$\mathcal{K}$ functions $v_1, v_2, v_3$ such that
-\[
+\begin{equation}
 v_1(\|x\|) \;\le\; W(x,t) \;\le\; v_2(\|x\|), 
-\]
+\end{equation}
 and
-\[
+\begin{equation}
 \frac{\partial W}{\partial t}(x,t) + \nabla W(x,t) f(x,t) \;\le\; -v_3(\|x\|),
-\]
+\end{equation}
 then the equilibrium $x=0$ is \textbf{uniformly asymptotically stable}.
 \end{theorem}
 
@@ -168,159 +168,159 @@ then the equilibrium $x=0$ is \textbf{globally uniformly asymptotically stable}.
 
 \begin{remark}\textbf{Hierarchy of Stability Notions}
 \\\\The following chain of implications holds:
-\[
+\begin{equation}
 \text{Global Uniform Asymptotic Stability} 
 \;\;\Rightarrow\;\; \text{Uniform Asymptotic Stability} 
 \;\;\Rightarrow\;\; \text{Asymptotic Stability} 
 \;\;\Rightarrow\;\; \text{Stability}.
-\]
+\end{equation}
 The converse implications do not hold in general.
 \end{remark}
 
 \section{Analysis of LTV Systems}\index{Analysis of LTV Systems}
 
 Consider the linear time-varying system
-\[
+\begin{equation}
 \dot{x}(t) = A(t)x(t), \qquad x(t_0)=x_0,
-\]
+\end{equation}
 where $A(t)$ is a continuous matrix function of time.
 
 Let $\Phi(t,t_0)$ denote the \textbf{state transition matrix}, which satisfies
-\[
+\begin{equation}
 \dot{\Phi}(t,t_0) = A(t)\Phi(t,t_0), 
 \qquad \Phi(t_0,t_0) = I.
-\]
+\end{equation}
 
 \begin{theorem}[Exponential Stability via State Transition Matrix]
 The equilibrium $x=0$ of the LTV system is \textbf{exponentially stable} if there exist constants $\alpha>0$ and $\lambda>0$ such that
-\[
+\begin{equation}
 \|\Phi(t,t_0)\| \le \alpha e^{-\lambda (t-t_0)}, 
 \qquad \forall t\ge t_0\ge 0.
-\]
+\end{equation}
 \end{theorem}
 
 Now consider the quadratic Lyapunov function candidate
-\[
+\begin{equation}
 W(x,t) = x^T P(t) x,
-\]
+\end{equation}
 where $P(t)=P^T(t)>0$ for all $t\ge 0$.  
 The derivative along solutions is
-\[
+\begin{equation}
 \dot{W}(x,t) = x^T \big( \dot{P}(t) + A^T(t)P(t) + P(t)A(t) \big) x.
-\]
+\end{equation}
 
 \begin{theorem}[Exponential Stability via Lyapunov Function]
 Suppose there exist positive definite matrices $P(t)$ and $Q(t)$ such that
-\[
+\begin{equation}
 \dot{P}(t) + A^T(t)P(t) + P(t)A(t) = -Q(t),
-\]
+\end{equation}
 with $Q(t)>0$ for all $t\ge 0$.  
 Then the equilibrium $x=0$ is \textbf{uniformly exponentially stable}.
 \end{theorem}
 
 \begin{remark}\textbf{Origin of $Q(t)$ and Construction of $P(t)$}
 \\\\The matrix $Q(t)$ appears as the negative of the quadratic form that equals the derivative of the candidate Lyapunov function:
-\[
+\begin{equation}
 \dot W(x,t) = x^T\big(\dot P(t)+A^T(t)P(t)+P(t)A(t)\big)x = -x^T Q(t)x.
-\]
+\end{equation}
 Thus $Q(t)>0$ guarantees $\dot W \le -\lambda_{\min}(Q(t))\|x\|^2$, which ensures dissipation.
 
 A standard way to obtain a symmetric positive definite $P(t)$ for a given positive definite $Q(t)$ is via the state transition matrix:
-\[
+\begin{equation}
 P(t) = \int_{t}^{\infty} \Phi^T(\tau,t)\,Q(\tau)\,\Phi(\tau,t)\,d\tau.
-\]
+\end{equation}
 If the system is exponentially stable, this integral converges and yields $P(t)$ satisfying the Lyapunov differential equation.
 
 Moreover, if there exist constants $m_1,m_2>0$ such that
-\[
+\begin{equation}
 m_1 I \le Q(t) \le m_2 I, 
 \qquad \alpha_1 I \le P(t) \le \alpha_2 I,
-\]
+\end{equation}
 then
-\[
+\begin{equation}
 \dot W \le -m_1 \|x\|^2 \le -\tfrac{m_1}{\alpha_2}W,
-\]
+\end{equation}
 which implies the exponential decay estimate
-\[
+\begin{equation}
 \|x(t)\| \le \sqrt{\tfrac{\alpha_2}{\alpha_1}} \, e^{-\tfrac{m_1}{2\alpha_2}(t-t_0)} \|x(t_0)\|.
-\]
+\end{equation}
 This shows how the choice of $Q(t)$ (and the resulting $P(t)$) provides explicit exponential stability bounds.
 \end{remark}
 
 \begin{example}
 Consider the time-varying linear system
-\[
+\begin{equation}
 \dot x(t)=A(t)x(t),\qquad A(t) = -\big(1+\tfrac{1}{2}\sin t\big) I_{2},
-\]
+\end{equation}
 so that \(x\in\mathbb{R}^2\) and \(A(t)\) is a scalar multiple of the identity. Note that
-\[
+\begin{equation}
 a(t):=1+\tfrac{1}{2}\sin t \in [\,1/2,\,3/2\,].
-\]
+\end{equation}
 
 \begin{itemize}
     \item \textbf{State-transition matrix.} Because \(A(t)\) is a scalar times \(I\), the state-transition matrix is
-    \[
+    \begin{equation}
     \Phi(\tau,t)=\exp\bigg(-\int_{t}^{\tau} a(s)\,ds\bigg) I_2
     =\exp\!\Big(-( \tau-t ) -\tfrac{1}{2}\big(\cos t-\cos\tau\big)\Big) I_2,
-    \]
+    \end{equation}
     for \(\tau\ge t\). In particular \(\|\Phi(\tau,t)\|= \exp\big(-( \tau-t ) -\tfrac{1}{2}(\cos t-\cos\tau)\big)\).
     
     \item \textbf{Exponential stability (by inspection).} Since \(a(t)\ge 1/2>0\) for all \(t\), the factor \(\exp(-\int_t^\tau a(s)ds)\) decays at least like \(e^{-\tfrac{1}{2}(\tau-t)}\). Hence the system is uniformly exponentially stable.
     
     \item \textbf{Choice \(Q(t)=I_2\) and construction of \(P(t)\).} Let \(Q(t)\equiv I_2\). Define
-    \[
+    \begin{equation}
     P(t)=\int_{t}^{\infty}\Phi^{T}(\tau,t)\,Q(\tau)\,\Phi(\tau,t)\,d\tau
     =\left(\int_t^{\infty} e^{-2(\tau-t)} e^{-(\cos t-\cos\tau)}\,d\tau\right) I_2.
-    \]
+    \end{equation}
     Thus \(P(t)=p(t) I_2\) with the scalar
-    \[
+    \begin{equation}
     p(t)=\int_t^{\infty} e^{-2(\tau-t)} e^{-(\cos t-\cos\tau)}\,d\tau.
-    \]
+    \end{equation}
     Note \(e^{\cos\tau}\in[e^{-1},e^{1}]\), therefore
-    \[
+    \begin{equation}
     \frac{1}{2} e^{-1-\cos t} \;\le\; p(t) \;\le\; \frac{1}{2} e^{1-\cos t}.
-    \]
+    \end{equation}
     Since \(\cos t\in[-1,1]\) we obtain uniform bounds independent of \(t\):
-    \[
+    \begin{equation}
     \alpha_1 I_2 \le P(t) \le \alpha_2 I_2,\qquad
     \alpha_1=\tfrac{1}{2}e^{-2},\;\; \alpha_2=\tfrac{1}{2}e^{2}.
-    \]
+    \end{equation}
     Hence \(P(t)>0\) for all \(t\) and \(P(t)\) is uniformly positive definite.
     
     \item \textbf{Lyapunov relation.} By construction \(P(t)\) satisfies the differential Lyapunov equation
-    \[
+    \begin{equation}
     \dot P(t) + A^T(t)P(t) + P(t)A(t) = -Q(t) = -I_2.
-    \]
+    \end{equation}
     Therefore for the quadratic Lyapunov candidate
-    \[
+    \begin{equation}
     W(x,t)=x^T P(t) x
-    \]
+    \end{equation}
     we have along trajectories of \(\dot x = A(t)x\):
-    \[
+    \begin{equation}
     \dot W(x,t) = x^T\big(\dot P + A^TP + PA\big)x = -x^T I_2 x = -\|x\|^2.
-    \]
+    \end{equation}
     
     \item \textbf{Derive exponential bounds.} Using the uniform bounds on \(P(t)\):
-    \[
+    \begin{equation}
     \alpha_1 \|x\|^2 \le W(x,t) \le \alpha_2 \|x\|^2,
-    \]
+    \end{equation}
     and \(\dot W = -\|x\|^2 \le -\tfrac{1}{\alpha_2} W(x,t)\). Hence
-    \[
+    \begin{equation}
     W(x(t),t) \le W(x(t_0),t_0)\,e^{-(1/\alpha_2)(t-t_0)}.
-    \]
+    \end{equation}
     Using the lower bound \(W\ge \alpha_1 \|x\|^2\) we obtain the state bound
-    \[
+    \begin{equation}
     \|x(t)\| \le \sqrt{\frac{\alpha_2}{\alpha_1}}\; e^{-\tfrac{1}{2\alpha_2}(t-t_0)} \,\|x(t_0)\|.
-    \]
+    \end{equation}
     With \(\alpha_1=\tfrac{1}{2}e^{-2}\) and \(\alpha_2=\tfrac{1}{2}e^{2}\) this gives explicit constants:
-    \[
+    \begin{equation}
     C=\sqrt{\frac{\alpha_2}{\alpha_1}} = e^{2}, \qquad
     \gamma=\frac{1}{2\alpha_2} = \frac{1}{e^{2}}.
-    \]
+    \end{equation}
     Thus the solution satisfies the global exponential estimate
-    \[
+    \begin{equation}
     \|x(t)\| \le C\, e^{-\gamma (t-t_0)} \|x(t_0)\|,\qquad \forall t\ge t_0,
-    \]
+    \end{equation}
     proving global uniform exponential stability for this example.
 \end{itemize}
 
@@ -333,9 +333,9 @@ This example illustrates the general construction: pick a positive definite \(Q(
 \section{Perturbation Analysis}\index{Perturbation Analysis}
 
 Consider the perturbed nonautonomous system
-\[
+\begin{equation}
 \dot{x} = f(x,t) + g(x,t),
-\]
+\end{equation}
 where \(g(x,t)\) is a perturbation and \(f(0,t)=0\).
 
 \begin{theorem}[Stability under perturbations]
@@ -347,47 +347,47 @@ Suppose there exists a continuously differentiable positive definite function \(
     \item \(\|g(x,t)\| \le k_5 \|x\|\).
 \end{itemize}
 If
-\[
+\begin{equation}
 k_3 - k_4 k_5 > 0,
-\]
+\end{equation}
 then the equilibrium \(x=0\) is uniformly exponentially stable.
 \end{theorem}
 
 \subsection{Special Case: Linear System with Perturbation}\index{Perturbation Analysis!Linear System}
 
 Consider the linear system with perturbation:
-\[
+\begin{equation}
 \dot{x} = A x + g(x,t), \qquad A \;\text{Hurwitz}.
-\]
+\end{equation}
 
 \begin{itemize}
     \item Solve the Lyapunov equation \(A^T P + P A = -Q\) with \(P=P^T>0\) and \(Q=Q^T>0\).  
     \item Quadratic Lyapunov function: \(W(x) = x^T P x\).  
     \item Bounds on \(W\):
-    \[
+    \begin{equation}
     \lambda_{\min}(P)\|x\|^2 \le W(x) \le \lambda_{\max}(P)\|x\|^2.
-    \]
+    \end{equation}
     \item Derivative along solutions:
-    \[
+    \begin{equation}
     \dot W(x) = -x^T Q x + 2 x^T P g(x,t) \le -\lambda_{\min}(Q)\|x\|^2 + 2\|P\|\,\|x\|\,\|g(x,t)\|.
-    \]
+    \end{equation}
     \item If \(\|g(x,t)\| \le \gamma \|x\|\), then
-    \[
+    \begin{equation}
     \dot W(x) \le -\big(\lambda_{\min}(Q) - 2 \lambda_{\max}\|P\|\, \gamma \big) \|x\|^2.
-    \]
+    \end{equation}
     \item Exponential stability is guaranteed if
-    \[
+    \begin{equation}
     \gamma < \frac{\lambda_{\min}(Q)}{2 \lambda_{\max}\|P\|}.
-    \]
+    \end{equation}
     \item Corresponding exponential decay rate:
-    \[
+    \begin{equation}
     c = \frac{\lambda_{\min}(Q) - 2 \lambda_{\max}\|P\| \gamma}{\lambda_{\max}(P)}.
-    \]
+    \end{equation}
     \item Therefore, the solution satisfies
-    \[
+    \begin{equation}
     \|x(t)\| \le \sqrt{\frac{\lambda_{\max}(P)}{\lambda_{\min}(P)}} 
     \, e^{-\tfrac{c}{2}(t-t_0)} \|x(t_0)\|.
-    \]
+    \end{equation}
 \end{itemize}
 
 \section{Discretization}\index{Discretization}
@@ -416,42 +416,42 @@ The discretization of a continuous-time control system involves sampling the inp
     \item \(H\) is the \textbf{hold device} (e.g., zero-order hold) that converts the discrete input \(u(k)\) into a piecewise constant continuous-time signal \(u(t)\).  
     \item The summation block represents the \textbf{continuous-time plant} \(\dot{x}=f(x,u)\).  
     \item The discrete-time summation \(\sum_d\) combines the sampler and hold, giving the discrete evolution:
-    \[
+    \begin{equation}
     x(k+1) = F(x(k), u(k), T) \approx f_d(x(k),u(k)).
-    \]
+    \end{equation}
 \end{itemize}
 
 \subsection{Case 1: LTI Plants}\index{Discretization!LTI Plants}
 
 Consider a linear time-invariant (LTI) system:
-\[
+\begin{equation}
 \dot{x}(t) = A x(t) + B u(t), \quad x(0) = x_0.
-\]
+\end{equation}
 
 Using the zero-order hold over the sampling interval \(T\), the solution is
-\[
+\begin{equation}
 x((k+1)T) = e^{A T} x(kT) + \int_{0}^{T} e^{A\tau} B u((k+1)T - \tau) \, d\tau.
-\]
+\end{equation}
 
 If \(u(t)\) is piecewise constant \(u(t) = u(k)\) for \(kT \le t < (k+1)T\), the integral simplifies:
-\[
+\begin{equation}
 \int_0^T e^{A \tau} B u(k) \, d\tau = \left(\int_0^T e^{A \tau} d\tau \right) B u(k),
-\]
+\end{equation}
 so the discrete-time model is
-\[
+\begin{equation}
 \boxed{x(k+1) = e^{A T} x(k) + \left( \int_0^T e^{A \tau} d\tau \right) B u(k)}.
-\]
+\end{equation}
 
 \subsection{Case 2: Nonlinear Plants}\index{Discretization!Nonlinear Plants}
 
 For a nonlinear system
-\[
+\begin{equation}
 \dot{x} = f(x,u),
-\]
+\end{equation}
 a simple forward Euler approximation over the sampling interval \(T\) gives:
-\[
+\begin{equation}
 \boxed{x(k+1) \approx x(k) + T f(x(k), u(k))}.
-\]
+\end{equation}
 
 This is a first-order discrete-time approximation suitable for small \(T\) and is widely used in digital control of nonlinear systems.
 
@@ -462,9 +462,9 @@ This is a first-order discrete-time approximation suitable for small \(T\) and i
 Consider the discrete-time system $x(k+1) = f(x(k),k)$ with equilibrium $x=0$.  
 \begin{itemize}
     \item \textbf{Stable:} For every $\epsilon>0$ there exists $\delta>0$ such that
-    \[
+    \begin{equation}
     ||x(k_0)|| < \delta \;\; \Rightarrow \;\; ||x(k)|| < \epsilon, \quad \forall k \ge k_0.
-    \]
+    \end{equation}
     \item \textbf{Convergent:} $x(k) \to 0$ as $k \to \infty$.
     \item \textbf{Asymptotically Stable:} The equilibrium is stable and convergent.  
     \item \textbf{Unstable:} The equilibrium is not stable.  
@@ -476,9 +476,9 @@ The equilibrium $x=0$ is said to be uniformly stable if the $\delta$ in the stab
 \begin{itemize}
     \item \textbf{Uniformly Stable:} $\delta = \delta(\epsilon)$ independent of $k_0$.  
     \item \textbf{Uniformly Convergent:} For every $\epsilon>0$, there exists $N(\epsilon)>0$ independent of $k_0$ such that
-    \[
+    \begin{equation}
     k \ge k_0 + N(\epsilon) \;\; \Rightarrow \;\; ||x(k)|| < \epsilon.
-    \]
+    \end{equation}
     \item \textbf{Uniformly Asymptotically Stable (UAS):} Uniformly stable and uniformly convergent.  
     \item \textbf{Globally Uniformly Asymptotically Stable (GUAS):} Uniformly asymptotically stable with region of attraction $\mathbb{R}^n$.  
 \end{itemize}
@@ -486,9 +486,9 @@ The equilibrium $x=0$ is said to be uniformly stable if the $\delta$ in the stab
 
 \begin{definition}[Exponential Stability]
 The equilibrium $x=0$ is \textbf{exponentially stable} if there exist constants $\alpha>0$, $\lambda>0$ such that
-\[
+\begin{equation}
 ||x(k)|| \leq \alpha \, ||x(k_0)|| (1-\lambda)^{k-k_0}, \quad \forall k \ge k_0, \; ||x(k_0)|| < \delta.
-\]
+\end{equation}
 If the inequality holds for all $x(k_0)\in\mathbb{R}^n$, the equilibrium is \textbf{globally exponentially stable}.
 \end{definition}
 
@@ -498,41 +498,41 @@ Let $W : D \times \mathbb{Z}^+ \to \mathbb{R}$ be a scalar function, where $D \s
 
 \begin{definition}[Positive Semi-Definite Function]
 $W(x,k)$ is \textbf{positive semi-definite} in $D$ if
-\[
+\begin{equation}
 W(0,k) = 0, \quad W(x,k) \ge 0, \;\; \forall x\in D, k \in \mathbb{Z}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Positive Definite Function]
 $W(x,k)$ is \textbf{positive definite} if
-\[
+\begin{equation}
 W(0,k) = 0, \quad W(x,k) > 0 \;\; \forall x \neq 0,
-\]
+\end{equation}
 and there exists a continuous function $V_1(x)$ with $V_1(0)=0$ such that
-\[
+\begin{equation}
 V_1(x) \leq W(x,k), \quad \forall x \in D, k \in \mathbb{Z}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Decrescent Function]
 $W(x,k)$ is \textbf{decrescent} in $D$ if there exists a continuous function $V_2(x)$ with $V_2(0)=0$ such that
-\[
+\begin{equation}
 W(x,k) \leq V_2(x), \quad \forall x \in D, k \in \mathbb{Z}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Radially Unbounded Function]
 $W(x,k)$ is \textbf{radially unbounded} if
-\[
+\begin{equation}
 ||x|| \to \infty \;\; \Rightarrow \;\; W(x,k) \to \infty, \quad \forall k \in \mathbb{Z}^+.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}[Discrete-Time Positive Definite Function]
 Consider
-\[
+\begin{equation}
 W(x,k) = (1+0.5\cos k)\|x\|^2, \quad x\in\mathbb{R}^n, k \ge 0.
-\]
+\end{equation}
 
 \begin{itemize}
     \item \textbf{Positive semi-definite:} $W(x,k) \ge 0$.  
@@ -547,31 +547,31 @@ W(x,k) = (1+0.5\cos k)\|x\|^2, \quad x\in\mathbb{R}^n, k \ge 0.
 
 \begin{theorem}[Lyapunov Stability Theorem for Discrete-Time Systems]
 If $W:D \times \mathbb{Z}^+ \to \mathbb{R}$ is positive definite and
-\[
+\begin{equation}
 \Delta W(x(k)) = W(x(k+1),k+1) - W(x(k),k) \le 0,
-\]
+\end{equation}
 then the equilibrium $x=0$ is \textbf{stable}.
 \end{theorem}
 
 \begin{theorem}[Uniform Asymptotic Stability for Discrete-Time Systems]
 If $W(x,k)$ is positive definite, decrescent, and
-\[
+\begin{equation}
 \Delta W(x(k)) < 0, \quad x\neq 0,
-\]
+\end{equation}
 then the equilibrium $x=0$ is \textbf{uniformly asymptotically stable}.
 \end{theorem}
 
 \begin{theorem}[Global Uniform Asymptotic Stability]
 If $W(x,k)$ is positive definite, decrescent, radially unbounded, and
-\[
+\begin{equation}
 \Delta W(x(k)) < 0, \quad x\neq 0,
-\]
+\end{equation}
 then the equilibrium $x=0$ is \textbf{globally uniformly asymptotically stable}.
 \end{theorem}
 
 \begin{remark}\textbf{Hierarchy of Discrete-Time Stability}
-\[
+\begin{equation}
 \text{GUAS} \;\Rightarrow\; \text{UAS} \;\Rightarrow\; \text{Asymptotic Stability} \;\Rightarrow\; \text{Stability}.
-\]
+\end{equation}
 The converse implications do not hold in general.
 \end{remark}

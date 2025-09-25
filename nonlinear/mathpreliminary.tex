@@ -438,32 +438,32 @@ Uniform continuity requires a single $\delta$ (depending only on $\epsilon$) tha
 \begin{definition}[Linear Operator]
 Let $X$ and $Y$ be vector spaces.  
 A map $T:X \to Y$ is called a \emph{linear operator} if for all $x_1,x_2 \in X$ and scalars $\alpha,\beta \in \mathbb{R}$ (or $\mathbb{C}$),
-\[
+\begin{equation}
 T(\alpha x_1 + \beta x_2) = \alpha T(x_1) + \beta T(x_2).
-\]
+\end{equation}
 \index{Operator!Linear}
 \end{definition}
 
 \begin{definition}[Bounded Linear Operator]
 Let $(X,\|\cdot\|_X)$ and $(Y,\|\cdot\|_Y)$ be normed spaces.  
 A linear operator $T:X \to Y$ is said to be \emph{bounded} if there exists $C>0$ such that
-\[
+\begin{equation}
 \|Tx\|_Y \leq C \|x\|_X, \quad \forall x \in X.
-\]
+\end{equation}
 Equivalently, the \emph{operator norm} is defined as
-\[
+\begin{equation}
 \|T\| = \sup_{x \neq 0} \frac{\|Tx\|_Y}{\|x\|_X} 
 = \max_{\|x\|_X = 1} \|Tx\|_Y.
-\]
+\end{equation}
 \index{Operator!Bounded Linear}
 \end{definition}
 
 \begin{example}
 Consider $T:\mathbb{R}^2 \to \mathbb{R}^2$ defined by $T(x,y) = (2x,3y)$.  
 We compute:
-\[
+\begin{equation}
 \|T(x,y)\|_\infty = \max(|2x|,|3y|).
-\]
+\end{equation}
 If $\|(x,y)\|_\infty = 1$, then the maximum value of $\|T(x,y)\|_\infty$ is $3$.  
 Thus $\|T\|_\infty = 3$, and $T$ is bounded.  
 \end{example}
@@ -471,9 +471,9 @@ Thus $\|T\|_\infty = 3$, and $T$ is bounded.
 \begin{definition}[Induced Matrix Norms]
 Let $A \in \mathbb{R}^{n \times n}$.  
 Given a vector norm $\|\cdot\|$ on $\mathbb{R}^n$, the \emph{induced matrix norm} is defined as
-\[
+\begin{equation}
 \|A\| = \max_{\|x\|=1} \|Ax\|.
-\]
+\end{equation}
 \index{Matrix Norm}
 \end{definition}
 
@@ -481,20 +481,20 @@ Given a vector norm $\|\cdot\|$ on $\mathbb{R}^n$, the \emph{induced matrix norm
 For a matrix $A = (a_{ij}) \in \mathbb{R}^{n \times n}$, three common induced matrix norms are:
 \begin{itemize}
     \item $\mathbf{1\text{-norm}}$:  
-    \[
+    \begin{equation}
     \|A\|_1 = \max_{1 \leq j \leq n} \sum_{i=1}^n |a_{ij}| 
     \quad \text{(maximum absolute column sum)}.
-    \]
+    \end{equation}
     \item $\mathbf{\infty\text{-norm}}$:  
-    \[
+    \begin{equation}
     \|A\|_\infty = \max_{1 \leq i \leq n} \sum_{j=1}^n |a_{ij}| 
     \quad \text{(maximum absolute row sum)}.
-    \]
+    \end{equation}
     \item $\mathbf{2\text{-norm}}$:  
-    \[
+    \begin{equation}
     \|A\|_2 = \sqrt{\lambda_{\max}(A^TA)}
     \quad \text{(spectral norm)}.
-    \]
+    \end{equation}
 \end{itemize}
 \end{example}
 
@@ -502,9 +502,9 @@ For a matrix $A = (a_{ij}) \in \mathbb{R}^{n \times n}$, three common induced ma
 
 \begin{definition}[Differentiability in $\mathbb{R}$]
 A function $f:\mathbb{R}\to \mathbb{R}$ is said to be \emph{differentiable} at $x_0\in \mathbb{R}$ if the limit
-\[
+\begin{equation}
 f'(x_0) = \lim_{h\to 0} \frac{f(x_0+h)-f(x_0)}{h}
-\]
+\end{equation}
 exists. The function $f'(x_0)$ is called the \emph{derivative} of $f$ at $x_0$.
 \end{definition}
 
@@ -520,35 +520,35 @@ The function $f(x)=|x|$ is not differentiable at $x=0$, since the left and right
 \begin{definition}[Differentiability in Higher Dimensions]
 Let $f:\mathbb{R}^m\to \mathbb{R}^n$. We say $f$ is differentiable at $x_0\in \mathbb{R}^m$ if there exists a linear map 
 $A:\mathbb{R}^m\to \mathbb{R}^n$ such that
-\[
+\begin{equation}
 \lim_{h\to 0}\frac{\|f(x_0+h)-f(x_0)-A(h)\|}{\|h\|} = 0.
-\]
+\end{equation}
 The linear map $A$ is called the \emph{derivative} (or \emph{Jacobian matrix}) of $f$ at $x_0$.
 \end{definition}
 
 \begin{example}
 Let $f:\mathbb{R}^2\to \mathbb{R}^2$ be given by $f(x,y)=(x^2+y,\, xy)$.  
 Then 
-\[
+\begin{equation}
 Df(x,y) = \begin{bmatrix}
 2x & 1\\
 y & x
 \end{bmatrix}.
-\]
+\end{equation}
 \end{example}
 
 \begin{definition}[Partial Derivative]
 If $f:\mathbb{R}^m\to \mathbb{R}$, the \emph{partial derivative} with respect to $x_i$ at a point $x=(x_1,\dots,x_m)$ is
-\[
+\begin{equation}
 \frac{\partial f}{\partial x_i}(x) = \lim_{h\to 0} \frac{f(x_1,\dots,x_i+h,\dots,x_m)-f(x)}{h}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}
 For $f(x,y)=x^2y+e^y$, we have
-\[
+\begin{equation}
 \frac{\partial f}{\partial x} = 2xy, \qquad \frac{\partial f}{\partial y} = x^2+e^y.
-\]
+\end{equation}
 \end{example}
 
 \begin{definition}[Continuously Differentiable]
@@ -558,25 +558,25 @@ A function $f:\mathbb{R}^m\to \mathbb{R}^n$ is \emph{continuously differentiable
 \begin{proposition}[Chain Rule]
 Let $f:\mathbb{R}^m\to \mathbb{R}^n$ be differentiable at $x_0$, and $g:\mathbb{R}^n\to \mathbb{R}^p$ be differentiable at $f(x_0)$.  
 Then $g\circ f:\mathbb{R}^m\to \mathbb{R}^p$ is differentiable at $x_0$, with
-\[
+\begin{equation}
 D(g\circ f)(x_0) = Dg(f(x_0)) \cdot Df(x_0).
-\]
+\end{equation}
 \end{proposition}
 
 \begin{example}
 Let $f(x,y)=(x^2,y^2)$ and $g(u,v)=u+v$. Then $g\circ f(x,y)=x^2+y^2$.  
 The chain rule gives
-\[
+\begin{equation}
 D(g\circ f)(x,y)= [2x \quad 2y],
-\]
+\end{equation}
 which matches the direct derivative.
 \end{example}
 
 \begin{theorem}[Mean Value Theorem]
 If $f:[a,b]\to \mathbb{R}$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then there exists $c\in (a,b)$ such that
-\[
+\begin{equation}
 f'(c) = \frac{f(b)-f(a)}{b-a}.
-\]
+\end{equation}
 \end{theorem}
 
 \begin{example}
@@ -588,18 +588,18 @@ Let $f:\mathbb{R}^n\to \mathbb{R}^n$ be a $C^1$ function.
 If $\det(Df(x_0))\neq 0$, then $f$ is locally invertible around $x_0$, and the inverse $f^{-1}$ is also $C^1$ near $f(x_0)$.  
 
 Moreover, for $y=f(x)$ close to $f(x_0)$, the derivative of the inverse satisfies
-\[
+\begin{equation}
 D(f^{-1})(y) = \big(Df(x)\big)^{-1}.
-\]
+\end{equation}
 \end{theorem}
 
 
 \begin{example}
 Consider $f:\mathbb{R}^2\to \mathbb{R}^2$, $f(x,y)=(e^x \cos y, e^x \sin y)$.  
 At $(0,0)$, the Jacobian is 
-\[
+\begin{equation}
 Df(0,0)=\begin{bmatrix}1&0\\0&1\end{bmatrix},
-\]
+\end{equation}
 which is invertible. Hence $f$ is locally invertible near $(0,0)$.
 \end{example}
 
@@ -620,22 +620,22 @@ which is invertible. Hence $f$ is locally invertible near $(0,0)$.
 \begin{theorem}[Differentiable Functions are Locally Lipschitz]
     Let $f: \mathbb{R}^n \to \mathbb{R}^m$ be continuously differentiable ($C^1$).  
     Then $f$ is locally Lipschitz continuous, i.e., for every compact set $K \subset \mathbb{R}^n$, there exists a constant $L$ such that
-    \[
+    \begin{equation}
         \| f(x) - f(y) \| \leq L \| x - y \|, \qquad \forall x,y \in K.
-    \]
+    \end{equation}
 \end{theorem}
 
 %------------------------------------------------
 
 \begin{remark}
     If $f:\mathbb{R}^n \to \mathbb{R}^m$ is differentiable on $D$ and its Jacobian is bounded,
-    \[
+    \begin{equation}
         M = \sup_{x \in D} \|Df(x)\| < \infty,
-    \]
+    \end{equation}
     then by the Mean Value Theorem,
-    \[
+    \begin{equation}
         \|f(x)-f(y)\| \leq M \|x-y\|, \qquad \forall x,y \in D.
-    \]
+    \end{equation}
     Hence $f$ is Lipschitz on $D$ with constant $L=M$.  
     In simple terms: a bounded derivative ensures the function cannot change faster than linearly.
 \end{remark}
@@ -645,9 +645,9 @@ which is invertible. Hence $f$ is locally invertible near $(0,0)$.
 \begin{example}
     Consider $f:\mathbb{R}\to \mathbb{R}$ given by $f(x) = 3x + 2$.  
     For all $x,y \in \mathbb{R}$,
-    \[
+    \begin{equation}
         |f(x)-f(y)| = |3(x-y)| = 3|x-y|.
-    \]
+    \end{equation}
     Thus $f$ is Lipschitz continuous with Lipschitz constant $L=3$.
 \end{example}
 
@@ -661,9 +661,9 @@ which is invertible. Hence $f$ is locally invertible near $(0,0)$.
 \begin{definition}[Contraction Mapping]
     Let $(X,d)$ be a metric space.  
     A mapping $T: X \to X$ is called a \emph{contraction} if there exists a constant $0 \leq k < 1$ such that
-    \[
+    \begin{equation}
         d(Tx,Ty) \leq k \, d(x,y), \qquad \forall x,y \in X.
-    \]
+    \end{equation}
     The constant $k$ is called the \emph{contraction constant}.
 \end{definition}
 
@@ -675,9 +675,9 @@ which is invertible. Hence $f$ is locally invertible near $(0,0)$.
     \begin{enumerate}
         \item There exists a unique fixed point $x^* \in X$ such that $T(x^*) = x^*$.
         \item For any initial point $x_0 \in X$, the sequence defined by iteration
-        \[
+        \begin{equation}
             x_{n+1} = T(x_n)
-        \]
+        \end{equation}
         converges to $x^*$ as $n \to \infty$.
     \end{enumerate}
 \end{theorem}
@@ -688,15 +688,15 @@ which is invertible. Hence $f$ is locally invertible near $(0,0)$.
 \subsection{Linear Time-Invariant (LTI) Systems}\index{Differential Equations!LTI systems}
 
 Consider the LTI system
-\[
+\begin{equation}
     \dot{x}(t) = A x(t) + B u(t), \qquad x(0) = x_0,
-\]
+\end{equation}
 where $A \in \mathbb{R}^{n \times n}$ and $B \in \mathbb{R}^{n \times m}$.
 
 The solution is given by
-\[
+\begin{equation}
     x(t) = e^{At} x_0 + \int_0^t e^{A(t-\tau)} B u(\tau)\, d\tau.
-\]
+\end{equation}
 
 This closed-form expression follows from the matrix exponential and the variation of constants formula.
 
@@ -705,9 +705,9 @@ This closed-form expression follows from the matrix exponential and the variatio
 \subsection{Nonlinear Systems}\index{Differential Equations!Nonlinear Systems}
 
 For nonlinear systems of the form
-\[
+\begin{equation}
     \dot{x}(t) = f(x(t),t), \qquad x(0) = x_0,
-\]
+\end{equation}
 an explicit solution formula generally does not exist, and one instead relies on qualitative theorems about existence and uniqueness of solutions.
 
 %------------------------------------------------

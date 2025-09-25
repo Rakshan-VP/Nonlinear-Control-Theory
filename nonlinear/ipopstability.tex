@@ -6,7 +6,7 @@
 
 \section{Overview}\index{Overview}
 
-So far, stability was studied using Lyapunov functions focusing on internal states. Input-Output (I/O) Stability, in contrast, studies how bounded inputs produce bounded outputs using the mapping $y = H(u)$. It treats the system as a black box without considering internal states.  
+So far, stability was studied using Lyapunov functions focusing on internal states. \textbf{Input-Output (I/O) Stability}, in contrast, studies how bounded inputs produce bounded outputs using the mapping $y = H(u)$. It treats the system as a black box without considering internal states.  
 
 \begin{center}
 \begin{tikzpicture}[auto, node distance=1.5cm, thick]
@@ -26,14 +26,14 @@ Now we study \textbf{function spaces}, where the elements are \emph{functions} i
 \begin{definition}[Function space]
 A \emph{function space} is a set of functions from a domain (e.g.\ time, $\mathbb{R}_{\geq 0}$) into a codomain (e.g.\ $\mathbb{R}^q$) that is equipped with additional structure, such as operations (addition, scalar multiplication) and possibly a norm or inner product.  
 For example, we may consider
-\[
+\begin{equation}
 u:\mathbb{R}_{\geq 0} \to \mathbb{R}^q, 
 \quad 
 u(t) =
 \begin{bmatrix}
 u_1(t) \\ \vdots \\ u_q(t)
 \end{bmatrix}.
-\]
+\end{equation}
 \end{definition}
 
 \subsection{$L_p$ Spaces}
@@ -42,41 +42,41 @@ A particularly important class of function spaces in analysis and control are th
 
 \begin{definition}[$L_p$ space]
 For $1 \leq p < \infty$, the space $L_p(0,\infty;\mathbb{R}^q)$ is defined as
-\[
+\begin{equation}
 L_p = \Big\{ u:\mathbb{R}_{\geq 0}\to \mathbb{R}^q \;\Big|\;
 \int_{0}^{\infty} \|u(t)\|^p \, dt < \infty \Big\}.
-\]
+\end{equation}
 The corresponding norm is
-\[
+\begin{equation}
 \|u\|_{L_p} = \left( \int_{0}^{\infty} \|u(t)\|^p \, dt \right)^{1/p}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[$L_2$ space]
 The \emph{square-integrable space} is the case $p=2$:
-\[
+\begin{equation}
 L_2(0,\infty;\mathbb{R}^q) 
 = \Big\{ u:\mathbb{R}_{\geq 0}\to \mathbb{R}^q \;\Big|\;
 \int_{0}^{\infty} \|u(t)\|^2 \, dt < \infty \Big\}.
-\]
+\end{equation}
 The norm
-\[
+\begin{equation}
 \|u\|_{L_2} = \left( \int_{0}^{\infty} \|u(t)\|^2 \, dt \right)^{1/2}
-\]
+\end{equation}
 represents the \textbf{energy} of the signal.
 \end{definition}
 
 \begin{definition}[$L_\infty$ space]
 The \emph{essentially bounded space} is defined as
-\[
+\begin{equation}
 L_\infty(0,\infty;\mathbb{R}^q) 
 = \Big\{ u:\mathbb{R}_{\geq 0}\to \mathbb{R}^q \;\Big|\;
 \sup_{t \geq 0} \|u(t)\| < \infty \Big\}.
-\]
+\end{equation}
 The norm
-\[
+\begin{equation}
 \|u\|_{L_\infty} = \sup_{t \geq 0} \|u(t)\|
-\]
+\end{equation}
 represents the \textbf{maximum amplitude} of the signal.
 \end{definition}
 
@@ -91,19 +91,19 @@ represents the \textbf{maximum amplitude} of the signal.
 \begin{proposition}[Hölder’s inequality]
 Let $p,q > 1$ with $\tfrac{1}{p}+\tfrac{1}{q}=1$.  
 If $f \in L_p(0,T)$ and $g \in L_q(0,T)$, then $fg \in L_1(0,T)$ and 
-\[
+\begin{equation}
 \int_{0}^{T} |f(t)g(t)| \, dt 
 \;\leq\;
 \left( \int_{0}^{T} |f(t)|^p \, dt \right)^{1/p}
 \left( \int_{0}^{T} |g(t)|^q \, dt \right)^{1/q}.
-\]
+\end{equation}
 \end{proposition}
 
 \begin{proposition}[Minkowski’s inequality]
 For $1 \leq p < \infty$, if $f,g \in L_p(0,T)$, then
-\[
+\begin{equation}
 \|f+g\|_{L_p} \;\leq\; \|f\|_{L_p} + \|g\|_{L_p}.
-\]
+\end{equation}
 Thus $\|\cdot\|_{L_p}$ defines a norm on $L_p$.
 \end{proposition}
 
@@ -112,30 +112,30 @@ Thus $\|\cdot\|_{L_p}$ defines a norm on $L_p$.
 \begin{definition}[Truncation operator]
 Let $X$ be a function space on $[0,\infty)$.  
 For $T>0$, the \emph{truncation operator} $P_T:X \to X$ is defined by
-\[
+\begin{equation}
 (P_Tu)(t) =
 \begin{cases}
 u(t), & 0 \leq t \leq T,\\[6pt]
 0, & t > T.
 \end{cases}
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Extended space]
 Let $X$ be a function space on $[0,\infty)$.  
 The \emph{extended space} $X_e$ is defined as
-\[
+\begin{equation}
 X_e = \big\{ u:[0,\infty)\to\mathbb{R}^q \;\big|\; 
 P_T u \in X \;\; \text{for all } T>0 \big\}.
-\]
+\end{equation}
 In words: $u \in X_e$ if \textbf{every finite-time truncation} of $u$ belongs to $X$.
 \end{definition}
 
 \begin{example}
 If $X = L_2(0,\infty)$, then
-\[
+\begin{equation}
 X_e = \{ u:[0,\infty)\to \mathbb{R}^q \mid u \in L_2(0,T) \;\;\forall T>0\}.
-\]
+\end{equation}
 Thus $X_e$ contains all signals that have \textbf{finite energy on every bounded interval}, even if their total energy on $[0,\infty)$ is infinite.  
 For example, $u(t)=1$ is not in $L_2(0,\infty)$, but $u \in (L_2)_e$ since its truncation to any finite interval lies in $L_2(0,T)$.
 \end{example}
@@ -149,26 +149,26 @@ This is useful in control theory because real signals are often studied over fin
 
 \begin{definition}[Mapping]
 The mathematical representation of a physical system is defined as a mapping
-\[
+\begin{equation}
 H: X_e \to X_e
-\]
+\end{equation}
 that satisfies the \textbf{causality condition}:
-\[
+\begin{equation}
 (Hu)_T = \big(H(u_T)\big)_T, \qquad \forall u \in X_e, \; T>0,
-\]
+\end{equation}
 where $X_e$ is the space consisting of all functions whose truncation belongs to $X$.
 \end{definition}
 
 \begin{example}
 Consider the first-order causal system:
-\[
+\begin{equation}
 \dot{y}(t) + y(t) = u(t), \qquad y(0) = 0.
-\]
+\end{equation}
 
 Let the input $u(t)$ be a step function. Its truncated version at $T=4$ is denoted $u_T(t)$. Then the system outputs satisfy the causality condition:
-\[
+\begin{equation}
 (Hu)_T = (H(u_T))_T.
-\]
+\end{equation}
 
 \begin{center}
 \begin{tikzpicture}[auto, node distance=1.5cm, thick]
@@ -241,38 +241,38 @@ For a causal system, the output at any time $t$ depends only on the input values
 \begin{definition}[Finite-Gain System]
 A system $H$ is said to have a \textbf{finite gain} if there exist constants 
 \(\gamma(H) < \infty\) (called the \emph{gain} of $H$) and \(\beta \in \mathbb{R}^+\) such that, for all inputs \(u \in X_e\),
-\[
+\begin{equation}
 \| Hu \|_X \le \gamma(H) \, \| u \|_X + \beta.
-\]
+\end{equation}
 
 Here, \(\beta\) is a bias term which may be nonzero even when \(u = 0\).  
 If \((Hu) = 0\) whenever \(u = 0\), then \(\beta = 0\), and the gain can be calculated as
-\[
+\begin{equation}
 \gamma(H) = \sup_{u \neq 0} \frac{\| (Hu)_T \|_X}{\| u_T \|_X}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{example}[First-Order Linear System]
 Consider the system
-\[
+\begin{equation}
 \dot{y}(t) + y(t) = u(t), \quad y(0)=0,
-\]
+\end{equation}
 with input \(u(t) \in L_\infty[0,\infty)\).  
 
 - The output is 
-\[
+\begin{equation}
 y(t) = \int_0^t e^{-(t-\tau)} u(\tau) \, d\tau.
-\]  
+\end{equation}  
 
 - Using the norm \(\| \cdot \|_\infty\), we can estimate
-\[
+\begin{equation}
 |y(t)| \le \int_0^t e^{-(t-\tau)} |u(\tau)| \, d\tau \le \| u \|_\infty \int_0^t e^{-(t-\tau)} d\tau \le \| u \|_\infty.
-\]
+\end{equation}
 
 Thus, the system has \textbf{finite gain} with 
-\[
+\begin{equation}
 \gamma(H) = 1, \quad \beta = 0.
-\]
+\end{equation}
 \end{example}
 
 \section{LTI Systems}\index{LTI Systems}
@@ -282,24 +282,24 @@ We study Linear Time-Invariant (LTI) systems in terms of input-output behavior i
 %------------------------------------------------
 \begin{definition}[Set $A$]  
 A function $f$ belongs to the set $\mathcal{A}$ if
-\[
+\begin{equation}
 f(t) = f_0\delta(t) + f_a(t), \quad t \geq 0,
-\]
+\end{equation}
 and $f(t) = 0$ for $t < 0$, where
-\[
+\begin{equation}
 f_a \in L_1, \quad \int_0^\infty |f_a(\tau)| \, d\tau < \infty.
-\]
+\end{equation}
 The norm is defined as
-\[
+\begin{equation}
 \|f_a\| = f_0 + \int_0^\infty f_a(t)\, dt.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Laplace Transform Set]  
 Let $\hat{\mathcal{A}}$ be the set of Laplace transforms of $A$. That is,
-\[
+\begin{equation}
 \hat{\mathcal{A}} = \{ F(s) = \mathcal{L}\{f(t)\} \mid f \in A \}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Proper and Strictly Proper Rational Functions]  
@@ -323,28 +323,28 @@ If $\hat{F}(s) \in \mathbb{R}(s)$, then $F(s) \in \hat{\mathcal{A}}$ if and only
 
 \begin{definition}[Convolution]  
 For functions $f$ and $g$, their convolution is defined as
-\[
+\begin{equation}
 (f * g)(t) = \int_0^t f(\tau) g(t-\tau)\, d\tau.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Convolution Operator]  
 An LTI system $H$ is a convolution operator if
-\[
+\begin{equation}
 H(u(t)) = (h * u)(t),
-\]
+\end{equation}
 where $h(\cdot)$ is called the \textbf{kernel} (impulse response) of $H$.  
 \end{definition}
 
 \begin{theorem}[Lp Stability]  
 Consider an LTI system $H$ with impulse response
-\[
+\begin{equation}
 h(t) = h_0 \delta(t) + h_a(t).
-\]  
+\end{equation}
 Then $H$ is $L_p$ stable if and only if $h \in A$, and moreover
-\[
+\begin{equation}
 \|Hu\|_{L_p} \;\leq\; \|h\|_{L_p}\, \|u\|_{L_p}.
-\]
+\end{equation}
 \end{theorem}
 
 \section{$L_p$ Gains for LTI Systems}\index{Lp Gains}
@@ -358,16 +358,16 @@ The notion of gain depends essentially on the choice of input function space.
 
 \begin{definition}[$L_\infty$ Gain]
 For an LTI system $H$ with impulse response $h(t) = h_0 \delta(t) + h_a(t)$, the $L_\infty$ gain is defined as
-\[
+\begin{equation}
 \gamma_\infty(H) \;=\; \sup_{u \neq 0} \frac{\|Hu\|_\infty}{\|u\|_\infty}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{theorem}
 The $L_\infty$ gain of $H$ is given by the $L_1$ norm of the impulse response:
-\[
+\begin{equation}
 \gamma_\infty(H) = \|h\|_1 = |h_0| + \int_0^\infty |h_a(\tau)| \, d\tau.
-\]
+\end{equation}
 \end{theorem}
 
 %------------------------------------------------
@@ -375,17 +375,17 @@ The $L_\infty$ gain of $H$ is given by the $L_1$ norm of the impulse response:
 
 \begin{definition}[$L_2$ Gain]
 For an LTI system $H$ with impulse response $h \in L_2$, the $L_2$ gain is defined as
-\[
+\begin{equation}
 \gamma_2(H) \;=\; \sup_{u \neq 0} \frac{\|Hu\|_2}{\|u\|_2}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{theorem}
 The $L_2$ gain of $H$ equals the $H_\infty$ norm of its transfer function:
-\[
+\begin{equation}
 \gamma_2(H) \;=\; \|H(j\omega)\|_\infty 
 = \sup_{\omega \in \mathbb{R}} |H(j\omega)|.
-\]
+\end{equation}
 \end{theorem}
 
 \section{Closed-Loop Input-Output Stability}\index{Closed-Loop Stability}
@@ -405,12 +405,12 @@ The signals $e_1,e_2,y_1,y_2$ are called the \emph{internal errors and outputs}.
 
 \begin{definition}[Closed-Loop Relations]
 Define
-\[
+\begin{equation}
 E = \{ (u,e) \in X_e \times X_e \;\mid\; e \text{ satisfies } \eqref{eq:fb1}, \eqref{eq:fb2}\},
-\]
-\[
+\end{equation}
+\begin{equation}
 F = \{ (u,y) \in X_e \times X_e \;\mid\; y \text{ satisfies } \eqref{eq:fb1}, \eqref{eq:fb2}\}.
-\]
+\end{equation}
 \end{definition}
 
 \begin{definition}[Boundedness]
@@ -467,13 +467,13 @@ In this section we study the so-called \textbf{small gain theorem}, one of the m
 
 \begin{theorem}[Small Gain Theorem]
 Consider the feedback interconnection of two systems 
-\[
+\begin{equation}
 H_1, H_2 : X_e \to X_e.
-\]
+\end{equation}
 If 
-\[
+\begin{equation}
 \gamma(H_1)\,\gamma(H_2) < 1,
-\]
+\end{equation}
 then the feedback system is input-output stable.
 \end{theorem}
 
@@ -486,6 +486,24 @@ then the feedback system is input-output stable.
 \end{remark}
 
 \begin{example}[Nonlinear Feedback]
+Let $H_1$ be an LTI system with transfer function
+\begin{equation}
+G(s) = \frac{-2}{s^2+2s+4},
+\end{equation}
+and $H_2$ a memoryless nonlinearity $N(\cdot)$ as in Fig.\ref{fig:nonlinear}.
+
+The gain of $H_1$ is
+\begin{equation}
+\gamma(H_1) = \sup_{\omega} |G(j\omega)|.
+\end{equation}
+After computation, $\gamma(H_1) = \tfrac{1}{12}$.
+
+If $N(\cdot)$ has slope $k$, then $\gamma(H_2) = |k|$.  
+The small gain condition requires
+\begin{equation}
+|k| < 12.
+\end{equation}
+
 \centering
 \begin{tikzpicture}[scale=1.2, thick]
   % Axes
@@ -501,38 +519,20 @@ then the feedback system is input-output stable.
 \end{tikzpicture}
 \captionof{figure}{The nonlinearity $N(\cdot)$.}
 \label{fig:nonlinear}
-
-Let $H_1$ be an LTI system with transfer function
-\[
-G(s) = \frac{-2}{s^2+2s+4},
-\]
-and $H_2$ a memoryless nonlinearity $N(\cdot)$ as in Fig.\ref{fig:nonlinear}.
-
-The gain of $H_1$ is
-\[
-\gamma(H_1) = \sup_{\omega} |G(j\omega)|.
-\]
-After computation, $\gamma(H_1) = \tfrac{1}{12}$.
-
-If $N(\cdot)$ has slope $k$, then $\gamma(H_2) = |k|$.  
-The small gain condition requires
-\[
-|k| < 12.
-\]
 \end{example}
 
 \begin{example}[Constant Gain Feedback]
 Let $H_2 = k$ (a constant gain). Then $\gamma(H_2)=|k|$.
 
 Small gain theorem yields stability if
-\[
+\begin{equation}
 |k| < 12.
-\]
+\end{equation}
 
 Pole analysis of
-\[
+\begin{equation}
 H(s) = \frac{G(s)}{1+kG(s)} = \frac{-2}{s^2+2s+4+k}
-\]
+\end{equation}
 gives stability iff $k>-4$.
 
 \textbf{Conclusion:} small gain theorem gives $-12<k<12$, while exact pole test gives $k>-4$. Thus, the small gain theorem provides only a conservative (sufficient) stability condition.
@@ -566,13 +566,13 @@ Consider the feedback system $S$ of Figure~\ref{fig:feedback}.
 Let $H_1, H_2, K$ and $(I+KH_1)^{-1}$ be causal maps from $X_e$ into $X$, and assume that $K$ is linear.  
 
 A loop transformation of Type I is defined to be the modified system, denoted $S_K$, formed by the feedback interconnection of the subsystems
-\[
+\begin{equation}
 H_1' = H_1 (I+KH_1)^{-1}, \qquad H_2' = H_2 - K,
-\]
+\end{equation}
 with inputs
-\[
+\begin{equation}
 u_1' = u_1 - Ku_2, \qquad u_2' = u_2,
-\]
+\end{equation}
 as shown in Figure~\ref{fig:feedback_sk}.  
 
 The closed-loop relations of $S_K$ will be denoted $E_K$ and $F_K$.
@@ -645,13 +645,13 @@ Let $H_1, H_2$ be causal maps of $X_e$ into $X$, and let $M$ be a causal linear 
 \end{enumerate}
 
 A Type II loop transformation is defined to be the modified system $S_M$, formed by the feedback interconnection of the subsystems
-\[
+\begin{equation}
 H_1' = H_1 M, \qquad H_2' = M^{-1} H_2,
-\]
+\end{equation}
 with inputs
-\[
+\begin{equation}
 u_1' = M^{-1}u_1, \qquad u_2' = u_2,
-\]
+\end{equation}
 as shown in Figure~\ref{fig:feedback_sm}.  
 
 The closed-loop relations of this modified system will be denoted $E_M$ and $F_M$.
@@ -659,9 +659,9 @@ The closed-loop relations of this modified system will be denoted $E_M$ and $F_M
 
 \begin{theorem}
 Consider the system $S$ of Figure~\ref{fig:feedback} and let $S_M$ be the modified system obtained after a Type II loop transformation. Then:
-\[
+\begin{equation}
 S \text{ is stable } \iff S_M \text{ is stable.}
-\]
+\end{equation}
 \end{theorem}
 
 %------------------------------------------------
@@ -677,9 +677,9 @@ A function $\phi:\mathbb{R}^+\times\mathbb{R}\to\mathbb{R}$ belongs to the secto
 \end{definition}
 
 The Nyquist stability criterion provides necessary and sufficient conditions for the closed-loop stability of LTI systems with transfer function
-\[
+\begin{equation}
     G(s) = g(s) + \frac{n(s)}{d(s)},
-\]
+\end{equation}
 where $g(s)$ is stable, $n(s),d(s)$ are polynomials, and all zeros of $d(s)$ lie in the closed right-half plane. The number of open right-half plane zeros of $d(s)$ is denoted $v$.  
 
 \begin{proposition}[Nyquist Criterion]
@@ -693,10 +693,6 @@ Consider the feedback interconnection of an LTI system $H_1$ with transfer funct
     \item If $0=\alpha<\beta$: $G(s)$ has no right-half plane poles and the Nyquist plot lies to the right of the vertical line $\Re(z) = -1/\beta$.
     \item If $\alpha<0<\beta$: $G(s)$ has no poles in the closed right-half plane and the Nyquist plot lies entirely inside the circle $C'$.
 \end{enumerate}
-\end{theorem}
-
-%------------------------------------------------
-\begin{figure}[!h]
 \centering
 \begin{tikzpicture}[scale=1.2]
     % Axes
@@ -723,5 +719,9 @@ Consider the feedback interconnection of an LTI system $H_1$ with transfer funct
     \node at (-2,1.5) {$C'$: critical circle};
     \node[blue] at (-0.8,1.2) {Nyquist plot};
 \end{tikzpicture}
-\caption{The critical circle $C'$ in the Nyquist plane, passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$.}
-\end{figure}
+\captionof{figure}{The critical circle $C'$ in the Nyquist plane, passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$.}
+
+\end{theorem}
+
+%------------------------------------------------
+
