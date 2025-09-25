@@ -502,7 +502,7 @@
 	urlcolor=ocre, % Color for \url and \href links
 	linkcolor=black, % Color for \ref/\nameref links
 	citecolor=ocre, % Color for reference citations like \cite{}
-	hyperindex=true, % Adds links from the page numbers in the index to the relevant page
+	% hyperindex=true, % Adds links from the page numbers in the index to the relevant page
 	linktoc=all, % Link from section names and page numbers in the table of contents
 }
 
@@ -777,3 +777,4 @@
 \usepackage{pgfplots}
 \usepackage{subcaption}
 \usepackage{subfig}
+\usepackage[hypcap=false]{caption}
