@@ -414,7 +414,14 @@ F = \{ (u,y) \in X_e \times X_e \;\mid\; y \text{ satisfies } \eqref{eq:fb1}, \e
 \end{definition}
 
 \begin{definition}[Boundedness]
-A relation $P$ on $X_e$ is \emph{bounded} if the image of every bounded subset of $\mathrm{dom}(P)$ is bounded in $X_e$.
+A relation $P$ on $X_e$ is said to be \emph{bounded} if it does not enlarge signals without limit.  
+Formally, for every bounded set $B \subseteq \mathrm{dom}(P)$, the image
+\[
+P(B) = \{\, y \in X_e \mid \exists x \in B \ \text{such that}\ (x,y) \in P \,\}
+\]
+is also a bounded subset of $X_e$.
+
+In simpler terms: if all possible inputs taken from $B$ remain bounded, then all the corresponding outputs produced by $P$ also remain bounded.
 \end{definition}
 
 \begin{definition}[Closed-Loop Stability]
@@ -461,12 +468,30 @@ Stability depends on the choice of function space $X_e$; we may write ``$X_e$-st
 \label{fig:feedback}
 \end{figure}
 
-\section{The Small Gain Theorem}
+\section{The Small Gain Theorem}\index{The Small Gain Theorem}
 
 In this section we study the so-called \textbf{small gain theorem}, one of the most important results in the theory of input-output systems. The main goal of the theorem is to provide open-loop conditions for closed-loop stability. 
 
+\begin{definition}[System Gain]
+For a causal operator (system) $H: X_e \to X_e$, its \emph{gain} $\gamma(H)$ is defined as
+\begin{equation}
+\gamma(H) = \sup_{u \neq 0} \frac{\|Hu\|}{\|u\|}.
+\end{equation}
+This quantity measures the maximum amplification of the input signal energy (or norm) that the system can produce at the output. 
+\end{definition}
+
+\begin{itemize}
+    \item If $\gamma(H)<\infty$, the system is said to have \emph{finite gain}.  
+    \item For an LTI system with transfer function $G(s)$, the gain is given by the $\mathcal{H}_\infty$ norm:
+    \begin{equation}
+    \gamma(H) = \sup_{\omega \in \mathbb{R}} |G(j\omega)|.
+    \end{equation}
+    That is, the largest magnitude of the frequency response.  
+    \item In simple terms, $\gamma(H)$ tells us the worst-case signal amplification. It is extremely useful in feedback analysis, because if the product of gains in a loop is less than one, signals are guaranteed not to blow up.
+\end{itemize}
+
 \begin{theorem}[Small Gain Theorem]
-Consider the feedback interconnection of two systems 
+Consider the feedback interconnection of two systems as shown in Figure \ref{fig:feedback}
 \begin{equation}
 H_1, H_2 : X_e \to X_e.
 \end{equation}
@@ -477,12 +502,8 @@ If
 then the feedback system is input-output stable.
 \end{theorem}
 
-
 \begin{remark}
-\begin{itemize}
-    \item The theorem gives a \textbf{sufficient condition} for stability, not necessary. Some systems with $\gamma(H_1)\gamma(H_2)\geq 1$ may still be stable.
-    \item Existence of solutions is not guaranteed by the theorem; it only ensures boundedness if solutions exist.
-\end{itemize}
+ The theorem gives a \textbf{sufficient condition} for stability, not necessary. Some systems with $\gamma(H_1)\gamma(H_2)\geq 1$ may still be stable. Existence of solutions is not guaranteed by the theorem; it only ensures boundedness if solutions exist.
 \end{remark}
 
 \begin{example}[Nonlinear Feedback]
@@ -555,7 +576,7 @@ There are two basic transformations of feedback loops that will be used througho
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\linewidth]{Images/nonlinear/ipopstability/sk.png}
+    \includegraphics[width=0.8\linewidth]{Images/nonlinear/ipopstability/sk.png}
     \caption{The feedback system $S_k$}
     \label{fig:feedback_sk}
 \end{figure}
@@ -579,13 +600,14 @@ The closed-loop relations of $S_K$ will be denoted $E_K$ and $F_K$.
 \end{definition}
 
 \begin{theorem}
-Consider the system $S$ of Figure~\ref{fig:feedback} and let $S_K$ be the modified system obtained after a Type I loop transformation. Assume $K$ and $(I+KH_1)^{-1}: X \to X$. Then:
-\begin{enumerate}
-    \item The system $S$ is stable if and only if the system $S_K$ is stable.
-\end{enumerate}
+Consider the system $S$ of Figure~\ref{fig:feedback} and let $S_K$ be the modified system obtained after a Type I loop transformation.  
+Assume $K$ and $(I+KH_1)^{-1}: X \to X$. Then:
+\begin{equation}
+S \text{ is stable } \iff S_K \text{ is stable.}
+\end{equation}
 \end{theorem}
 
-\begin{figure}[h!]
+\begin{figure}[h]
 \centering
 \begin{tikzpicture}[auto, node distance=1.5cm, thick, >=latex]
   % Nodes
@@ -667,61 +689,86 @@ S \text{ is stable } \iff S_M \text{ is stable.}
 %------------------------------------------------
 \section{The Circle Criterion}\index{Circle Criterion}
 
-Historically, one of the first applications of the small gain theorem was the celebrated \emph{circle criterion}, which analyzes the $\mathcal{L}_2$ stability of nonlinear feedback systems.  
+Historically, one of the first major applications of the small gain theorem was the celebrated \emph{circle criterion}, which provides frequency-domain conditions for the $\mathcal{L}_2$ stability of nonlinear feedback systems.  
+The key idea is to combine the input-output viewpoint (sector nonlinearities) with the frequency-domain viewpoint (Nyquist plots).
 
 \begin{definition}[Sector Condition]
 A function $\phi:\mathbb{R}^+\times\mathbb{R}\to\mathbb{R}$ belongs to the sector $[\alpha,\beta]$ with $\alpha<\beta$ if
 \begin{equation}
-    \alpha x^2 \leq x\phi(t,x) \leq \beta x^2, \quad \forall t\geq 0,\ \forall x\in\mathbb{R}.
+    \alpha x^2 \leq x\phi(t,x) \leq \beta x^2, 
+    \qquad \forall t\geq 0,\ \forall x\in\mathbb{R}.
 \end{equation}
+Intuitively, this means that the slope of the nonlinearity $\phi$ always lies between $\alpha$ and $\beta$.
 \end{definition}
 
-The Nyquist stability criterion provides necessary and sufficient conditions for the closed-loop stability of LTI systems with transfer function
-\begin{equation}
-    G(s) = g(s) + \frac{n(s)}{d(s)},
-\end{equation}
-where $g(s)$ is stable, $n(s),d(s)$ are polynomials, and all zeros of $d(s)$ lie in the closed right-half plane. The number of open right-half plane zeros of $d(s)$ is denoted $v$.  
+Before introducing the circle criterion itself, we recall the Nyquist stability test for linear feedback systems.
+
+\begin{definition}[Nyquist Plot]
+The \emph{Nyquist plot} of a transfer function $G(s)$ is the locus of points
+\[
+G(j\omega), \qquad -\infty < \omega < \infty,
+\]
+in the complex plane.  
+It represents how the system responds to sinusoidal inputs of frequency $\omega$, with the magnitude and phase encoded as the distance and angle of $G(j\omega)$ from the origin.
+\end{definition}
 
 \begin{proposition}[Nyquist Criterion]
-Consider the feedback of $H_1$ (with transfer function $d(s)$) and a constant gain $K$. The system is $\mathcal{L}_p$-stable ($1<p<\infty$) iff the Nyquist plot of $G(j\omega)$ avoids the point $(-1/K,0)$ and encircles it exactly $v$ times counterclockwise as $\omega$ goes from $-\infty$ to $\infty$.
+Consider a feedback system where the open-loop transfer function is
+\[
+G(s) = g(s) + \frac{n(s)}{d(s)},
+\]
+with $g(s)$ stable, $n(s), d(s)$ polynomials, and all zeros of $d(s)$ in the closed right-half plane.  
+Let $v$ denote the number of open right-half plane poles of $d(s)$.  
+
+Then the closed-loop system with constant feedback gain $K$ is $\mathcal{L}_p$-stable ($1<p<\infty$) if and only if the Nyquist plot of $G(j\omega)$
+\begin{itemize}
+    \item does not pass through the critical point $\big(-\tfrac{1}{K},0\big)$, and  
+    \item encircles $\big(-\tfrac{1}{K},0\big)$ exactly $v$ times in the counterclockwise direction as $\omega$ varies from $-\infty$ to $+\infty$.
+\end{itemize}
 \end{proposition}
 
 \begin{theorem}[Circle Criterion]
-Consider the feedback interconnection of an LTI system $H_1$ with transfer function $G(s)$ (satisfying the above assumptions) and a nonlinearity $\phi$ in the sector $[\alpha,\beta]$. The closed-loop system is $\mathcal{L}_2$-stable if one of the following holds:
-\begin{enumerate}
-    \item If $0 < \alpha < \beta$: the Nyquist plot of $\tfrac{n(s)}{d(s)}$ avoids the \emph{critical circle} $C'$ (centered on the real axis and passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$) and encircles it $v$ times counterclockwise.
-    \item If $0=\alpha<\beta$: $G(s)$ has no right-half plane poles and the Nyquist plot lies to the right of the vertical line $\Re(z) = -1/\beta$.
-    \item If $\alpha<0<\beta$: $G(s)$ has no poles in the closed right-half plane and the Nyquist plot lies entirely inside the circle $C'$.
-\end{enumerate}
-\centering
+Consider the feedback of an LTI system $G(s)$ and a static nonlinearity $\phi$ in the sector $[\alpha,\beta]$.  
+The closed-loop is $\mathcal{L}_2$-stable if the Nyquist plot of $G(j\omega)$ avoids a certain \emph{critical circle} in the complex plane, defined by:
+\begin{itemize}
+    \item It passes through $(-1/\alpha,0)$ and $(-1/\beta,0)$ on the real axis.  
+    \item Its center lies on the real axis.  
+\end{itemize}
+The exact condition depends on whether the sector includes the origin.
+
+\begin{center}
 \begin{tikzpicture}[scale=1.2]
     % Axes
     \draw[->] (-3.5,0) -- (1,0) node[right] {$\Re$};
     \draw[->] (0,-2) -- (0,2) node[above] {$\Im$};
 
-    % Points on real axis (-1/alpha, 0) and (-1/beta, 0)
-    \coordinate (A) at (-3,0); % Example: -1/alpha
-    \coordinate (B) at (-1,0); % Example: -1/beta
+    % Sector points
+    \coordinate (A) at (-3,0); % -1/alpha
+    \coordinate (B) at (-1,0); % -1/beta
+    \coordinate (M) at (-2,0); % midpoint
 
-    % Circle through A and B centered on real axis
-    \path (A) -- (B) coordinate[midway] (M);
-    \draw[dashed] (M) circle [x radius=1, y radius=1];
+    % Critical circle
+    \draw[dashed] (M) circle (1);
 
     % Mark points
     \fill (A) circle (1.5pt) node[below] {$-\tfrac{1}{\alpha}$};
     \fill (B) circle (1.5pt) node[below] {$-\tfrac{1}{\beta}$};
     \fill (M) circle (1.5pt) node[below,yshift=-2pt] {center};
 
-    % Nyquist path (schematic curve)
-    \draw[thick,blue,->,>=stealth] (-2.5,-1.2) .. controls (-2,0.8) and (-1.5,-0.8) .. (-0.5,1);
+    % Example Nyquist plot (safe, staying outside the circle)
+    \draw[thick,blue,->,>=stealth] 
+        (-3.4,-0.5) .. controls (-3.2,2) and (-0.5,1.5) .. (-0.6,-0.8);
 
     % Labels
-    \node at (-2,1.5) {$C'$: critical circle};
-    \node[blue] at (-0.8,1.2) {Nyquist plot};
+    \node at (-2,1.8) {Critical circle $C'$};
+    \node[blue] at (-1,1.3) {Nyquist plot};
 \end{tikzpicture}
-\captionof{figure}{The critical circle $C'$ in the Nyquist plane, passing through $(-1/\alpha,0)$ and $(-1/\beta,0)$.}
+\captionof{figure}{Circle Criterion: the Nyquist plot must avoid the critical circle $C'$.}
+\end{center}
 
 \end{theorem}
+
+
 
 %------------------------------------------------
 
