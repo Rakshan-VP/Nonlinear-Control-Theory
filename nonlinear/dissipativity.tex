@@ -1,0 +1,406 @@
+\chapterimage{orange2.jpg} % Chapter heading image
+\chapterspaceabove{6.75cm} % Whitespace from the top of the page to the chapter title on chapter pages
+\chapterspacebelow{7.25cm} % Amount of vertical whitespace from the top margin to the start of the text on chapter pages
+
+\chapter{Dissipativity}\index{Dissipativity}
+\section{Overview}\index{Overview}
+Passivity describes systems that cannot generate energy on their own, but this condition is often too restrictive for general dynamical systems. To extend the idea, we introduce the concept of \textit{dissipativity}, which relies on two ingredients: a storage function (representing internal energy) and a supply rate (describing energy exchange with the environment). A system is dissipative if the growth of stored energy is always bounded by the supplied energy. For example, in a resistor–capacitor circuit the capacitor stores energy while the resistor dissipates it as heat, and the total energy can never exceed what is supplied by the voltage source. On the other hand, in a mass–spring–damper system, passivity fails if the output is chosen as position, since force–position is not a power variable; however, dissipativity still applies if we define a storage function equal to the mechanical energy of the system. This generalization therefore includes passivity as a special case and provides a unified way to study stability using Lyapunov functions in state space. In this chapter, we develop these ideas and show how dissipativity links input-output stability, Lyapunov stability, and interconnections of dynamical systems.
+
+\section{Dissipative Systems}\index{Dissipative Systems}
+
+The notion of passivity can be generalized by introducing \emph{dissipative systems}.  
+Instead of relying solely on input--output energy balance, dissipativity allows for a 
+general \emph{supply rate} $w(u,y)$ and a corresponding \emph{storage function} $V(x)$.
+
+\begin{definition}[Dissipative System]\label{def:dissipative}
+Consider a state-space system
+\[
+\dot{x} = f(x,u), \qquad y = h(x,u),
+\]
+with state $x \in \mathbb{R}^n$, input $u \in \mathbb{R}^m$, and output $y \in \mathbb{R}^p$.  
+Given a supply rate $w(u,y)$, the system is called \textbf{dissipative} if there exists a 
+function $V : \mathbb{R}^n \to \mathbb{R}_{\ge 0}$, called the \emph{storage function}, such that
+for all $t_1 \ge t_0$,
+\begin{equation}\label{eq:dissipation}
+V(x(t_1)) \;\le\; V(x(t_0)) + \int_{t_0}^{t_1} w(u(t),y(t)) \, dt.
+\end{equation}
+\end{definition}
+
+\begin{remark}
+The dissipation inequality~\eqref{eq:dissipation} states that the stored energy at time $t_1$ 
+cannot exceed the initially stored energy plus the total supplied energy.  
+Thus, dissipative systems cannot internally generate energy: closed trajectories require 
+nonnegative external input.
+\end{remark}
+
+\section{Differentiable Storage Functions}\index{Differentiable Storage Functions}
+
+The storage function $V(x)$ of a dissipative system (Definition~\ref{def:dissipative}) 
+need not be differentiable. However, if $V$ is continuously differentiable, the dissipation 
+inequality can be reformulated in a differential form which is particularly useful for 
+analysis and controller design.
+
+\begin{definition}[Differential Dissipation Inequality]\label{def:ddi}
+Let
+\[
+\dot{x} = f(x,u), 
+\qquad y = h(x,u),
+\]
+with state $x \in \mathbb{R}^n$, input $u \in \mathbb{R}^m$, and output $y \in \mathbb{R}^p$.  
+The system is \textbf{dissipative} with respect to the supply rate $w(u,y)$ if there exists 
+a differentiable storage function $V : \mathbb{R}^n \to \mathbb{R}_{\ge 0}$ such that
+\begin{equation}\label{eq:ddi}
+\dot{V}(x,u) \;\triangleq\; \nabla V(x)^\top f(x,u) \;\le\; w(u,y), 
+\qquad \forall (x,u).
+\end{equation}
+\end{definition}
+
+\begin{remark}
+Two key properties are required:
+\begin{enumerate}
+    \item \textbf{Positive definiteness:} There exist class-$\mathcal{K}_\infty$ functions 
+    $\alpha_1, \alpha_2$ such that
+    \[
+    \alpha_1(\|x\|) \;\le\; V(x) \;\le\; \alpha_2(\|x\|), \qquad \forall x \in \mathbb{R}^n.
+    \]
+    This ensures that $V(x)$ behaves like an energy function.
+    \item \textbf{Dissipation inequality:} The instantaneous rate of stored energy never 
+    exceeds the supplied power, as stated in~\eqref{eq:ddi}.
+\end{enumerate}
+\end{remark}
+
+\begin{proposition}[ISS as a Special Case]\label{lem:iss_dissipative}
+A system is \textbf{input-to-state stable (ISS)} if and only if it is dissipative with 
+respect to a supply rate of the form
+\[
+w(u,y) \;=\; -\alpha_3(\|x\|) + \sigma(\|u\|),
+\]
+where $\alpha_3, \sigma \in \mathcal{K}_\infty$.
+\end{proposition}
+
+\section{QSR Dissipativity}\index{QSR Dissipativity}
+
+The concept of dissipativity depends crucially on the choice of the supply rate $w(u,y)$.  
+An important and widely used family is the \emph{quadratic supply rate}, which leads to the 
+notion of \textbf{QSR dissipativity}.
+
+\begin{definition}[QSR Supply Rate]\label{def:QSR}
+Let $Q \in \mathbb{R}^{p \times p}$ and $R \in \mathbb{R}^{m \times m}$ be symmetric matrices, 
+and $S \in \mathbb{R}^{p \times m}$.  
+The \textbf{QSR supply rate} is defined as
+\begin{equation}\label{eq:QSR_supply}
+w(u,y) \;=\; y^\top Q y \;+\; 2 y^\top S u \;+\; u^\top R u .
+\end{equation}
+Equivalently, it can be expressed in quadratic form:
+\begin{equation}\label{eq:QSR_matrix}
+w(u,y) \;=\; 
+\begin{bmatrix} y^T,  u^T \end{bmatrix}
+\begin{bmatrix} Q & S \\[3pt] S^\top & R \end{bmatrix}
+\begin{bmatrix} y \\[3pt] u \end{bmatrix}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[QSR Dissipativity]\label{def:QSR_dissipative}
+A system 
+\begin{equation}
+\dot{x} = f(x,u), \qquad y = h(x,u),
+\end{equation}
+is said to be \textbf{QSR-dissipative} if there exists a storage function 
+$V : \mathbb{R}^n \to \mathbb{R}_{\ge 0}$ such that for all $t_1 \ge t_0$,
+\begin{equation}\label{eq:QSR_dissipation}
+V(x(t_1)) - V(x(t_0)) 
+\;\le\; \int_{t_0}^{t_1} \! \big( y^\top Q y + 2 y^\top S u + u^\top R u \big)\, dt .
+\end{equation}
+\end{definition}
+
+\subsection{Special Cases}
+By appropriate choices of $(Q,S,R)$, several classical system properties are recovered as instances of QSR dissipativity:
+
+\begin{itemize}
+    \item \textbf{Passivity:}  
+    Choosing $Q=0,\;R=0,\;S=\tfrac{1}{2}I$ gives
+    \begin{equation}
+        w(u,y) = u^\top y.
+    \end{equation}
+    This corresponds exactly to the standard passivity supply rate: the supplied power is 
+    the product of input and output.
+
+    \item \textbf{Strict Passivity:}  
+    If in addition $R=-\beta I$ with $\beta>0$, then
+    \begin{equation}
+        w(u,y) = u^\top y - \beta \|u\|^2.
+    \end{equation}
+    Here, the system is not only passive but also strictly dissipates energy 
+    proportional to the input magnitude.
+
+    \item \textbf{Finite Gain Stability ($\mathcal{L}_2$-gain):}  
+    Setting $Q=-I,\; R=\gamma^2 I,\; S=0$ yields
+    \begin{equation}
+        \int_0^T \|y(t)\|^2 dt \;\le\; \gamma^2 \int_0^T \|u(t)\|^2 dt,
+    \end{equation}
+    or equivalently
+    \begin{equation}
+        \|y\|_{\mathcal{L}_2} \le \gamma \|u\|_{\mathcal{L}_2}.
+    \end{equation}
+    This shows that the system has finite input–output gain $\gamma$ in the 
+    $\mathcal{L}_2$ sense.
+
+    \item \textbf{Strict Output Passivity:}  
+    With $Q=-\epsilon I,\; R=0,\; S=\tfrac{1}{2}I$ and $\epsilon>0$, the supply rate is
+    \begin{equation}
+        w(u,y) = u^\top y - \epsilon \|y\|^2.
+    \end{equation}
+    Compared to ordinary passivity, the system now dissipates an additional term proportional 
+    to the output energy, guaranteeing stronger robustness properties.
+
+    \item \textbf{Very Strict Passivity:}  
+    Finally, taking $Q=-\epsilon I,\; R=-\beta I,\; S=\tfrac{1}{2}I$ with $\epsilon,\beta>0$ leads to
+    \begin{equation}
+        w(u,y) = u^\top y - \beta \|u\|^2 - \epsilon \|y\|^2.
+    \end{equation}
+    This enforces dissipation in both input and output channels, resulting in the strongest 
+    form of passivity.
+\end{itemize}
+
+\begin{remark}
+QSR dissipativity provides a unifying framework:  
+\begin{itemize}
+    \item \emph{Passivity} and \emph{strict passivity} emerge as special cases with 
+    specific $(Q,S,R)$.  
+    \item \emph{Finite $\mathcal{L}_2$ gain stability} can also be cast as a QSR property.  
+\end{itemize}
+This formulation highlights how energy-based system properties can be interpreted 
+in terms of quadratic supply rates.
+\end{remark}
+
+\begin{example}[Mass--Spring System with Friction]
+Consider a mass--spring system governed by
+\begin{equation}
+m \ddot{x} + \beta \dot{x} + kx = f,
+\end{equation}
+where $m$ is the mass, $k$ the spring constant, $\beta$ the damping coefficient, and $f$ 
+an external force.  
+
+With state variables 
+\begin{equation}
+x_1 = x, \qquad x_2 = \dot{x},
+\end{equation}
+and output 
+\begin{equation}
+y = x_2,
+\end{equation}
+the system can be written in state-space form as
+\begin{equation}
+\dot{x}_1 = x_2, 
+\qquad \dot{x}_2 = -\frac{k}{m} x_1 - \frac{\beta}{m} x_2 + \frac{1}{m} f.
+\end{equation}
+
+A natural choice of storage function is the total mechanical energy
+\begin{equation}
+V(x_1,x_2) = \frac{1}{2} k x_1^2 + \frac{1}{2} m x_2^2.
+\end{equation}
+
+\textbf{Step 1: Differentiate the storage function along trajectories.}  
+\begin{equation}
+\dot{V} = \frac{\partial V}{\partial x_1} \dot{x}_1 + \frac{\partial V}{\partial x_2} \dot{x}_2
+= k x_1 x_2 + m x_2 \left(-\frac{k}{m} x_1 - \frac{\beta}{m} x_2 + \frac{1}{m} f \right)
+\end{equation}
+
+\textbf{Step 2: Simplify the expression.}  
+\begin{equation}
+\dot{V} = k x_1 x_2 - k x_1 x_2 - \beta x_2^2 + x_2 f = y f - \beta y^2
+\end{equation}
+
+\textbf{Step 3: Identify the supply rate.}  
+Comparing with the QSR-dissipation inequality, we have
+\begin{equation}
+w(u,y) = u^\top y - \beta \|y\|^2,
+\end{equation}
+where \(u = f\) and \(y = x_2\). This corresponds to \emph{strict output passivity}.
+
+\end{example}
+
+\begin{example}[Mass--Spring System without Friction]
+If damping is absent ($\beta = 0$), the dynamics become
+\begin{equation}
+m \ddot{x} + kx = f,
+\qquad y = \dot{x}.
+\end{equation}
+
+With the same storage function
+\begin{equation}
+V(x_1,x_2) = \frac{1}{2} k x_1^2 + \frac{1}{2} m x_2^2,
+\end{equation}
+we differentiate along trajectories:
+
+\textbf{Step 1: Compute derivative.}  
+\begin{equation}
+\dot{V} = k x_1 x_2 + m x_2 \left(-\frac{k}{m} x_1 + \frac{1}{m} f \right)
+= k x_1 x_2 - k x_1 x_2 + x_2 f
+\end{equation}
+
+\textbf{Step 2: Simplify.}  
+\begin{equation}
+\dot{V} = y f
+\end{equation}
+
+\textbf{Step 3: Identify the supply rate.}  
+\begin{equation}
+w(u,y) = u^\top y,
+\end{equation}
+which is exactly the standard passivity condition.
+
+\end{example}
+
+\begin{remark}
+These examples highlight how physical energy functions provide natural storage functions.  
+Friction (damping) introduces an explicit dissipative term, turning passivity into 
+strict output passivity.
+\end{remark}
+
+\section{Available Storage}\index{Available Storage}
+
+Having introduced dissipative systems, supply rates, and storage functions, we now turn 
+to an important conceptual question: \emph{What is the maximum amount of energy that 
+can be extracted from a dissipative system at a given state?}  
+This quantity, introduced by Willems, is known as the \textbf{available storage}.  
+Although somewhat abstract, it plays a key role in the theory of dissipativity and 
+appears in several proofs of stability theorems.
+
+\begin{definition}[Available Storage]\label{def:available_storage}
+Let a dissipative dynamical system with supply rate $w(u,y)$ be given.  
+The \textbf{available storage} $\phi_a(x)$ from initial state $x$ is defined as
+\begin{equation}\label{eq:available_storage}
+\phi_a(x) \;=\; \sup_{T>0} \; \sup_{u(\cdot)} \; 
+\left( - \int_0^T w(u(t), y(t)) \, dt \;\Big|\; x(0) = x \right).
+\end{equation}
+\end{definition}
+
+\begin{remark}
+Intuitively, $\phi_a(x)$ represents the maximum energy that can be extracted 
+from the system, starting from state $x$, by choosing suitable inputs over some finite 
+time horizon.  
+It is always nonnegative and depends both on the supply rate and the system dynamics.
+\end{remark}
+
+\begin{theorem}[Characterization of Dissipativity]\label{thm:avail_storage}
+A dynamical system is dissipative with respect to a supply rate $w(u,y)$ if and only if 
+the available storage $\phi_a(x)$ is finite for all $x \in X$.  
+Moreover, if the system is dissipative, then
+\[
+0 \;\le\; \phi_a(x) \;\le\; V(x),
+\]
+for any storage function $V(x)$.  
+Thus, the available storage itself can serve as a valid storage function.
+\end{theorem}
+
+\begin{remark}
+The concept of available storage provides a theoretical tool for verifying dissipativity, 
+even though explicit computation of $\phi_a(x)$ is often difficult.  
+It also emphasizes the energy interpretation of dissipative systems:  
+the system cannot release more energy than it has stored.
+\end{remark}
+
+\section{Algebraic Condition for Dissipativity}\index{Algebraic Condition for Dissipativity}
+
+The notion of available storage provided a theoretical characterization of dissipativity, 
+but it is not always practical for applications.  
+We now present an algebraic condition, similar in spirit to the Kalman–Yakubovich lemma, 
+that provides explicit criteria for checking dissipativity in terms of the state-space 
+realization of the system.
+
+Throughout this section we assume:
+
+\begin{enumerate}
+    \item The system has a state-space realization affine in the input:
+    \begin{equation}\label{eq:affine_sys}
+    \dot{x} = f(x) + g(x)u, 
+    \qquad y = h(x) + j(x)u,
+    \end{equation}
+    where $x \in \mathbb{R}^n$, $u \in \mathbb{R}^m$, and $y \in \mathbb{R}^p$.
+    
+    \item The state space of the system is reachable from the origin:  
+    given any $x_1 \in \mathbb{R}^n$ and $t_1 > 0$, there exists an input $u(\cdot)$ such that 
+    $x(0) = 0$ and $x(t_1) = x_1$.
+    
+    \item Whenever the system is dissipative with respect to a supply rate of the form
+    \begin{equation}\label{eq:QSR_supply}
+    w(u,y) = y^\top Q y + 2 y^\top S u + u^\top R u,
+    \end{equation}
+    the available storage $\phi_a(x)$ is differentiable.
+\end{enumerate}
+
+\begin{theorem}[Algebraic Condition for QSR Dissipativity]\label{thm:algebraic_dissipativity}
+The nonlinear system~\eqref{eq:affine_sys} is QSR-dissipative with supply rate~\eqref{eq:QSR_supply} 
+if there exists a differentiable function $\phi : \mathbb{R}^n \to \mathbb{R}$, 
+and functions $L : \mathbb{R}^n \to \mathbb{R}^q$, $W : \mathbb{R}^n \to \mathbb{R}^{m \times q}$ 
+satisfying
+\begin{align}
+    & \phi(x) \ge 0, \quad \phi(0) = 0, \label{eq:phi_nonneg}\\
+    & \nabla \phi(x) f(x) = h(x)^\top Q h(x) - L(x)^\top L(x), \label{eq:phi_f}\\
+    & \nabla \phi(x) g(x) = h(x)^\top S - W(x)^\top L(x), \label{eq:phi_g}\\
+    & R = W(x)^\top W(x), \label{eq:R_W}
+\end{align}
+for all $x$. Furthermore, the matrices
+\begin{align}
+    R(x) &= R + j(x)^\top S + S^\top j(x) + j(x)^\top Q j(x), \label{eq:R_x}\\
+    S(x) &= Q j(x) + S, \label{eq:S_x}
+\end{align}
+must hold.
+\end{theorem}
+
+\begin{corollary}\label{cor:diff_dissipation}
+If the system is dissipative with respect to the supply rate~\eqref{eq:QSR_supply}, 
+then there exists a differentiable function $\phi(x)$ such that
+\begin{equation}\label{eq:diff_dissipation}
+\nabla \phi(x) f(x) = - (L(x) + W(x) u)^\top (L(x) + W(x) u) + w(u,y).
+\end{equation}
+\end{corollary}
+
+\subsection{Special Cases}
+
+\subsubsection{Passive Systems}
+Consider the passivity supply rate
+\begin{equation}
+w(u,y) = u^\top y,
+\end{equation}
+i.e., $Q = 0,\; R = 0,\; S = I$.  
+Assume $j(x) = 0$.  
+The system is passive if and only if
+\begin{align}
+    \nabla \phi(x) f(x) &= - L(x)^\top L(x), \label{eq:passive_f}\\
+    \nabla \phi(x) g(x) &= h(x). \label{eq:passive_g}
+\end{align}
+In the linear case ($f(x) = Ax$, $g(x) = B$, $h(x) = Cx$) and with 
+$\phi(x) = x^\top P x$, $P = P^\top > 0$, these reduce to
+\begin{equation}
+A^\top P + P A \le 0, 
+\qquad B^\top P = C,
+\end{equation}
+which is precisely the Kalman–Yakubovich lemma.
+
+\subsubsection{Strictly Output Passive Systems}
+Consider the supply rate
+\begin{equation}
+w(u,y) = u^\top y - \epsilon \|y\|^2,
+\end{equation}
+with $\epsilon > 0$, i.e., $Q = -\epsilon I,\; R = 0,\; S = I$.  
+Assuming $j(x) = 0$, the system is strictly output passive if and only if
+\begin{align}
+    \nabla \phi(x) f(x) &= - \epsilon h(x)^\top h(x) - L(x)^\top L(x), \\
+    \nabla \phi(x) g(x) &= h(x).
+\end{align}
+
+\subsubsection{Strictly Passive Systems}
+For the strict passivity supply rate
+\begin{equation}
+w(u,y) = u^\top y - \beta \|u\|^2, \qquad \beta > 0,
+\end{equation}
+i.e., $Q = 0,\; R = -\beta I,\; S = I$, and $j(x) = 0$, the system would require
+\begin{align}
+    \nabla \phi(x) f(x) &= - L(x)^\top L(x), \\
+    \nabla \phi(x) g(x) &= h(x) - 2 W(x)^\top L(x), \\
+    R &= W(x)^\top W(x) = -\beta I.
+\end{align}
+Since $W(x)^\top W(x) \ge 0$ while $-\beta I < 0$, this condition cannot be satisfied.  
+Therefore, no system of the form~\eqref{eq:affine_sys} with $j(x) = 0$ can be strictly passive.
