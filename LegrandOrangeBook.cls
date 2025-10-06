@@ -628,6 +628,7 @@
 \theoremstyle{blacknumbox}
 \newtheorem{definitionT}{Definition}[chapter] % Definitions, the first argument is the theorem name, the second the theorem title used before the number and the third optional argument is whether to number under chapters (e.g. 2.1) or sections (e.g. 2.1.1)
 \newtheorem{corollaryT}{Corollary}[chapter] % Corollaries, the first argument is the theorem name, the second the theorem title used before the number and the third optional argument is whether to number under chapters (e.g. 2.1) or sections (e.g. 2.1.1)
+\newtheorem{lemmaT}{Lemma}[chapter]
 
 %----------------------------------------------------------------------------------------
 %	COLORED THEOREM BOXES
@@ -740,7 +741,7 @@
 % \newtcolorbox{dBox}{colframe=ocre, colback=ocre!2, left=6pt, right=6pt, breakable}
 
 \newtcolorbox{cBox}{colframe=gray, colback=black!5, breakable}
-
+\newtcolorbox{lBox}{colframe=gray, colback=black!5, breakable}
 \newtcolorbox{xBox}{colframe=gray, colback=black!5, breakable}
 
 
@@ -750,7 +751,7 @@
 \newenvironment{definition}{\begin{dBox}\begin{definitionT}}{\end{definitionT}\end{dBox}}
 \newenvironment{example}{\begin{xBox}\begin{exampleT}}{\end{exampleT}\end{xBox}}	
 \newenvironment{corollary}{\begin{cBox}\begin{corollaryT}}{\end{corollaryT}\end{cBox}}
-
+\newenvironment{lemma}{\begin{lBox}\begin{lemmaT}}{\end{lemmaT}\end{lBox}}
 %----------------------------------------------------------------------------------------
 %	REMARK ENVIRONMENT
 %----------------------------------------------------------------------------------------
