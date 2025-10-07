@@ -5,3 +5,837 @@
 \chapter{Feedback Linearisation}\index{Feedback Linearisation}
 \section{Overview}\index{Overview}
 This chapter introduces the concept of \textbf{feedback linearization}, a nonlinear control technique used to transform a nonlinear system into an equivalent \textbf{linear time-invariant (LTI)} form through an appropriate control law and change of variables. Once linearized, standard linear control methods can be applied to achieve desired system performance. The method, developed extensively during the 1970s and 1980s, has proven effective but also faces limitations such as sensitivity to modeling errors and structural constraints. Despite these challenges, feedback linearization remains a \textbf{fundamental tool in nonlinear control theory}, providing valuable insight into the control of complex dynamic systems.
+
+\section{Mathematical Tools}\index{Mathematical Tools}
+
+Before proceeding, we review several fundamental concepts from differential geometry that 
+are frequently used in nonlinear control theory and, in particular, in feedback linearization.  
+Throughout this section, $D \subset \mathbb{R}^n$ denotes an open and connected subset of $\mathbb{R}^n$.  
+We assume all functions encountered are sufficiently smooth, i.e., they possess continuous 
+partial derivatives of all required orders.
+
+\subsection{Vector Fields}
+
+A \textbf{vector field} is a function $f : D \subset \mathbb{R}^n \to \mathbb{R}^n$ that assigns an 
+$n$-dimensional vector to every point in $\mathbb{R}^n$.  
+Thus, $f(x)$ can be viewed as an $n$-dimensional column vector at each point $x \in D$.  
+The transpose of a vector field is called a \emph{covector field}.  
+
+\subsection{Lie Derivative}
+
+In Lyapunov stability analysis, we often consider the \emph{time derivative of a scalar function}
+$V(x)$ along trajectories of $\dot{x} = f(x)$.  
+This quantity can be written as
+\[
+\dot{V}(x) = \nabla V(x)^\top f(x),
+\]
+which motivates the following general definition.
+
+\begin{definition}[Lie Derivative]\label{def:Lie_derivative}
+Let $h : D \subset \mathbb{R}^n \to \mathbb{R}$ be a scalar function and 
+$f : D \subset \mathbb{R}^n \to \mathbb{R}^n$ a vector field.  
+The \textbf{Lie derivative} of $h$ with respect to $f$, denoted by $L_f h$, is defined as
+\begin{equation}\label{eq:Lie_derivative}
+L_f h(x) \;=\; \nabla h(x)^\top f(x).
+\end{equation}
+\end{definition}
+
+\begin{remark}
+For Lyapunov functions, $\dot{V} = L_f V$ simply expresses the rate of change of $V(x)$ 
+along system trajectories.  
+The Lie derivative notation is convenient for computing higher-order derivatives, e.g.,
+\[
+L_g L_f h(x) = \nabla (L_f h(x))^\top g(x).
+\]
+When $f = g$, we denote $L_f^2 h(x) = L_f (L_f h(x))$.
+\end{remark}
+
+\begin{example}
+Let
+\[
+h(x) = \tfrac{1}{2}(x_1^2 + x_2^2), 
+\qquad 
+f(x) = 
+\begin{bmatrix}
+ -x_2 - \mu (1 - x_1^2) x_2 \\
+ x_1
+\end{bmatrix}.
+\]
+Then
+\[
+L_f h(x) = \nabla h(x)^\top f(x) = x_1(-x_2 - \mu(1 - x_1^2)x_2) + x_2 x_1 
+= -\mu(1 - x_1^2)x_2^2.
+\]
+\end{example}
+
+\subsection{Lie Bracket}
+
+\begin{definition}[Lie Bracket]\label{def:Lie_bracket}
+Let $f,g : D \subset \mathbb{R}^n \to \mathbb{R}^n$ be vector fields.  
+The \textbf{Lie bracket} of $f$ and $g$, denoted $[f,g]$, is the vector field defined by
+\begin{equation}\label{eq:Lie_bracket}
+[f,g](x) \;=\; \frac{\partial g}{\partial x} f(x) \;-\; \frac{\partial f}{\partial x} g(x).
+\end{equation}
+\end{definition}
+
+\begin{example}
+Consider
+\[
+f(x) =
+\begin{bmatrix}
+ -x_2 - \mu(1 - x_1^2)x_2 \\[4pt]
+ x_1
+\end{bmatrix}, 
+\qquad
+g(x) =
+\begin{bmatrix}
+ 0 \\[4pt]
+ 1
+\end{bmatrix}.
+\]
+Then
+\[
+[f,g](x) = 
+\frac{\partial g}{\partial x} f(x) - \frac{\partial f}{\partial x} g(x)
+=
+\begin{bmatrix}
+ 2 \mu x_1 x_2 + 1 \\[4pt]
+ -\mu(1 - x_1^2)
+\end{bmatrix}.
+\]
+\end{example}
+
+\begin{lemma}[Properties of the Lie Bracket]\label{lem:Lie_properties}
+Given vector fields $f_1, f_2, g : D \to \mathbb{R}^n$ and scalar constants $a_1, a_2$, the following hold:
+\begin{enumerate}
+    \item \textbf{Bilinearity:}
+    \[
+    [a_1 f_1 + a_2 f_2, g] = a_1 [f_1,g] + a_2 [f_2,g].
+    \]
+    \item \textbf{Skew-symmetry:}
+    \[
+    [f,g] = -[g,f].
+    \]
+    \item \textbf{Jacobi identity:}
+    \[
+    L_{[f,g]} h = L_f L_g h - L_g L_f h.
+    \]
+\end{enumerate}
+\end{lemma}
+
+\subsection{Diffeomorphisms}
+
+\begin{definition}[Diffeomorphism]\label{def:diffeomorphism}
+A mapping $T : D \subset \mathbb{R}^n \to \mathbb{R}^n$ is called a 
+\textbf{diffeomorphism} on $D$ if:
+\begin{enumerate}
+    \item $T$ is continuously differentiable on $D$, and
+    \item its inverse $T^{-1}$ exists and is continuously differentiable on $T(D)$.
+\end{enumerate}
+If $D = \mathbb{R}^n$ and $\|T(x)\| \to \infty$ as $\|x\| \to \infty$, 
+then $T$ is a \emph{global diffeomorphism}.
+\end{definition}
+
+\begin{lemma}[Inverse Function Theorem]\label{lem:inverse_function}
+Let $T : D \subset \mathbb{R}^n \to \mathbb{R}^n$ be continuously differentiable on $D$.  
+If the Jacobian matrix $\frac{\partial T}{\partial x}$ is nonsingular at $x_0 \in D$,  
+then $T$ is a local diffeomorphism in a neighborhood of $x_0$.
+\end{lemma}
+
+\subsection{Coordinate Transformations}
+
+Coordinate transformations are used to rewrite a system in a more convenient form.  
+For a linear system
+\[
+\dot{x} = A x + B u,
+\]
+a coordinate change $z = T x$, with $T$ nonsingular, yields
+\[
+\dot{z} = T A T^{-1} z + T B u.
+\]
+
+For nonlinear affine systems of the form
+\[
+\dot{x} = f(x) + g(x) u,
+\]
+a diffeomorphism $T(x)$ can be used to define new coordinates $z = T(x)$.  
+Then
+\[
+\dot{z} = \frac{\partial T}{\partial x} \big( f(x) + g(x)u \big).
+\]
+Since $T$ is invertible, one can always recover $x = T^{-1}(z)$.
+
+\begin{example}
+Consider the system
+\[
+\dot{x}_1 = x_2, 
+\qquad 
+\dot{x}_2 = -2x_1 x_2 + x_1 + u,
+\]
+and the transformation
+\[
+z_1 = x_1 + x_2, 
+\qquad 
+z_2 = x_2^2 + x_3.
+\]
+If $T(x)$ is a diffeomorphism, then in the new coordinates $z = T(x)$, 
+the system can be rewritten as
+\[
+\dot{z} = \frac{\partial T}{\partial x} (f(x) + g(x)u),
+\]
+and the original state variables can be recovered as $x = T^{-1}(z)$.
+\end{example}
+
+\subsection{Distributions}\index{Distributions}
+
+Throughout the study of control systems, the concept of a \emph{vector space} plays a central role.  
+Recall from linear algebra that a set of vectors 
+$S = \{x_1, x_2, \ldots, x_p\}$ in $\mathbb{R}^n$ is said to be \textbf{linearly dependent}  
+if there exist scalars $\lambda_1, \lambda_2, \ldots, \lambda_p$, not all zero, such that
+\[
+\lambda_1 x_1 + \lambda_2 x_2 + \cdots + \lambda_p x_p = 0.
+\]
+If this equality holds only when all $\lambda_i = 0$, the set is said to be \textbf{linearly independent}.
+
+A \textbf{linear combination} of the vectors in $S$ is a new vector $x \in \mathbb{R}^n$ defined as
+\[
+x = \lambda_1 x_1 + \lambda_2 x_2 + \cdots + \lambda_p x_p, \quad \lambda_i \in \mathbb{R}.
+\]
+The collection of all such linear combinations forms a subspace of $\mathbb{R}^n$ known as the \emph{span} of $S$:
+\[
+\mathrm{span}\{x_1, x_2, \ldots, x_p\} = 
+\left\{ x \in \mathbb{R}^n : x = \sum_{i=1}^{p} \lambda_i x_i, \ \lambda_i \in \mathbb{R} \right\}.
+\]
+
+\paragraph{From Vector Spaces to Distributions.}
+Now consider a differentiable vector field $f : D \subset \mathbb{R}^n \to \mathbb{R}^n$.  
+This function assigns an $n$-dimensional vector $f(x)$ to each point $x \in D$.  
+If we have several such vector fields $f_1, f_2, \ldots, f_p$ on $D$,  
+then at every point $x \in D$ we can form the set of vectors
+\[
+\{ f_1(x), f_2(x), \ldots, f_p(x) \}.
+\]
+The subspace of $\mathbb{R}^n$ spanned by these vectors is called a \emph{distribution}.
+
+\begin{definition}[Distribution]\label{def:distribution}
+Given an open set $D \subset \mathbb{R}^n$ and smooth vector fields  
+$f_1, f_2, \ldots, f_p : D \to \mathbb{R}^n$,  
+the \textbf{distribution} $\Delta$ generated by these fields is the mapping
+\[
+\Delta(x) = \mathrm{span}\{ f_1(x), f_2(x), \ldots, f_p(x) \}, \quad x \in D.
+\]
+The subspace $\Delta(x)$ is called the \emph{value of the distribution at $x$}.
+\end{definition}
+
+The \textbf{dimension} of $\Delta(x)$ at a point $x \in D$ is given by
+\[
+\dim(\Delta(x)) = \mathrm{rank} \big( [ f_1(x) \; f_2(x) \; \cdots \; f_p(x) ] \big),
+\]
+that is, the rank of the matrix whose columns are the values of the vector fields at $x$.
+
+\begin{definition}[Regular and Singular Distributions]\label{def:regular_singular_distribution}
+A distribution $\Delta$ defined on $D \subset \mathbb{R}^n$ is said to be:
+\begin{itemize}
+    \item \textbf{Nonsingular (or regular)} if there exists an integer $d$ such that
+    \[
+    \dim(\Delta(x)) = d, \quad \forall x \in D.
+    \]
+    \item \textbf{Of variable dimension (or singular)} if $\dim(\Delta(x))$ is not constant over $D$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Regular Point]\label{def:regular_point}
+A point $x_0 \in D$ is said to be a \textbf{regular point} of the distribution $\Delta$
+if there exists a neighborhood $D_0$ of $x_0$ such that $\Delta$ is nonsingular on $D_0$.  
+If this condition fails, $x_0$ is called a \emph{singular point}.
+\end{definition}
+
+\begin{example}
+Let $D = \{ x \in \mathbb{R}^2 : x_1 + x_2 \neq 0 \}$ and consider the distribution
+\[
+\Delta = \mathrm{span}\{ f_1, f_2 \},
+\quad \text{where} \quad
+f_1 =
+\begin{bmatrix}
+1 \\[3pt]
+0
+\end{bmatrix},
+\quad
+f_2 =
+\begin{bmatrix}
+0 \\[3pt]
+x_1 + x_2
+\end{bmatrix}.
+\]
+Then
+\[
+\dim(\Delta(x)) = \mathrm{rank}
+\begin{bmatrix}
+1 & 0 \\[3pt]
+0 & x_1 + x_2
+\end{bmatrix}
+=
+\begin{cases}
+2, & \text{if } x_1 + x_2 \neq 0,\\
+1, & \text{if } x_1 + x_2 = 0.
+\end{cases}
+\]
+Hence, $\Delta$ is nonsingular on $D$ (dimension $2$ everywhere in $D$),  
+and every point of $D$ is a regular point.
+\end{example}
+
+\begin{example}
+Consider the same vector fields as above but now defined on the entire $\mathbb{R}^2$.  
+Along the line $x_1 + x_2 = 0$, we have $\dim(\Delta(x)) = 1$, while elsewhere it is $2$.  
+Thus $\Delta$ is \emph{not regular} on $\mathbb{R}^2$, and every point on the line $x_1 + x_2 = 0$  
+is a singular point.
+\end{example}
+
+\begin{definition}[Involutive Distribution]\label{def:involutive_distribution}
+A distribution $\Delta$ is said to be \textbf{involutive} if, for any pair of vector fields 
+$f_i, f_j \in \Delta$, their Lie bracket $[f_i, f_j]$ also belongs to $\Delta$:
+\[
+[f_i, f_j] \in \Delta, \quad \forall i,j.
+\]
+Equivalently, if $\Delta = \mathrm{span}\{ f_1, f_2, \ldots, f_p \}$,  
+then $\Delta$ is involutive if and only if
+\[
+\mathrm{rank} \big( [f_1(x), \ldots, f_p(x)] \big)
+=
+\mathrm{rank} \big( [f_1(x), \ldots, f_p(x), [f_i, f_j](x)] \big).
+\]
+\end{definition}
+
+\begin{example}
+Let $D = \mathbb{R}^3$ and define
+\[
+f_1 =
+\begin{bmatrix}
+1 \\[3pt]
+0 \\[3pt]
+x_2
+\end{bmatrix},
+\qquad
+f_2 =
+\begin{bmatrix}
+0 \\[3pt]
+1 \\[3pt]
+x_1
+\end{bmatrix}.
+\]
+Then $\Delta = \mathrm{span}\{ f_1, f_2 \}$ has dimension $2$ everywhere on $\mathbb{R}^3$.  
+Computing the Lie bracket gives
+\[
+[f_1, f_2] =
+\begin{bmatrix}
+0 \\[3pt]
+0 \\[3pt]
+1
+\end{bmatrix}.
+\]
+Because this new vector is \emph{not} a linear combination of $f_1$ and $f_2$,  
+the rank increases from $2$ to $3$.  
+Hence, $\Delta$ is \emph{not involutive}.
+\end{example}
+
+\begin{definition}[Complete Integrability]\label{def:complete_integrability}
+A linearly independent set of vector fields $f_1, f_2, \ldots, f_p$ on $D \subset \mathbb{R}^n$  
+is said to be \textbf{completely integrable} if for each point $x_0 \in D$ there exist:
+\begin{itemize}
+    \item a neighborhood $N$ of $x_0$, and  
+    \item $(n-p)$ smooth functions $h_1(x), h_2(x), \ldots, h_{n-p}(x)$
+\end{itemize}
+such that
+\[
+\nabla h_j(x)^\top f_i(x) = 0, 
+\quad \forall i = 1, \ldots, p, \ \forall j = 1, \ldots, n-p,
+\]
+and the gradients $\nabla h_j(x)$ are linearly independent in $N$.
+\end{definition}
+
+\begin{theorem}[Frobenius Theorem]\label{thm:Frobenius}
+Let $f_1, f_2, \ldots, f_p$ be a set of linearly independent smooth vector fields on 
+$D \subset \mathbb{R}^n$.  
+The set $\{ f_1, f_2, \ldots, f_p \}$ is completely integrable \emph{if and only if}  
+it is involutive.
+\end{theorem}
+
+\begin{example}
+Consider the set of partial differential equations
+\[
+\frac{\partial h}{\partial x_1} + 2x_2 \frac{\partial h}{\partial x_2} - x_3 \frac{\partial h}{\partial x_3} = 0,
+\qquad
+2x_3 \frac{\partial h}{\partial x_1} - x_1 \frac{\partial h}{\partial x_2} = 0.
+\]
+These can be expressed as $L_{f_1}h = 0$ and $L_{f_2}h = 0$ for the vector fields
+\[
+f_1 =
+\begin{bmatrix}
+1 \\[3pt]
+2x_2 \\[3pt]
+-x_3
+\end{bmatrix},
+\qquad
+f_2 =
+\begin{bmatrix}
+2x_3 \\[3pt]
+-x_1 \\[3pt]
+0
+\end{bmatrix}.
+\]
+Define the distribution $\Delta = \mathrm{span}\{ f_1, f_2 \}$ on the set 
+$D = \{ x \in \mathbb{R}^3 : x_1 + x_2 \neq 0 \}$.
+By computing the Lie bracket $[f_1, f_2]$, we obtain
+\[
+[f_1, f_2] = 
+\begin{bmatrix}
+-4x_3 \\[3pt]
+2 \\[3pt]
+0
+\end{bmatrix}.
+\]
+The rank of $\big[ f_1(x) \; f_2(x) \; [f_1, f_2](x) \big]$ equals $2$ for all $x \in D$,  
+hence $\Delta$ is involutive and therefore completely integrable,  
+according to the Frobenius Theorem.
+\end{example}
+
+\begin{remark}
+Distributions are essential in geometric control theory and feedback linearization.  
+They capture the subspaces spanned by system vector fields and their Lie brackets,  
+providing a framework to study controllability, accessibility, and coordinate transformations.
+\end{remark}
+
+\section{Input-State Linearization}\index{Input-State Linearization}
+
+In this section, we study nonlinear systems of the form
+\begin{equation}
+\dot{x} = f(x) + g(x)u,
+\end{equation}
+and explore conditions under which they can be transformed into linear time-invariant (LTI) systems
+through a suitable \emph{state feedback law} and \emph{coordinate transformation}.
+
+\subsection{Motivation}
+
+The goal of input-state linearization is to design a control law that converts a nonlinear system
+into a linear controllable system of the form
+\begin{equation}
+\dot{z} = A z + B v,
+\end{equation}
+where $v$ is a new (linearizing) input.  
+This simplifies control design since powerful linear control tools can then be applied.
+
+\subsection{Simple Case: Systems of the Form $\dot{x} = A x + B w(x)[u - \phi(x)]$}
+
+Consider the nonlinear system
+\begin{equation}
+\dot{x} = A x + B w(x)[u - \phi(x)],
+\end{equation}
+where $A \in \mathbb{R}^{n \times n}$, $B \in \mathbb{R}^{n \times 1}$,
+$\phi : D \to \mathbb{R}$, and $w : D \to \mathbb{R}$ is nonzero on $D$.
+If $(A, B)$ is controllable, then the feedback law
+\begin{equation}
+u = \phi(x) + w^{-1}(x) v
+\end{equation}
+transforms the system into the LTI form
+\begin{equation}
+\dot{x} = A x + B v.
+\end{equation}
+
+\begin{itemize}
+    \item The term $\phi(x)$ cancels the nonlinearities.
+    \item The term $w^{-1}(x)$ rescales the input.
+\end{itemize}
+
+\begin{example}[Example 10.8]
+For the nonlinear mass-spring system
+\begin{equation}
+\dot{x}_1 = x_2, \qquad m\dot{x}_2 = -k x_1 + m a^2 x_1 x_2 + u,
+\end{equation}
+we have $w(x) = 1$, $\phi(x) = k a^2 x_1$.  
+Hence, the linearizing control is
+\begin{equation}
+u = k a^2 x_1 + v,
+\end{equation}
+yielding $\dot{x} = A x + B v$.
+\end{example}
+
+\begin{example}[Example 10.9]
+For
+\begin{equation}
+\dot{x}_1 = x_2, \qquad \dot{x}_2 = -a x_1 + b x_2 + \cos x_1 (u - x_2),
+\end{equation}
+we have $w(x) = \cos x_1$, $\phi(x) = x_2$, and the feedback
+\begin{equation}
+u = x_2 + \cos^{-1}(x_1) v,
+\end{equation}
+valid for $|x_1| < \pi/2$.
+\end{example}
+
+\subsection{General Case: $\dot{x} = f(x) + g(x)u$}
+
+A nonlinear system is said to be \textbf{input-state linearizable} if there exist:
+\begin{itemize}
+    \item a diffeomorphism $z = T(x)$, and
+    \item a feedback law $u = \phi(x) + w^{-1}(x)v$
+\end{itemize}
+such that the transformed dynamics are
+\begin{equation}
+\dot{z} = A z + B v.
+\end{equation}
+
+\noindent To find $T(x)$, $\phi(x)$, and $w(x)$, we require
+\begin{align}
+\frac{\partial T(x)}{\partial x} f(x) &= A T(x) - B w(x)\phi(x), \label{eq:T_f}\\
+\frac{\partial T(x)}{\partial x} g(x) &= B w(x). \label{eq:T_g}
+\end{align}
+
+
+\noindent Without loss of generality, let $(A, B)$ be in controllable canonical form:
+\begin{equation}
+A_c =
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & 0
+\end{bmatrix}, \quad
+B_c =
+\begin{bmatrix}
+0 \\ 0 \\ \vdots \\ 1
+\end{bmatrix}.
+\end{equation}
+Let
+\begin{equation}
+T(x) =
+\begin{bmatrix}
+T_1(x) \\ T_2(x) \\ \vdots \\ T_n(x)
+\end{bmatrix}.
+\end{equation}
+Then \eqref{eq:T_f}–\eqref{eq:T_g} imply
+\begin{equation}
+\begin{cases}
+\dfrac{\partial T_i(x)}{\partial x} f(x) = T_{i+1}(x), & i = 1, \ldots, n-1,\\[8pt]
+\dfrac{\partial T_n(x)}{\partial x} f(x) = -\phi(x) w(x), \\[8pt]
+\dfrac{\partial T_i(x)}{\partial x} g(x) = 0, & i = 1, \ldots, n-1,\\[8pt]
+\dfrac{\partial T_n(x)}{\partial x} g(x) = w(x) \neq 0.
+\end{cases}
+\end{equation}
+
+From this, we identify
+\begin{equation}
+w(x) = \frac{\partial T_n(x)}{\partial x} g(x),
+\qquad
+\phi(x) = -\frac{\frac{\partial T_n(x)}{\partial x} f(x)}{\frac{\partial T_n(x)}{\partial x} g(x)}.
+\end{equation}
+
+\begin{remark}
+Input-state linearization transforms nonlinear dynamics into equivalent controllable LTI systems.  
+This approach provides a foundation for applying standard linear control methods to nonlinear systems.
+\end{remark}
+
+\begin{example}[A generic example]
+Consider the nonlinear system
+\begin{equation}
+\dot{x} = f(x) + g(x)u,
+\end{equation}
+where
+\begin{equation}
+f(x) =
+\begin{bmatrix}
+f_1(x) \\[3pt] f_2(x)
+\end{bmatrix}
+=
+\begin{bmatrix}
+e^{x_2} - 1 \\[3pt] x_1
+\end{bmatrix}, 
+\qquad
+g(x) =
+\begin{bmatrix}
+g_1(x) \\[3pt] g_2(x)
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\[3pt] 1
+\end{bmatrix}.
+\end{equation}
+
+We seek a coordinate transformation
+\begin{equation}
+T =
+\begin{bmatrix}
+T_1 \\[3pt] T_2
+\end{bmatrix},
+\end{equation}
+such that
+\begin{equation}
+\frac{\partial T_1}{\partial x} g(x) = 0, 
+\qquad 
+\frac{\partial T_2}{\partial x} g(x) \neq 0.
+\end{equation}
+
+From the relation
+\begin{equation}
+\frac{\partial T_1}{\partial x} f(x) = T_2,
+\end{equation}
+and since \( \frac{\partial T_1}{\partial x} g(x) = 0 \), we infer that \( T_1 \) depends only on \( x_1 \):
+\begin{equation}
+T_1 = T_1(x_1).
+\end{equation}
+
+Substituting \( f_1(x) = e^{x_2} - 1 \), we get
+\begin{equation}
+\frac{dT_1}{dx_1} f_1(x) = T_2 
+\quad \Rightarrow \quad 
+T_2 = \frac{dT_1}{dx_1}(e^{x_2} - 1).
+\end{equation}
+
+To ensure \( \frac{\partial T_2}{\partial x} g(x) \neq 0 \),
+\begin{equation}
+\frac{\partial T_2}{\partial x} g(x)
+=
+\frac{\partial T_2}{\partial x_2} g_2(x)
+=
+\frac{dT_1}{dx_1} e^{x_2} \neq 0.
+\end{equation}
+
+Thus, choose
+\begin{equation}
+T_1(x) = x_1, \qquad
+T_2(x) = e^{x_2} - 1.
+\end{equation}
+
+The transformation maps the equilibrium at \( x = 0 \) to \( z = 0 \).
+
+The functions \( w(x) \) and \( \phi(x) \) are:
+\begin{equation}
+w(x) = \frac{\partial T_2}{\partial x} g(x) = e^{x_2},
+\end{equation}
+\begin{equation}
+\phi(x) = -\frac{\frac{\partial T_2}{\partial x} f(x)}{\frac{\partial T_2}{\partial x} g(x)} 
+= -x_1 e^{-x_2}.
+\end{equation}
+
+In the new coordinates
+\begin{equation}
+z_1 = T_1 = x_1, \qquad 
+z_2 = T_2 = e^{x_2} - 1,
+\end{equation}
+the transformed dynamics become
+\begin{equation}
+\dot{z}_1 = z_2, \qquad 
+\dot{z}_2 = -z_1 z_2 + (z_2 + 1)u.
+\end{equation}
+
+Hence, the system can be expressed as
+\begin{equation}
+\dot{z} = A z + B w(z) [u - \phi(z)],
+\end{equation}
+where
+\begin{equation}
+A =
+\begin{bmatrix}
+0 & 1 \\ 0 & 0
+\end{bmatrix}, \quad
+B =
+\begin{bmatrix}
+0 \\ 1
+\end{bmatrix}, \quad
+w(z) = z_2 + 1, \quad
+\phi(z) = -z_1.
+\end{equation}
+\end{example}
+
+% ------------------------------------------------------------
+
+\begin{example}[Magnetic Suspension System]
+Consider the magnetic suspension system
+\begin{equation}
+\dot{x} = f(x) + g(x)u,
+\end{equation}
+with
+\begin{equation}
+f(x) =
+\begin{bmatrix}
+f_1(x) \\[3pt] f_2(x) \\[3pt] f_3(x)
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_2 \\[5pt]
+\frac{k}{m}\!\left(\!\frac{x_3^2}{(1+\mu x_1)^2}\!\right) - g \\[5pt]
+-\frac{R}{L}x_3
+\end{bmatrix},
+\qquad
+g(x) =
+\begin{bmatrix}
+g_1(x) \\[3pt] g_2(x) \\[3pt] g_3(x)
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\[3pt] 0 \\[3pt] \dfrac{1}{L}
+\end{bmatrix}.
+\end{equation}
+
+We look for a transformation
+\begin{equation}
+T =
+\begin{bmatrix}
+T_1 \\[3pt] T_2 \\[3pt] T_3
+\end{bmatrix}
+\end{equation}
+such that
+\begin{equation}
+\frac{\partial T_1}{\partial x} g(x) = 0, \quad
+\frac{\partial T_2}{\partial x} g(x) = 0, \quad
+\frac{\partial T_3}{\partial x} g(x) \neq 0.
+\end{equation}
+
+From
+\begin{equation}
+\frac{\partial T_1}{\partial x} f(x) = T_2, \quad
+\frac{\partial T_2}{\partial x} f(x) = T_3, \quad
+\frac{\partial T_3}{\partial x} f(x) = -\phi(x)w(x),
+\end{equation}
+we note that \( T_1 \) does not depend on \( x_3 \).  
+Choose
+\begin{equation}
+T_1 = x_1.
+\end{equation}
+
+Then,
+\begin{equation}
+\frac{\partial T_1}{\partial x} f(x) = f_1(x) = x_2 = T_2,
+\end{equation}
+and
+\begin{equation}
+\frac{\partial T_2}{\partial x} f(x) = f_2(x)
+= \frac{k}{m}\!\left(\!\frac{x_3^2}{(1+\mu x_1)^2}\!\right) - g = T_3.
+\end{equation}
+
+We check the remaining conditions:
+\begin{equation}
+\frac{\partial T_1}{\partial x} g(x) = 0, \qquad 
+\frac{\partial T_2}{\partial x} g(x) = 0,
+\end{equation}
+and
+\begin{equation}
+\frac{\partial T_3}{\partial x} g(x)
+= \frac{\partial T_3}{\partial x_3} g_3(x)
+= \frac{2k x_3}{m(1+\mu x_1)^2} \cdot \frac{1}{L} \neq 0,
+\end{equation}
+for \( x_3 \neq 0 \).
+
+Thus, the coordinate transformation is
+\begin{equation}
+T =
+\begin{bmatrix}
+x_1 \\[3pt]
+x_2 \\[3pt]
+\frac{kx_3^2}{m(1+\mu x_1)^2} - g
+\end{bmatrix}.
+\end{equation}
+
+The functions \( w(x) \) and \( \phi(x) \) are given by
+\begin{equation}
+w(x) = \frac{\partial T_3}{\partial x} g(x)
+= \frac{2k x_3}{mL(1+\mu x_1)^2},
+\end{equation}
+\begin{equation}
+\phi(x) = -\frac{\frac{\partial T_3}{\partial x} f(x)}{\frac{\partial T_3}{\partial x} g(x)}.
+\end{equation}
+
+All linearizing conditions hold in the domain
+\begin{equation}
+D = \{ x \in \mathbb{R}^3 \mid x_3 \neq 0 \}.
+\end{equation}
+\end{example}
+
+\section{Conditions for Input-State Linearization}
+
+Consider the nonlinear system
+\begin{equation}
+\dot{x} = f(x) + g(x)u
+\label{eq:10.28}
+\end{equation}
+where $f, g : D \to \mathbb{R}^n$.  
+We now state the conditions for which this system is \textbf{input-state linearizable}.
+
+\begin{theorem}
+The system \eqref{eq:10.28} is input-state linearizable on $D_0 \subset D$ if and only if:
+\begin{enumerate}
+\item The vector fields $\{ g(x), \text{ad}_f g(x), \dots, \text{ad}_f^{n-1} g(x) \}$ are linearly independent in $D_0$, i.e.,
+\begin{equation}
+C = [g,~ \text{ad}_f g,~ \dots,~ \text{ad}_f^{n-1} g]
+\end{equation}
+has rank $n$ for all $x \in D_0$.
+\item The distribution 
+\begin{equation}
+\Delta = \text{span}\{ g,~ \text{ad}_f g,~ \dots,~ \text{ad}_f^{n-2} g \}
+\end{equation}
+is involutive in $D_0$.
+\end{enumerate}
+\end{theorem}
+
+
+\begin{example}[Example]
+Consider the system
+\begin{equation}
+\dot{x} =
+\begin{bmatrix}
+x_2 \\ e^{x_2} - 1
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\ 1
+\end{bmatrix}u
+= f(x) + g(x)u
+\end{equation}
+
+Here,
+$f_1 = x_2$, $f_2 = e^{x_2} - 1$, and $g_1 = 0$, $g_2 = 1$.
+
+The Lie bracket is
+\begin{equation}
+\text{ad}_f g = [f, g] = -\frac{\partial f}{\partial x} g(x)
+= -
+\begin{bmatrix}
+1 \\ e^{x_2}
+\end{bmatrix}
+\end{equation}
+
+Thus,
+\[
+C =
+\begin{bmatrix}
+0 & -1 \\
+1 & -e^{x_2}
+\end{bmatrix}, \quad
+\text{rank}(C) = 2
+\]
+so condition (i) holds $\forall x \in \mathbb{R}^2$.
+
+Since $\Delta = \text{span}\{g\}$ is one-dimensional and hence involutive, both conditions are satisfied.
+\end{example}
+
+
+\begin{example}[Example]
+Consider the linear system
+\begin{equation}
+\dot{x} = A x + B u, \quad f(x) = A x, \ g(x) = B
+\end{equation}
+
+The Lie brackets are
+\begin{align}
+\text{ad}_f g &= -A B, &
+\text{ad}_f^2 g &= A^2 B, &
+\dots, &
+\text{ad}_f^{n-1} g &= (-1)^{n-1} A^{n-1}B
+\end{align}
+
+Hence,
+\[
+C = [B,~ AB,~ \dots,~ A^{n-1}B]
+\]
+and condition (i) holds iff $(A,B)$ is controllable.  
+Condition (ii) is trivially true since $f$ and $g$ are constant.
+\end{example}
+
