@@ -5,3 +5,602 @@
 \chapter{Nonlinear Observers}\index{Nonlinear Observers}
 \section{Overview}\index{Overview}
 In previous chapters, it was assumed that the system state vector $x$ was directly measurable and available for control design. However, in most practical situations, not all state variables can be measured, making it necessary to reconstruct the state from available outputs. This process, known as \textbf{state estimation}, relies on certain \textbf{observability conditions} being satisfied, allowing the use of an \textbf{observer} to estimate the true state. While observer design for linear time-invariant systems is well established, extending these concepts to nonlinear systems remains a challenging task. This chapter introduces the fundamentals of observer design and presents key results applicable to nonlinear systems.
+
+\section{Observers for LTI Systems}\index{Observers for LTI Systems}
+
+In many control problems, the full state vector $x$ is not directly measurable, 
+and only the input $u$ and output $y$ are available. 
+To reconstruct $x$ from $y$, an \emph{observer} (or \emph{state estimator}) 
+is introduced. This section reviews the main results for linear time-invariant (LTI) systems.
+
+\subsection{Observability}\index{Observers for LTI Systems!Observability}
+
+Consider the LTI system:
+\begin{align}
+    \dot{x} &= A x + B u, \qquad x \in \mathbb{R}^n, \; u \in \mathbb{R}, \label{eq:lti_sys}\\
+    y &= C x, \qquad C \in \mathbb{R}^{1\times n}. \label{eq:lti_out}
+\end{align}
+
+\begin{definition}[Observability]
+The realization \eqref{eq:lti_sys}--\eqref{eq:lti_out} is said to be \emph{observable} 
+if, for any initial state $x_0$ and fixed time $t_1>0$, the knowledge of $u(t)$ and $y(t)$ 
+over $[0,t_1]$ uniquely determines $x_0$.
+\end{definition}
+
+\begin{theorem}[Observability Matrix Test]
+The realization \eqref{eq:lti_sys}--\eqref{eq:lti_out} is observable if and only if
+\begin{equation}
+    \operatorname{rank}(\mathcal{O}) = n,
+    \qquad 
+    \mathcal{O} = 
+    \begin{bmatrix}
+        C \\ CA \\ CA^2 \\ \vdots \\ CA^{n-1}
+    \end{bmatrix}.
+\end{equation}
+\end{theorem}
+
+\begin{example}[Two-State System]
+Let 
+\[
+A = 
+\begin{bmatrix}
+0 & 1 \\ -2 & -3
+\end{bmatrix}, \qquad
+C = [\,1 \; 0\,].
+\]
+Then
+\[
+\mathcal{O} = 
+\begin{bmatrix}
+1 & 0\\
+0 & 1
+\end{bmatrix},
+\]
+so $\operatorname{rank}(\mathcal{O})=2$. Hence, the system is observable.
+\end{example}
+
+\subsection{Observer Canonical Form}\index{Observers for LTI Systems!Observer Canonical Form}
+
+\begin{theorem}[Observer Form Transformation]
+If the pair $(A,C)$ is observable, there exists a nonsingular transformation 
+$T$ such that, in the new coordinates $\tilde{x} = T x$, 
+the system takes the \emph{observer (observable) canonical form}
+\begin{align}
+    \dot{\tilde{x}} &=
+    \begin{bmatrix}
+        -q_{n-1} & 1         & 0         & \cdots & 0\\
+        -q_{n-2} & 0         & 1         & \cdots & 0\\
+        \vdots   & \vdots    & \ddots    & \ddots & \vdots\\
+        -q_{1}   & 0         & 0         & \cdots & 1\\
+        -q_{0}   & 0         & 0         & \cdots & 0
+    \end{bmatrix} \tilde{x}
+    +
+    \begin{bmatrix}
+        p_{n-1}\\ p_{n-2}\\ \vdots\\ p_{1}\\ p_{0}
+    \end{bmatrix} u, \label{eq:obs_canonical}\\
+    y &= [\,1 \; 0 \; 0 \; \cdots \; 0\,]\,\tilde{x}. \label{eq:obs_output}
+\end{align}
+\end{theorem}
+
+Here the coefficients $q_i$ and $p_i$ come from the transfer function of the system
+\begin{equation}
+H(s) = C (sI - A)^{-1} B 
+     = \frac{p_{n-1}s^{n-1} + p_{n-2}s^{n-2} + \cdots + p_0}
+            {s^{n} + q_{n-1}s^{n-1} + \cdots + q_0}.
+\end{equation}
+In this form, the output is simply the first state, $y = \tilde{x}_1$, 
+and the dynamics matrix is the transpose of the controllable canonical form matrix.
+
+\begin{remark}
+This representation makes the structure of observability explicit: 
+the first row of the matrix defines the coefficients of the characteristic polynomial,
+and the subdiagonal of ones shifts the state variables corresponding to 
+successive time derivatives of the output.  
+Hence, it provides a convenient framework for observer design and pole placement.
+\end{remark}
+
+\subsection{Observer Design}\index{Observers for LTI Systems!Observer Design}
+
+\begin{definition}[Luenberger Observer]
+For the system \eqref{eq:lti_sys}--\eqref{eq:lti_out}, a \emph{Luenberger observer} is defined by
+\begin{equation}
+    \dot{\hat{x}} = A\hat{x} + B u + L (y - C\hat{x}),
+\end{equation}
+where $\hat{x}$ is the estimate of the true state $x$ and $L\in\mathbb{R}^{n\times 1}$ 
+is the \emph{observer gain}.
+\end{definition}
+
+Define the estimation error $e = x - \hat{x}$. Then
+\begin{equation}
+    \dot{e} = (A - L C)e.
+\end{equation}
+
+\begin{theorem}[Observer Error Dynamics]
+If $(A,C)$ is observable, the eigenvalues of $(A - LC)$ can be assigned arbitrarily 
+through suitable choice of $L$.  
+If all eigenvalues of $(A - L C)$ lie in the open left-half plane, 
+then $e(t) \to 0$ exponentially as $t \to \infty$.
+\end{theorem}
+
+\begin{example}[Second-Order Observer]
+For 
+\[
+A = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}, 
+\quad 
+C = [1 \; 0],
+\]
+let the desired observer poles be at $s^2 + 5s + 6 = 0$.  
+Then, solving for $L = [l_1 \; l_2]^T$, we obtain
+\[
+\det(sI - (A - L C)) = s^2 + (3 + l_1)s + (2 + 3l_1 + l_2) = s^2 + 5s + 6,
+\]
+yielding $l_1 = 2$, $l_2 = 1$.  
+Hence,
+\[
+L = \begin{bmatrix} 2 \\ 1 \end{bmatrix}.
+\]
+\end{example}
+
+\subsection{Separation Principle}\index{Observers for LTI Systems!Separation Principle}
+
+In practical control systems, the full state vector $x$ is rarely available for feedback. 
+Instead, we often rely on an estimate $\hat{x}$ obtained from an observer.  
+A natural question arises: \emph{Can we design the controller and the observer independently, 
+and still guarantee stability of the combined closed-loop system?}  
+The answer is provided by the \emph{separation principle}.
+
+\noindent Consider the LTI system:
+\begin{align}
+    \dot{x} &= A x + B u, \\
+    y &= C x.
+\end{align}
+A state feedback controller of the form
+\begin{equation}\label{eq:state_feedback}
+    u = Kx
+\end{equation}
+yields the closed-loop system
+\begin{equation}
+    \dot{x} = (A + BK)x,
+\end{equation}
+whose eigenvalues can be placed arbitrarily if the pair $(A,B)$ is controllable.
+
+\noindent However, in most cases the true state $x$ is not measurable, and we must rely on an estimate 
+$\hat{x}$ obtained from a Luenberger observer:
+\begin{equation}\label{eq:observer_equation}
+    \dot{\hat{x}} = A\hat{x} + Bu + L(y - C\hat{x}),
+\end{equation}
+where $L$ is the observer gain chosen to make $(A - LC)$ stable.
+
+\noindent Substituting the control law \eqref{eq:state_feedback} with the estimate $\hat{x}$ gives:
+\begin{align}
+    u &= K\hat{x}, \label{eq:output_feedback} \\
+    \dot{\hat{x}} &= A\hat{x} + B K \hat{x} + L(y - C\hat{x}). \label{eq:observer_with_feedback}
+\end{align}
+
+\begin{theorem}[Separation Principle]
+Consider the LTI system defined above.  
+If $(A,B)$ is controllable and $(A,C)$ is observable, 
+then the combined controller--observer system
+\begin{align}
+    \dot{x} &= (A + BK)x - BK\hat{x}, \\
+    \dot{\hat{x}} &= L C x + (A + BK - L C)\hat{x}
+\end{align}
+has a closed-loop matrix of the form
+\begin{equation}
+    \begin{bmatrix}
+        A + BK & -BK \\
+        L C     & A - L C
+    \end{bmatrix}.
+\end{equation}
+The eigenvalues of this matrix are precisely the union of those of $(A + BK)$ 
+and $(A - L C)$. Consequently:
+\begin{enumerate}
+    \item The observer poles (eigenvalues of $A - LC$) 
+          can be assigned independently of the controller poles 
+          (eigenvalues of $A + BK$).
+    \item The overall closed-loop system is stable 
+          if and only if both $(A + BK)$ and $(A - LC)$ are stable.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}
+The separation principle is fundamental in control theory.  
+It ensures that the design of the feedback gain $K$ and the observer gain $L$
+can be carried out separately without loss of generality.  
+In practice, the controller stabilizes the nominal dynamics,
+while the observer ensures accurate state estimation from the measured output.
+When both subsystems are stable, the overall closed-loop system remains stable.
+\end{remark}
+
+\begin{example}[Second-Order System]
+Consider
+\[
+A = \begin{bmatrix} 0 & 1 \\ -2 & -3 \end{bmatrix}, \quad
+B = \begin{bmatrix} 0 \\ 1 \end{bmatrix}, \quad
+C = [1 \; 0].
+\]
+Choose desired controller poles at $s^2 + 4s + 5 = 0$,
+yielding $K = [-3 \;\; -4]$.  
+Let the observer poles be at $s^2 + 6s + 8 = 0$, 
+giving $L = [4 \;\; 5]^T$.  
+Then both $(A + BK)$ and $(A - LC)$ are stable, 
+and by the separation principle, the overall output feedback system is stable.
+\end{example}
+
+
+\section{Nonlinear Observability}\index{Nonlinear Observability}
+
+For linear time-invariant (LTI) systems, observability can be checked easily using the
+rank condition on the observability matrix.  
+However, for \emph{nonlinear systems}, the situation is more subtle.  
+In general, observability depends on both the system dynamics and the input function.  
+This section introduces key ideas and basic conditions for nonlinear observability.
+
+\noindent Consider a general nonlinear system of the form
+\begin{align}
+    \dot{x} &= f(x) + g(x)u, \qquad f:\mathbb{R}^n \to \mathbb{R}^n, \; g:\mathbb{R}^n \to \mathbb{R}^n, \label{eq:nonlinear_system}\\
+    y &= h(x), \qquad h:\mathbb{R}^n \to \mathbb{R}. \label{eq:nonlinear_output}
+\end{align}
+For simplicity, we assume that the system has a single input and a single output,
+and that $f$, $g$, and $h$ are sufficiently smooth with $h(0) = 0$.
+
+\begin{definition}[Distinguishability]
+Two states $x_1, x_2 \in \mathbb{R}^n$ are said to be \emph{distinguishable} if there exists
+an input function $u(t)$ and a finite time interval $[0, t_1]$ such that
+\begin{equation}
+    y(x_u(t, x_1)) \neq y(x_u(t, x_2)), \qquad \text{for some } t \in [0, t_1],
+\end{equation}
+where $x_u(t, x_0)$ denotes the state trajectory originating from $x(0)=x_0$
+under the input $u(t)$.
+\end{definition}
+
+\begin{definition}[Local Observability]
+The realization \eqref{eq:nonlinear_system}–\eqref{eq:nonlinear_output} 
+is said to be \emph{locally observable at} $x_0 \in \mathbb{R}^n$ 
+if there exists a neighborhood $\mathcal{U}_0$ of $x_0$ such that every
+$x \in \mathcal{U}_0$, $x \neq x_0$, is distinguishable from $x_0$.
+It is said to be \emph{locally observable} if it is locally observable at each $x_0$.
+\end{definition}
+
+Intuitively, local observability means that small perturbations in the initial state
+lead to distinguishable output responses for some admissible input $u(t)$.
+
+\begin{theorem}[Local Observability Condition]\label{thm:nonlinear_observability}
+Consider the unforced nonlinear system
+\begin{align}
+    \dot{x} &= f(x), \label{eq:unforced_nonlin}\\
+    y &= h(x), \label{eq:unforced_output}
+\end{align}
+where $f$ and $h$ are smooth functions.  
+If in a neighborhood $\mathcal{U}_0$ of the origin the matrix
+\begin{equation}
+    \Phi(x) = 
+    \begin{bmatrix}
+        \nabla h(x)\\
+        \nabla (L_f h(x))\\
+        \nabla (L_f^2 h(x))\\
+        \vdots\\
+        \nabla (L_f^{n-1} h(x))
+    \end{bmatrix}
+\end{equation}
+has full rank $n$, i.e.,
+\begin{equation}
+    \operatorname{rank}\, \Phi(x) = n, \qquad \forall x \in \mathcal{U}_0,
+\end{equation}
+then the realization \eqref{eq:unforced_nonlin}–\eqref{eq:unforced_output}
+is locally observable in $\mathcal{U}_0$.
+\end{theorem}
+
+Here $L_f h$ denotes the \emph{Lie derivative} of $h$ along $f$,
+defined as
+\[
+L_f h(x) = \frac{\partial h}{\partial x} f(x),
+\qquad
+L_f^k h(x) = \frac{\partial (L_f^{k-1}h)}{\partial x} f(x).
+\]
+
+\begin{example}[Reduction to Linear Case]
+Let the system be linear:
+\[
+\dot{x} = A x, \qquad y = C x.
+\]
+Then $h(x) = Cx$ and $f(x) = A x$, giving
+\[
+\nabla h(x) = C, \quad
+\nabla (L_f h) = C A, \quad
+\nabla (L_f^2 h) = C A^2, \quad \dots
+\]
+Hence
+\[
+\Phi(x) =
+\begin{bmatrix}
+    C \\ CA \\ CA^2 \\ \vdots \\ CA^{n-1}
+\end{bmatrix}
+= \mathcal{O},
+\]
+the standard observability matrix.
+Therefore, the rank condition of Theorem~\ref{thm:nonlinear_observability}
+reduces exactly to the linear observability test
+\[
+\operatorname{rank}(\mathcal{O}) = n.
+\]
+\end{example}
+
+\begin{remark}
+Theorem~\ref{thm:nonlinear_observability} shows that if the \emph{linearization}
+of a nonlinear system is observable, then the nonlinear system is locally observable
+in a neighborhood of the operating point.  
+However, local observability does not in general imply global observability.
+\end{remark}
+
+\begin{example}[Input-Dependent Observability]
+Consider the nonlinear system
+\[
+\dot{x}_1 = x_2(1 - u), \qquad 
+\dot{x}_2 = x_1, \qquad
+y = x_1.
+\]
+For $u = 0$,
+\[
+\operatorname{rank}
+\begin{bmatrix}
+\nabla h\\
+\nabla (L_f h)
+\end{bmatrix}
+=
+\operatorname{rank}
+\begin{bmatrix}
+[1\; 0]\\[2pt]
+[0\; 1]
+\end{bmatrix}
+= 2,
+\]
+so the system is observable.  
+However, for $u = 1$, the dynamics become
+\[
+\dot{x}_1 = 0, \qquad \dot{x}_2 = x_1, \qquad y = x_1,
+\]
+and the system loses observability.
+Thus, in nonlinear systems, observability can depend explicitly on the input signal $u(t)$.
+\end{example}
+
+\begin{remark}
+In contrast to the LTI case, nonlinear observability is not independent of the input $u(t)$.
+Certain inputs, called \emph{singular inputs}, may render the system unobservable,
+even if it is observable for other inputs.
+\end{remark}
+
+\section{Observers with Linear Error Dynamics}\index{Observers with Linear Error Dynamics}
+
+For certain nonlinear systems, it is possible to design an observer whose error dynamics are linear.  
+This approach, inspired by feedback linearization, proceeds as follows:
+\begin{enumerate}
+    \item Find a coordinate transformation that converts the nonlinear system into a linear canonical form.
+    \item Design a linear observer in the new coordinates.
+    \item Recover the original state using the inverse transformation.
+\end{enumerate}
+
+\noindent Consider
+\begin{align}
+    \dot{x} &= f(x) + g(x,u), \qquad y = h(x), \label{eq:nonlinear_obs_lin}
+\end{align}
+and assume there exists a diffeomorphism \( z = T(x) \), \(T(0)=0\), such that in the new coordinates
+\begin{align}
+    \dot{z} &= A_0 z + \Gamma(y,u), \qquad y = C_0 z. \label{eq:linearized_obs_form}
+\end{align}
+Here
+\[
+A_0 =
+\begin{bmatrix}
+0 & 1 & 0 & \cdots & 0\\
+0 & 0 & 1 & \cdots & 0\\
+\vdots & \vdots & \ddots & \ddots & \vdots\\
+0 & 0 & \cdots & 0 & 1\\
+0 & 0 & \cdots & 0 & 0
+\end{bmatrix},
+\quad
+C_0 = [\,0~0~\cdots~1\,],
+\]
+and \(\Gamma(y,u) = [\,\gamma_1(y,u),\,\gamma_2(y,u),\,\ldots,\,\gamma_n(y,u)\,]^T\) collects the nonlinear terms that remain after transformation—typically functions of the measured output \(y\) and the known input \(u\).
+
+\begin{theorem}
+If the transformation \(z=T(x)\) exists, the observer
+\begin{align}
+    \dot{\hat{z}} &= A_0 \hat{z} + \Gamma(y,u) - K(y - C_0 \hat{z}), \label{eq:nonlinear_linear_error_obs}\\
+    \hat{x} &= T^{-1}(\hat{z}),
+\end{align}
+with gain \(K\) chosen such that \((A_0 + K C_0)\) is Hurwitz, ensures \(\hat{x}(t) \to x(t)\) as \(t \to \infty\).
+\end{theorem}
+
+\begin{example}
+Consider
+\[
+\dot{x}_1 = x_2 + 2x_1, \quad
+\dot{x}_2 = x_1 x_2 + x_1 u, \quad
+y = x_1.
+\]
+Define \(z_1 = x_2 - 2x_1,\; z_2 = x_1.\)  
+Then
+\[
+\dot{z}_1 = -2y^3 + y^3u, \quad
+\dot{z}_2 = z_1 + y^2, \quad
+y = z_2,
+\]
+which is of the form \eqref{eq:linearized_obs_form} with
+\[
+A_0 = \begin{bmatrix}0 & 1\\0 & 0\end{bmatrix},\;
+C_0 = [0~1],\;
+\Gamma(y,u) =
+\begin{bmatrix}
+-2y^3 + y^3u \\[2pt] 0
+\end{bmatrix}.
+\]
+The observer
+\[
+\dot{\hat{z}} = A_0\hat{z} + \Gamma(y,u) - K(y - \hat{z}_2)
+\]
+has error dynamics \(\dot{e}_z = (A_0 + K C_0)e_z\), which are stable for any \(k_1,k_2>0\).
+\end{example}
+
+\begin{remark}
+This method assumes perfect model knowledge and exact cancellation of nonlinearities.  
+Model uncertainties can destroy the linear error structure and compromise convergence, making the observer sensitive to parameter errors.
+\end{remark}
+
+\section{Lipschitz Systems}\index{Lipschitz Systems}
+
+A broad class of nonlinear systems that admit systematic observer design are the
+\emph{Lipschitz systems}.  
+Unlike feedback-linearized observers, which rely on exact cancellation of nonlinearities,
+Lipschitz observers use a Lyapunov-based approach, ensuring convergence when the nonlinear terms are bounded.
+
+\noindent Consider the nonlinear system
+\begin{align}
+    \dot{x} &= A x + f(x,u), \qquad y = Cx, \label{eq:lipschitz_system}
+\end{align}
+where \(A \in \mathbb{R}^{n\times n}\), \(C \in \mathbb{R}^{1\times n}\), and the nonlinear function \(f(x,u)\)
+satisfies a \emph{Lipschitz condition} in \(x\):
+\begin{equation}\label{eq:lipschitz_condition}
+    \| f(x_1,u) - f(x_2,u) \| \le \rho \|x_1 - x_2\|, 
+    \qquad \forall x_1, x_2 \in \mathcal{D},
+\end{equation}
+for some constant \(\rho > 0\) and region \(\mathcal{D} \subset \mathbb{R}^n\).
+
+An observer of the form
+\begin{align}
+    \dot{\hat{x}} = A\hat{x} + f(\hat{x},u) + L(y - C\hat{x}), \label{eq:lipschitz_observer}
+\end{align}
+is used to estimate the true state \(x\).  
+Defining the estimation error \(e = x - \hat{x}\), the error dynamics become
+\[
+\dot{e} = (A - L C)e + f(x,u) - f(\hat{x},u).
+\]
+
+\begin{theorem}[Lipschitz Observer Convergence]
+If there exist positive definite matrices \(P,Q \in \mathbb{R}^{n\times n}\) satisfying
+\[
+P(A - LC) + (A - LC)^T P = -Q,
+\]
+and if the Lipschitz constant \(\rho\) satisfies
+\[
+\rho < \frac{\lambda_{\min}(Q)}{2\,\lambda_{\max}(P)},
+\]
+then the observer \eqref{eq:lipschitz_observer} guarantees that the estimation error
+\(e(t)\) converges asymptotically to zero.
+\end{theorem}
+
+\begin{example}
+Consider
+\[
+\dot{x}_1 = x_2 + \sin(x_1), \quad
+\dot{x}_2 = -2x_1 + u, \quad
+y = x_1.
+\]
+Here,
+\[
+A = \begin{bmatrix} 0 & 1 \\ -2 & 0 \end{bmatrix}, \quad
+C = [1~0], \quad
+f(x,u) = \begin{bmatrix} \sin(x_1) - x_1 \\ 0 \end{bmatrix}.
+\]
+Since \(|\sin(x_1) - \sin(x_2)| \le |x_1 - x_2|\), the function \(f(x,u)\) is Lipschitz with constant \(\rho = 1\).
+Choosing \(L = [3~4]^T\) yields a stable error system, ensuring \(\hat{x}(t) \to x(t)\).
+\end{example}
+
+\begin{remark}
+The Lipschitz observer does not require exact cancellation of nonlinearities and therefore
+offers improved robustness to modeling errors and parameter uncertainties compared with
+observers based on feedback linearization.
+\end{remark}
+
+\section{Nonlinear Separation Principle}\index{Nonlinear Separation Principle}
+
+For linear time-invariant systems, the \emph{separation principle} ensures that the controller and observer
+can be designed independently.  
+Specifically, for
+\[
+\dot{x} = A x + B u, \qquad y = Cx,
+\]
+the control law \(u = K\hat{x}\) and observer
+\(\dot{\hat{x}} = A\hat{x} + Bu + L(y - C\hat{x})\)
+lead to the combined system
+\[
+\begin{bmatrix}\dot{x}\\[2pt]\dot{\hat{x}}\end{bmatrix}
+=
+\begin{bmatrix}
+A + BK & -BK \\[2pt]
+LC & A - LC
+\end{bmatrix}
+\begin{bmatrix}x\\[2pt]\hat{x}\end{bmatrix}.
+\]
+The eigenvalues of this matrix are simply those of \((A+BK)\) and \((A-LC)\),
+so stability of both subsystems guarantees overall closed-loop stability.
+
+\medskip
+\noindent In contrast, for \emph{nonlinear systems} the same separation does not generally hold.
+Consider
+\begin{align}
+    \dot{x} &= f(x) + g(x)u, \qquad y = h(x). \label{eq:nonlin_sep_system}
+\end{align}
+Assume a nonlinear state feedback controller \(u = \alpha(x)\)
+that stabilizes the system, i.e.
+\[
+\dot{x} = f(x) + g(x)\alpha(x)
+\]
+is asymptotically stable.
+Since \(x\) is not measured directly, we use an observer
+\begin{align}
+    \dot{\hat{x}} = f(\hat{x}) + g(\hat{x})u + L(y - h(\hat{x})). \label{eq:nonlin_sep_obs}
+\end{align}
+Substituting \(u = \alpha(\hat{x})\), the closed-loop dynamics become
+\begin{align}
+    \dot{x} &= f(x) + g(x)\alpha(\hat{x}), \label{eq:nonlin_sep_cl1}\\
+    \dot{\hat{x}} &= f(\hat{x}) + g(\hat{x})\alpha(\hat{x}) + L[h(x) - h(\hat{x})]. \label{eq:nonlin_sep_cl2}
+\end{align}
+
+\noindent Let the estimation error be \(e = x - \hat{x}\).  
+Subtracting \eqref{eq:nonlin_sep_cl2} from \eqref{eq:nonlin_sep_cl1} yields
+\begin{align}
+    \dot{e} = f(x) - f(\hat{x}) + [g(x) - g(\hat{x})]\alpha(\hat{x}) - L[h(x) - h(\hat{x})]. \label{eq:nonlin_sep_error}
+\end{align}
+Unlike the linear case, this equation is \emph{coupled} and \emph{state-dependent}.
+The evolution of \(e\) depends not only on \(e\) itself, but also on \(x\) and \(\hat{x}\),
+making the overall system nonlinear in both variables.
+Hence, exponential convergence of \(e\) to zero does not necessarily imply stability
+of the true state \(x\).
+
+\begin{example}
+Consider the nonlinear system
+\[
+\dot{x} = -x + x^4 + x^2 \xi, \qquad \dot{\xi} = -k\xi + u, \quad k > 0.
+\]
+Using backstepping, define the control law
+\[
+u = -c(\xi + x^2) - x^3 + k\xi - 2x(-x + x^4 + x^2\xi), \quad c > 0,
+\]
+which stabilizes the system if both \(x\) and \(\xi\) are measurable.
+Let the unmeasured state \(\xi\) be estimated by
+\[
+\dot{\hat{\xi}} = -k\hat{\xi} + u.
+\]
+The estimation error \(\tilde{\xi} = \xi - \hat{\xi}\) satisfies \(\dot{\tilde{\xi}} = -k\tilde{\xi}\),
+so \(\tilde{\xi}(t) \to 0\) exponentially.
+However, substituting \(\hat{\xi}\) into the controller gives the closed-loop system
+\[
+\dot{x} = -x + x^4 + x^2(\hat{\xi})
+         = -x + x^4 + x^2(\xi - \tilde{\xi})
+         = (-x + x^4 + x^2\xi) - x^2\tilde{\xi}.
+\]
+Even though \(\tilde{\xi}\) decays exponentially, the nonlinear term \(-x^2\tilde{\xi}\)
+can dominate transiently and cause the state \(x\) to diverge or exhibit finite escape
+for certain initial conditions.
+Thus, the stability of the observer and controller subsystems separately
+does not ensure stability of their interconnection.
+\end{example}
+
+\begin{remark}
+In nonlinear systems, the controller and observer are dynamically coupled through
+state-dependent nonlinearities, violating the additive structure required for separation.
+Consequently, no general \emph{nonlinear separation principle} exists.
+Stability must be analyzed for the full coupled system, often via a common Lyapunov function
+or composite design methods such as high-gain or adaptive observers.
+\end{remark}
